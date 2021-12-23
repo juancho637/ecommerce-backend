@@ -2,11 +2,21 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use App\Traits\ApiResponse;
+use Illuminate\Http\Response;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class Handler extends ExceptionHandler
 {
+    use ApiResponse;
+
     /**
      * A list of the exception types that are not reported.
      *
@@ -32,10 +42,43 @@ class Handler extends ExceptionHandler
      *
      * @return void
      */
-    public function register()
+    public function render($request, Throwable $exception)
     {
-        $this->reportable(function (Throwable $e) {
-            //
-        });
+        if ($exception instanceof ValidationException) {
+            return $this->convertValidationExceptionToResponse($exception, $request);
+        }
+
+        if ($exception instanceof AuthorizationException) {
+            return $this->showMessage(__("Unauthorized"), Response::HTTP_UNAUTHORIZED);
+        }
+
+        if ($exception instanceof AuthenticationException) {
+            return $this->errorResponse(__("Unauthenticated"), Response::HTTP_UNAUTHORIZED);
+        }
+
+        if ($exception instanceof ModelNotFoundException) {
+            return $this->showMessage(__("Model not found"), Response::HTTP_NOT_FOUND);
+        }
+
+        if ($exception instanceof NotFoundHttpException) {
+            return $this->errorResponse(__("Not found"), Response::HTTP_NOT_FOUND);
+        }
+
+        if ($exception instanceof MethodNotAllowedHttpException) {
+            return $this->errorResponse(__("Method not allowed"), Response::HTTP_METHOD_NOT_ALLOWED);
+        }
+
+        if ($exception instanceof \Exception) {
+            return $this->errorResponse($exception->getMessage(), $exception->getCode());
+        }
+
+        return parent::render($request, $exception);
+    }
+
+    protected function convertValidationExceptionToResponse(ValidationException $e, $request)
+    {
+        $errors = $e->validator->errors()->getMessages();
+
+        return $this->errorResponse($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 }
