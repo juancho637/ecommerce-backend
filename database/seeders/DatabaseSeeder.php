@@ -13,6 +13,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        if (app()->environment() === 'production') {
+            $this->call([
+                StatusSeeder::class,
+            ]);
+        } else {
+            $this->call([
+                StatusSeeder::class,
+            ]);
+        }
     }
 }
