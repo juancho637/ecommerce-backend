@@ -16,10 +16,14 @@ class DatabaseSeeder extends Seeder
         if (app()->environment() === 'production') {
             $this->call([
                 StatusSeeder::class,
+                PermissionSeeder::class,
+                RoleSeeder::class,
             ]);
         } else {
             $this->call([
                 StatusSeeder::class,
+                PermissionSeeder::class,
+                RoleSeeder::class,
             ]);
         }
     }
