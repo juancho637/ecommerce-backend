@@ -14,11 +14,17 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
+        $companyType = Permission::COMPANY;
+        $agencyType = Permission::AGENCY;
+
+        // Permissions
+        Permission::create(['name' => Permission::PERMISSIONS_VIEW, 'types' => "$companyType,$agencyType"]);
+
         // Roles
-        Permission::create(['name' => Permission::ROLES_VIEW]);
-        Permission::create(['name' => Permission::ROLES_SHOW]);
-        Permission::create(['name' => Permission::ROLES_CREATE]);
-        Permission::create(['name' => Permission::ROLES_EDIT]);
-        Permission::create(['name' => Permission::ROLES_DELETE]);
+        Permission::create(['name' => Permission::ROLES_VIEW, 'types' => "$companyType,$agencyType"]);
+        Permission::create(['name' => Permission::ROLES_SHOW, 'types' => "$companyType,$agencyType"]);
+        Permission::create(['name' => Permission::ROLES_CREATE, 'types' => "$companyType,$agencyType"]);
+        Permission::create(['name' => Permission::ROLES_EDIT, 'types' => "$companyType,$agencyType"]);
+        Permission::create(['name' => Permission::ROLES_DELETE, 'types' => "$companyType,$agencyType"]);
     }
 }

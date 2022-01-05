@@ -14,6 +14,7 @@ class Role extends SpatiRole
 
     const SUPER_ADMIN = 'super administrator';
     const COMPANY_ADMIN = 'company administrator';
+    const AGENCY_ADMIN = 'agency administrator';
 
     public function scopeSuperAdmin($query)
     {
@@ -23,5 +24,10 @@ class Role extends SpatiRole
     public function scopeCompanyAdmin($query)
     {
         return $query->where('name', self::COMPANY_ADMIN);
+    }
+
+    public function scopeAgencyAdmin($query)
+    {
+        return $query->where('name', self::AGENCY_ADMIN);
     }
 }

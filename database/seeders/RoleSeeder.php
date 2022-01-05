@@ -19,6 +19,13 @@ class RoleSeeder extends Seeder
         $super_admin->syncPermissions(Permission::all());
 
         $company_admin = Role::create(['name' => Role::COMPANY_ADMIN]);
-        $company_admin->syncPermissions(Permission::all());
+        $company_admin->syncPermissions(
+            Permission::where('types', 'like', '%' . Permission::COMPANY . '%')->get()
+        );
+
+        $agency_admin = Role::create(['name' => Role::AGENCY_ADMIN]);
+        $agency_admin->syncPermissions(
+            Permission::where('types', 'like', '%' . Permission::AGENCY . '%')->get()
+        );
     }
 }

@@ -12,7 +12,13 @@ class Permission extends SpatiPermission
 
     public $transformer = PermissionTransformer::class;
 
+    // Types
+    const COMPANY = 'company';
+    const AGENCY = 'agency';
+
     // Permissions
+    const PERMISSIONS_VIEW = 'permissions.view';
+
     const ROLES_VIEW = 'roles.view';
     const ROLES_SHOW = 'roles.show';
     const ROLES_CREATE = 'roles.create';
