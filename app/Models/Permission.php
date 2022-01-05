@@ -24,4 +24,10 @@ class Permission extends SpatiPermission
     const ROLES_CREATE = 'roles.create';
     const ROLES_EDIT = 'roles.edit';
     const ROLES_DELETE = 'roles.delete';
+
+    const AGENCIES_VIEW = 'agencies.view';
+    const AGENCIES_SHOW = 'agencies.show';
+    const AGENCIES_CREATE = 'agencies.create';
+    const AGENCIES_EDIT = 'agencies.edit';
+    const AGENCIES_DELETE = 'agencies.delete';
 }
