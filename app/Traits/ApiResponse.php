@@ -60,7 +60,7 @@ trait ApiResponse
      */
     protected function showOne(Model $model, $code = Response::HTTP_OK)
     {
-        $transformer = $model->first() ? $model->first()->transformer : $model->transformer;
+        $transformer = $model ? $model->transformer : $model->transformer;
         $data = $this->transformData($model, $transformer);
 
         return $this->jsonResponse($data, $code);
