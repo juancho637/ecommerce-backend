@@ -49,7 +49,7 @@ class Handler extends ExceptionHandler
         }
 
         if ($exception instanceof AuthorizationException) {
-            return $this->showMessage(__("Unauthorized"), Response::HTTP_UNAUTHORIZED);
+            return $this->errorResponse(__("Unauthorized"), Response::HTTP_UNAUTHORIZED);
         }
 
         if ($exception instanceof AuthenticationException) {
@@ -57,7 +57,7 @@ class Handler extends ExceptionHandler
         }
 
         if ($exception instanceof ModelNotFoundException) {
-            return $this->showMessage(__("Model not found"), Response::HTTP_NOT_FOUND);
+            return $this->errorResponse(__("Model not found"), Response::HTTP_NOT_FOUND);
         }
 
         if ($exception instanceof NotFoundHttpException) {
