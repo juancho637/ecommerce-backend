@@ -12,22 +12,16 @@ class Role extends SpatiRole
 
     public $transformer = RoleTransformer::class;
 
-    const SUPER_ADMIN = 'super administrator';
-    const COMPANY_ADMIN = 'company administrator';
-    const AGENCY_ADMIN = 'agency administrator';
+    const ADMIN = 'administrator';
+    const USER = 'user';
 
-    public function scopeSuperAdmin($query)
+    public function scopeAdmin($query)
     {
-        return $query->where('name', self::SUPER_ADMIN);
+        return $query->where('name', self::ADMIN);
     }
 
-    public function scopeCompanyAdmin($query)
+    public function scopeUser($query)
     {
-        return $query->where('name', self::COMPANY_ADMIN);
-    }
-
-    public function scopeAgencyAdmin($query)
-    {
-        return $query->where('name', self::AGENCY_ADMIN);
+        return $query->where('name', self::USER);
     }
 }

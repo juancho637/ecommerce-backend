@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Role;
-use App\Models\Permission;
 use Illuminate\Database\Seeder;
 
 class RoleSeeder extends Seeder
@@ -15,17 +14,7 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        $super_admin = Role::create(['name' => Role::SUPER_ADMIN]);
-        $super_admin->syncPermissions(Permission::all());
-
-        $company_admin = Role::create(['name' => Role::COMPANY_ADMIN]);
-        $company_admin->syncPermissions(
-            Permission::where('types', 'like', '%' . Permission::COMPANY . '%')->get()
-        );
-
-        $agency_admin = Role::create(['name' => Role::AGENCY_ADMIN]);
-        $agency_admin->syncPermissions(
-            Permission::where('types', 'like', '%' . Permission::AGENCY . '%')->get()
-        );
+        Role::create(['name' => Role::ADMIN]);
+        Role::create(['name' => Role::USER]);
     }
 }
