@@ -16,12 +16,18 @@ class DatabaseSeeder extends Seeder
         if (app()->environment() === 'production') {
             $this->call([
                 StatusSeeder::class,
+                CountrySeeder::class,
+                StateSeeder::class,
+                CitySeeder::class,
                 PermissionSeeder::class,
                 RoleSeeder::class,
             ]);
         } else {
             $this->call([
                 StatusSeeder::class,
+                CountrySeeder::class,
+                StateSeeder::class,
+                CitySeeder::class,
                 PermissionSeeder::class,
                 RoleSeeder::class,
             ]);
