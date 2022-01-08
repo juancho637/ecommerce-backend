@@ -22,7 +22,6 @@ class Status extends Model
     // Statuses
     const ENABLED = 'enabled';
     const DISABLED = 'disabled';
-    const DELETED = 'deleted';
 
     // Modules
     const GENERAL = 'general';
@@ -30,7 +29,6 @@ class Status extends Model
     const STATUSES = [
         ['name' => self::ENABLED, 'type' => self::GENERAL],
         ['name' => self::DISABLED, 'type' => self::GENERAL],
-        ['name' => self::DELETED, 'type' => self::GENERAL]
     ];
 
     public function scopeEnabled($query)
@@ -41,10 +39,5 @@ class Status extends Model
     public function scopeDisabled($query)
     {
         return $query->where('name', self::DISABLED);
-    }
-
-    public function scopeDeleted($query)
-    {
-        return $query->where('name', self::DELETED);
     }
 }
