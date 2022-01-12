@@ -27,6 +27,10 @@ class CityController extends ApiController
             'update',
             'destroy'
         ]);
+
+        $this->middleware('can:create,' . City::class)->only('store');
+        $this->middleware('can:update,city')->only('update');
+        $this->middleware('can:delete,city')->only('destroy');
     }
 
     /**

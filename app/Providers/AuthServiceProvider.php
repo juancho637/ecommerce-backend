@@ -2,8 +2,14 @@
 
 namespace App\Providers;
 
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use App\Models\City;
+use App\Models\State;
+use App\Models\Country;
+use App\Policies\CityPolicy;
+use App\Policies\StatePolicy;
+use App\Policies\CountryPolicy;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -13,7 +19,9 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        Country::class => CountryPolicy::class,
+        State::class => StatePolicy::class,
+        City::class => CityPolicy::class,
     ];
 
     /**

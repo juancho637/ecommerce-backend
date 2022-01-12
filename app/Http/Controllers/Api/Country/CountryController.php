@@ -27,6 +27,10 @@ class CountryController extends ApiController
             'update',
             'destroy'
         ]);
+
+        $this->middleware('can:create,' . Country::class)->only('store');
+        $this->middleware('can:update,country')->only('update');
+        $this->middleware('can:delete,country')->only('destroy');
     }
 
     /**

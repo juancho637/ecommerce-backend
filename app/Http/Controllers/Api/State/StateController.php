@@ -27,6 +27,10 @@ class StateController extends ApiController
             'update',
             'destroy'
         ]);
+
+        $this->middleware('can:create,' . State::class)->only('store');
+        $this->middleware('can:update,state')->only('update');
+        $this->middleware('can:delete,state')->only('destroy');
     }
 
     /**
