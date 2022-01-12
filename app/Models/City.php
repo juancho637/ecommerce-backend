@@ -51,14 +51,15 @@ class City extends Model
     {
         $user = auth('sanctum')->user();
 
-        if (
-            $this->status->name === Status::DISABLED &&
-            $user && $user->hasRole(Role::ADMIN)
-        ) {
+        if ($this->status->name === Status::DISABLED) {
+            if ($user && $user->hasRole(Role::ADMIN)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
             return true;
         }
-
-        return false;
     }
 
     public function setCreate($attributes)
