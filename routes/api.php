@@ -12,6 +12,7 @@ Route::group(['prefix' => 'v1'], function () {
         ->name('api.v1.auth.login');
     Route::post('auth/register', [AuthController::class, 'register'])
         ->name('api.v1.auth.register');
+    Route::post('/auth/{provider}', [AuthController::class, 'provider']);
 
     Route::apiResource('countries', CountryController::class, [
         'as' => 'api.v1'

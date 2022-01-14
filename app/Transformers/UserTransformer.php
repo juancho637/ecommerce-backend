@@ -25,6 +25,7 @@ class UserTransformer extends TransformerAbstract
         'status',
         'roles',
         'agency',
+        'socialNetworks',
     ];
 
     /**
@@ -70,6 +71,15 @@ class UserTransformer extends TransformerAbstract
 
         if ($roles) {
             return $this->collection($roles, new RoleTransformer());
+        }
+    }
+
+    public function includeSocialNetworks(User $user)
+    {
+        $socialNetworks = $user->socialNetworks;
+
+        if ($socialNetworks) {
+            return $this->collection($socialNetworks, new SocialNetworkTransformer());
         }
     }
 }

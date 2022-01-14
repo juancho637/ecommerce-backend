@@ -133,6 +133,10 @@ class UserController extends ApiController
             $query->with('agency');
         }
 
+        if (in_array('socialNetworks', $requestedIncludes)) {
+            $query->with('socialNetworks');
+        }
+
         return $query;
     }
 }

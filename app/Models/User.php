@@ -41,6 +41,11 @@ class User extends Authenticatable
         return $this->belongsTo(Status::class);
     }
 
+    public function socialNetworks()
+    {
+        return $this->hasMany(SocialNetwork::class);
+    }
+
     public function isAdmin()
     {
         return $this->hasRole(Role::ADMIN);
