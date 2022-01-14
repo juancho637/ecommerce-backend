@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
                 CitySeeder::class,
                 PermissionSeeder::class,
                 RoleSeeder::class,
+                UserSeeder::class,
             ]);
         } else {
             $this->call([
@@ -30,6 +31,7 @@ class DatabaseSeeder extends Seeder
                 CitySeeder::class,
                 PermissionSeeder::class,
                 RoleSeeder::class,
+                UserSeeder::class,
             ]);
         }
     }
