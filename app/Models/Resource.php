@@ -41,6 +41,8 @@ class Resource extends Model
     public function saveResource($resource, $type, $id, $typeResource, $path, $isImage = false, $disk = 'public')
     {
         try {
+            $disk = config('filesystems.' . $disk);
+
             $data['path'] = $isImage
                 ? $this->resizeImage($resource, $path, $disk)
                 : $this->uploadFile($resource, $path, $disk);
@@ -59,6 +61,8 @@ class Resource extends Model
     public function updateResource($resource, $type, $id, $typeResource, $path, $isImage = false, $disk = 'public')
     {
         try {
+            $disk = config('filesystems.' . $disk);
+
             $oldPath = $this->path;
             $this->path = $isImage
                 ? $this->resizeImage($resource, $path, $disk)
@@ -77,7 +81,7 @@ class Resource extends Model
         }
     }
 
-    protected function resizeImage($url, $path, $disk = 'public')
+    protected function resizeImage($url, $path, $disk)
     {
         try {
             $fitImage = Image::make($url); //->fit(720);
@@ -93,7 +97,7 @@ class Resource extends Model
         }
     }
 
-    public function uploadFile($file, $path, $disk = 'public')
+    public function uploadFile($file, $path, $disk)
     {
         try {
             return Storage::disk($disk)->put("files/" . $path, $file);
@@ -105,7 +109,9 @@ class Resource extends Model
     public function deleteFile($path, $disk = 'public')
     {
         try {
-            if (Storage::disk($disk)->exists($disk)) {
+            $disk = config('filesystems.' . $disk);
+
+            if (Storage::disk($disk)->exists($path)) {
                 Storage::disk($disk)->delete($path);
             }
         } catch (\Exception $exception) {
