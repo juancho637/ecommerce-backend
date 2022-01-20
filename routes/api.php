@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\Tag\TagController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\City\CityController;
 use App\Http\Controllers\Api\User\UserController;
@@ -32,6 +33,10 @@ Route::group(['prefix' => 'v1'], function () {
     ]);
 
     Route::apiResource('categories', CategoryController::class, [
+        'as' => 'api.v1'
+    ]);
+
+    Route::apiResource('tags', TagController::class, [
         'as' => 'api.v1'
     ]);
 });

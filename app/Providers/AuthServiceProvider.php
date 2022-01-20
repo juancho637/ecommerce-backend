@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
+use App\Models\Tag;
 use App\Models\City;
 use App\Models\User;
 use App\Models\State;
 use App\Models\Country;
 use App\Models\Category;
+use App\Policies\TagPolicy;
 use App\Policies\CityPolicy;
 use App\Policies\UserPolicy;
 use App\Policies\StatePolicy;
@@ -28,6 +30,7 @@ class AuthServiceProvider extends ServiceProvider
         City::class => CityPolicy::class,
         User::class => UserPolicy::class,
         Category::class => CategoryPolicy::class,
+        Tag::class => TagPolicy::class,
     ];
 
     /**
