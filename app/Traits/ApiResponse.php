@@ -16,7 +16,7 @@ trait ApiResponse
         return response()->json($data, $code);
     }
 
-    protected function errorResponse($message, $code)
+    protected function errorResponse($message, $code = Response::HTTP_BAD_REQUEST)
     {
         return $this->jsonResponse([
             'error' => $message,
