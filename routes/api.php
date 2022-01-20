@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\City\CityController;
 use App\Http\Controllers\Api\User\UserController;
 use App\Http\Controllers\Api\State\StateController;
 use App\Http\Controllers\Api\Country\CountryController;
+use App\Http\Controllers\Api\Category\CategoryController;
 
 Route::group(['prefix' => 'v1'], function () {
     Route::post('auth/login', [AuthController::class, 'login'])
@@ -27,6 +28,10 @@ Route::group(['prefix' => 'v1'], function () {
     ]);
 
     Route::apiResource('users', UserController::class, [
+        'as' => 'api.v1'
+    ]);
+
+    Route::apiResource('categories', CategoryController::class, [
         'as' => 'api.v1'
     ]);
 });

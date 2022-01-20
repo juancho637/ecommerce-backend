@@ -6,10 +6,12 @@ use App\Models\City;
 use App\Models\User;
 use App\Models\State;
 use App\Models\Country;
+use App\Models\Category;
 use App\Policies\CityPolicy;
 use App\Policies\UserPolicy;
 use App\Policies\StatePolicy;
 use App\Policies\CountryPolicy;
+use App\Policies\CategoryPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -25,6 +27,7 @@ class AuthServiceProvider extends ServiceProvider
         State::class => StatePolicy::class,
         City::class => CityPolicy::class,
         User::class => UserPolicy::class,
+        Category::class => CategoryPolicy::class,
     ];
 
     /**
