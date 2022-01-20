@@ -69,7 +69,7 @@ class Handler extends ExceptionHandler
         }
 
         if ($exception instanceof \Exception) {
-            return $this->errorResponse($exception->getMessage(), $exception->getCode());
+            return $this->errorResponse($exception->getMessage(), Response::HTTP_BAD_REQUEST);
         }
 
         return parent::render($request, $exception);
