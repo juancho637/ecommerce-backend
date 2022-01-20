@@ -14,12 +14,10 @@ use App\Http\Requests\Api\Country\UpdateRequest;
 
 class CountryController extends ApiController
 {
-    private $fractal;
     private $country;
 
-    public function __construct(Manager $fractal, Country $country)
+    public function __construct(Country $country)
     {
-        $this->fractal = $fractal;
         $this->country = $country;
 
         $this->middleware('auth:sanctum')->only([
@@ -40,10 +38,10 @@ class CountryController extends ApiController
      */
     public function index(Request $request)
     {
-        $this->fractal->parseIncludes($request->get('include', ''));
+        $includes = explode(',', $request->get('include', ''));
 
         $countries = $this->country->query()->byRole();
-        $countries = $this->eagerLoadIncludes($countries)->get();
+        $countries = $this->eagerLoadIncludes($countries, $includes)->get();
 
         return $this->showAll($countries);
     }
@@ -128,11 +126,9 @@ class CountryController extends ApiController
         }
     }
 
-    protected function eagerLoadIncludes(Builder $query)
+    protected function eagerLoadIncludes(Builder $query, array $includes)
     {
-        $requestedIncludes = $this->fractal->getRequestedIncludes();
-
-        if (in_array('status', $requestedIncludes)) {
+        if (in_array('status', $includes)) {
             $query->with('status');
         }
 

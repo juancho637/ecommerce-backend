@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Transformers\StateTransformer;
+use App\Http\Resources\StateResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,7 +22,7 @@ class State extends Model
         'country_id' => 'integer',
     ];
 
-    public $transformer = StateTransformer::class;
+    public $transformer = StateResource::class;
 
     public function status()
     {

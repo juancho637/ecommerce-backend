@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Transformers\CityTransformer;
+use App\Http\Resources\CityResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,7 +22,7 @@ class City extends Model
         'state_id' => 'integer',
     ];
 
-    public $transformer = CityTransformer::class;
+    public $transformer = CityResource::class;
 
     public function status()
     {

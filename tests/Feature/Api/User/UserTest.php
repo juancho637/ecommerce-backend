@@ -60,7 +60,7 @@ class UserTest extends ApiTestCase
             'role' => $role,
         ]);
 
-        $response->assertStatus(200)->assertJsonStructure([
+        $response->assertStatus(201)->assertJsonStructure([
             'data' => [
                 'id',
                 'name',

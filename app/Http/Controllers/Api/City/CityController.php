@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\City;
 
 use App\Models\City;
-use League\Fractal\Manager;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -14,12 +13,10 @@ use App\Http\Requests\Api\City\UpdateRequest;
 
 class CityController extends ApiController
 {
-    private $fractal;
     private $city;
 
-    public function __construct(Manager $fractal, City $city)
+    public function __construct(City $city)
     {
-        $this->fractal = $fractal;
         $this->city = $city;
 
         $this->middleware('auth:sanctum')->only([
@@ -40,10 +37,10 @@ class CityController extends ApiController
      */
     public function index(Request $request)
     {
-        $this->fractal->parseIncludes($request->get('include', ''));
+        $includes = explode(',', $request->get('include', ''));
 
         $cities = $this->city->query()->byRole();
-        $cities = $this->eagerLoadIncludes($cities)->get();
+        $cities = $this->eagerLoadIncludes($cities, $includes)->get();
 
         return $this->showAll($cities);
     }
@@ -128,15 +125,13 @@ class CityController extends ApiController
         }
     }
 
-    protected function eagerLoadIncludes(Builder $query)
+    protected function eagerLoadIncludes(Builder $query, array $includes)
     {
-        $requestedIncludes = $this->fractal->getRequestedIncludes();
-
-        if (in_array('status', $requestedIncludes)) {
+        if (in_array('status', $includes)) {
             $query->with('status');
         }
 
-        if (in_array('state', $requestedIncludes)) {
+        if (in_array('state', $includes)) {
             $query->with('state');
         }
 

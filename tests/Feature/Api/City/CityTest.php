@@ -49,7 +49,7 @@ class CityTest extends ApiTestCase
             'state_id' => $state->id,
         ]);
 
-        $response->assertStatus(200)->assertJsonStructure([
+        $response->assertStatus(201)->assertJsonStructure([
             'data' => [
                 'id',
                 'name',

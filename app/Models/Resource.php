@@ -5,7 +5,7 @@ namespace App\Models;
 use Intervention\Image\Facades\Image;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-use App\Transformers\ResourceTransformer;
+use App\Http\Resources\ResourceResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Resource extends Model
@@ -26,7 +26,7 @@ class Resource extends Model
         'obtainable_id' => 'integer',
     ];
 
-    public $transformer = ResourceTransformer::class;
+    public $transformer = ResourceResource::class;
 
     public function obtainable()
     {

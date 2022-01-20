@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Http\Resources\SocialNetworkResource;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class SocialNetwork extends Model
 {
@@ -20,4 +21,6 @@ class SocialNetwork extends Model
         'created_at',
         'updated_at'
     ];
+
+    public $transformer = SocialNetworkResource::class;
 }

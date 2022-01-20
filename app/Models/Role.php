@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Transformers\RoleTransformer;
+use App\Http\Resources\RoleResource;
 use Spatie\Permission\Models\Role as SpatiRole;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -10,7 +10,7 @@ class Role extends SpatiRole
 {
     use HasFactory;
 
-    public $transformer = RoleTransformer::class;
+    public $transformer = RoleResource::class;
 
     const ADMIN = 'administrator';
     const USER = 'user';

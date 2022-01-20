@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\State;
 
 use App\Models\State;
-use League\Fractal\Manager;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -14,12 +13,10 @@ use App\Http\Requests\Api\State\UpdateRequest;
 
 class StateController extends ApiController
 {
-    private $fractal;
     private $state;
 
-    public function __construct(Manager $fractal, State $state)
+    public function __construct(State $state)
     {
-        $this->fractal = $fractal;
         $this->state = $state;
 
         $this->middleware('auth:sanctum')->only([
@@ -40,10 +37,10 @@ class StateController extends ApiController
      */
     public function index(Request $request)
     {
-        $this->fractal->parseIncludes($request->get('include', ''));
+        $includes = explode(',', $request->get('include', ''));
 
         $states = $this->state->query()->byRole();
-        $states = $this->eagerLoadIncludes($states)->get();
+        $states = $this->eagerLoadIncludes($states, $includes)->get();
 
         return $this->showAll($states);
     }
@@ -128,15 +125,13 @@ class StateController extends ApiController
         }
     }
 
-    protected function eagerLoadIncludes(Builder $query)
+    protected function eagerLoadIncludes(Builder $query, array $includes)
     {
-        $requestedIncludes = $this->fractal->getRequestedIncludes();
-
-        if (in_array('status', $requestedIncludes)) {
+        if (in_array('status', $includes)) {
             $query->with('status');
         }
 
-        if (in_array('country', $requestedIncludes)) {
+        if (in_array('country', $includes)) {
             $query->with('country');
         }
 

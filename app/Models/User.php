@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Hash;
-use App\Transformers\UserTransformer;
+use App\Http\Resources\UserResource;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -34,7 +34,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public $transformer = UserTransformer::class;
+    public $transformer = UserResource::class;
 
     public function status()
     {

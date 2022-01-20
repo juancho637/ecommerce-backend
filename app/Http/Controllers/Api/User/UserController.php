@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Models\User;
-use League\Fractal\Manager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
@@ -13,12 +12,10 @@ use App\Http\Requests\Api\User\UpdateRequest;
 
 class UserController extends ApiController
 {
-    private $fractal;
     private $user;
 
-    public function __construct(Manager $fractal, User $user)
+    public function __construct(User $user)
     {
-        $this->fractal = $fractal;
         $this->user = $user;
 
         $this->middleware('auth:sanctum');
@@ -31,10 +28,10 @@ class UserController extends ApiController
 
     public function index(Request $request)
     {
-        $this->fractal->parseIncludes($request->get('include', ''));
+        $includes = explode(',', $request->get('include', ''));
 
         $users = $this->user->query();
-        $users = $this->eagerLoadIncludes($users)->get();
+        $users = $this->eagerLoadIncludes($users, $includes)->get();
 
         return $this->showAll($users);
     }
@@ -117,23 +114,21 @@ class UserController extends ApiController
         }
     }
 
-    protected function eagerLoadIncludes(Builder $query)
+    protected function eagerLoadIncludes(Builder $query, array $includes)
     {
-        $requestedIncludes = $this->fractal->getRequestedIncludes();
-
-        if (in_array('roles', $requestedIncludes)) {
+        if (in_array('roles', $includes)) {
             $query->with('roles');
         }
 
-        if (in_array('status', $requestedIncludes)) {
+        if (in_array('status', $includes)) {
             $query->with('status');
         }
 
-        if (in_array('agency', $requestedIncludes)) {
+        if (in_array('agency', $includes)) {
             $query->with('agency');
         }
 
-        if (in_array('socialNetworks', $requestedIncludes)) {
+        if (in_array('socialNetworks', $includes)) {
             $query->with('socialNetworks');
         }
 

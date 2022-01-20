@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Http\Resources\CountryResource;
 use Illuminate\Database\Eloquent\Model;
-use App\Transformers\CountryTransformer;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -22,7 +22,7 @@ class Country extends Model
         'status_id' => 'integer',
     ];
 
-    public $transformer = CountryTransformer::class;
+    public $transformer = CountryResource::class;
 
     public function status()
     {

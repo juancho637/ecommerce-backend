@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Transformers\StatusTransformer;
+use App\Http\Resources\StatusResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -17,7 +17,7 @@ class Status extends Model
 
     public $timestamps = false;
 
-    public $transformer = StatusTransformer::class;
+    public $transformer = StatusResource::class;
 
     // Statuses
     const ENABLED = 'enabled';

@@ -5,7 +5,6 @@ namespace App\Traits;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
-use App\Serializers\NoDataSerializer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -42,28 +41,24 @@ trait ApiResponse
             return $this->jsonResponse($collection, $code);
         }
 
-        if (isset($collection->first()->transformer)) {
-            $transformer = $collection->first()->transformer;
+        $transformer = $collection->first()->transformer;
 
-            $collection = $this->filterData($collection, $transformer);
-            $collection = $this->sortData($collection, $transformer);
-            $collection = $this->paginateData($collection);
-            $collection = $this->transformData($collection, $transformer);
-            $collection = $this->cacheResponse($collection);
-        }
+        $collection = $this->filterData($collection, $transformer);
+        $collection = $this->sortData($collection, $transformer);
+        $collection = $this->paginateData($collection);
+        $collection = $this->cacheResponse($collection);
 
-        return $this->jsonResponse($collection, $code);
+        return $transformer::collection($collection);
     }
 
     /**
      * Generalización de las respuestas JSON exitosas para un objeto de la colección.
      */
-    protected function showOne(Model $model, $code = Response::HTTP_OK)
+    protected function showOne(Model $model)
     {
-        $transformer = $model ? $model->transformer : $model->transformer;
-        $data = $this->transformData($model, $transformer);
+        $transformer = $model->transformer;
 
-        return $this->jsonResponse($data, $code);
+        return new $transformer($model);
     }
 
     /**
@@ -170,19 +165,5 @@ trait ApiResponse
         return Cache::remember($fullUrl, 15 / 60, function () use ($data) {
             return $data;
         });
-    }
-
-    /**
-     * Generalización de las transformaciones para las respuestas JSON.
-     */
-    protected function transformData($data, $transformer)
-    {
-        $transformation = fractal($data, new $transformer)
-            ->serializeWith(new NoDataSerializer());
-
-        if (isset($_GET['include']))
-            $transformation->parseIncludes($_GET['include']);
-
-        return $transformation->toArray();
     }
 }
