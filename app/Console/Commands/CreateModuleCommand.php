@@ -60,8 +60,8 @@ class CreateModuleCommand extends Command
             "--api" => true,
         ]);
 
-        $this->call('make:transformer', [
-            "name" => "{$name}Transformer",
+        $this->call('make:resource', [
+            "name" => "{$name}Resource",
         ]);
 
         $this->call('make:policy', [
