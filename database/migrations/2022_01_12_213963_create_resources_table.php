@@ -16,7 +16,7 @@ class CreateResourcesTable extends Migration
         Schema::create('resources', function (Blueprint $table) {
             $table->id();
             $table->text('url')->nullable();
-            $table->text('path');
+            $table->string('path');
             $table->string('type_resource');
             $table->morphs('obtainable');
         });
