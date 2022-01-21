@@ -14,7 +14,9 @@ use App\Policies\UserPolicy;
 use App\Policies\StatePolicy;
 use App\Policies\CountryPolicy;
 use App\Policies\CategoryPolicy;
+use App\Models\ProductAttribute;
 use Illuminate\Support\Facades\Gate;
+use App\Policies\ProductAttributePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -31,6 +33,7 @@ class AuthServiceProvider extends ServiceProvider
         User::class => UserPolicy::class,
         Category::class => CategoryPolicy::class,
         Tag::class => TagPolicy::class,
+        ProductAttribute::class => ProductAttributePolicy::class,
     ];
 
     /**
