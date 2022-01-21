@@ -92,7 +92,7 @@ class CategoryTest extends ApiTestCase
         Sanctum::actingAs($user, ['*']);
 
         $category = Category::all()->random();
-        $name = $this->faker->sentence(1, false);
+        $name = $this->faker->unique()->sentence(1, false);
 
         $response = $this->json('PUT', route('api.v1.categories.update', [$category]), [
             'name' => $name,
