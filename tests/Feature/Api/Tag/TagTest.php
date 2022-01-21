@@ -30,6 +30,7 @@ class TagTest extends ApiTestCase
                 [
                     'id',
                     'name',
+                    'slug',
                 ]
             ]
         ]);
@@ -40,7 +41,7 @@ class TagTest extends ApiTestCase
         $user = User::factory()->roleAdmin()->create();
         Sanctum::actingAs($user, ['*']);
 
-        $name = $this->faker->sentence(1, false);
+        $name = $this->faker->unique()->sentence(1, false);
 
         $response = $this->json('POST', route('api.v1.tags.store'), [
             'name' => $name,
@@ -50,6 +51,7 @@ class TagTest extends ApiTestCase
             'data' => [
                 'id',
                 'name',
+                'slug',
             ]
         ])->assertJson([
             'data' => [
@@ -78,7 +80,7 @@ class TagTest extends ApiTestCase
         Sanctum::actingAs($user, ['*']);
 
         $tag = Tag::all()->random();
-        $name = $this->faker->sentence(1, false);
+        $name = $this->faker->unique()->sentence(1, false);
 
         $response = $this->json('PUT', route('api.v1.tags.update', [$tag]), [
             'name' => $name,
@@ -88,6 +90,7 @@ class TagTest extends ApiTestCase
             'data' => [
                 'id',
                 'name',
+                'slug',
             ]
         ])->assertJson([
             'data' => [
@@ -119,6 +122,7 @@ class TagTest extends ApiTestCase
             'data' => [
                 'id' => $tag->id,
                 'name' => $tag->name,
+                'slug' => $tag->slug,
                 'status' => [
                     'id' => $disabledStatus->id,
                     'name' => $disabledStatus->name,
