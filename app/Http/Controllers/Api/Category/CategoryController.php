@@ -70,7 +70,7 @@ class CategoryController extends ApiController
             return $this->showOne($this->category);
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage(), Response::HTTP_BAD_REQUEST);
+            return $this->errorResponse($exception->getMessage());
         }
     }
 
@@ -109,7 +109,7 @@ class CategoryController extends ApiController
             return $this->showOne($this->category);
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage(), Response::HTTP_BAD_REQUEST);
+            return $this->errorResponse($exception->getMessage());
         }
     }
 
@@ -130,7 +130,7 @@ class CategoryController extends ApiController
             return $this->showOne($this->category);
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage(), Response::HTTP_BAD_REQUEST);
+            return $this->errorResponse($exception->getMessage());
         }
     }
 

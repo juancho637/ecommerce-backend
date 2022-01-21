@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Api\User;
+namespace App\Http\Requests\Api\Country;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateRequest extends FormRequest
+class StoreCountryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,9 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => "sometimes|string|max:255",
-            "username" => "sometimes|string|max:100|unique:users,username" . $this->user->id,
+            'name' => 'required|string|max:255',
+            'short_name' => 'required|string|max:5',
+            'phone_code' => 'required|string|max:5',
         ];
     }
 }

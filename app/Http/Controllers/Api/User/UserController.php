@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Controllers\Api\ApiController;
-use App\Http\Requests\Api\User\StoreRequest;
-use App\Http\Requests\Api\User\UpdateRequest;
+use App\Http\Requests\Api\User\StoreUserRequest;
+use App\Http\Requests\Api\User\UpdateUserRequest;
 
 class UserController extends ApiController
 {
@@ -42,21 +42,21 @@ class UserController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRequest $storeRequest)
+    public function store(StoreUserRequest $request)
     {
         DB::beginTransaction();
         try {
             $this->user = $this->user->create(
-                $this->user->setCreate($storeRequest)
+                $this->user->setCreate($request)
             );
 
-            $this->user->syncRoles($storeRequest->role);
+            $this->user->syncRoles($request->role);
             DB::commit();
 
             return $this->showOne($this->user);
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage(), 400);
+            return $this->errorResponse($exception->getMessage());
         }
     }
 
@@ -78,18 +78,18 @@ class UserController extends ApiController
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateRequest $updateRequest, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
         DB::beginTransaction();
         try {
-            $this->user = $user->setUpdate($updateRequest);
+            $this->user = $user->setUpdate($request);
             $this->user->save();
             DB::commit();
 
             return $this->showOne($this->user);
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage(), 400);
+            return $this->errorResponse($exception->getMessage());
         }
     }
 
@@ -110,7 +110,7 @@ class UserController extends ApiController
             return $this->showOne($this->user);
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage(), 400);
+            return $this->errorResponse($exception->getMessage());
         }
     }
 

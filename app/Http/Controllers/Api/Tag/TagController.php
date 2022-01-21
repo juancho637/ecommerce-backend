@@ -63,7 +63,7 @@ class TagController extends ApiController
             return $this->showOne($this->tag);
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage(), 400);
+            return $this->errorResponse($exception->getMessage());
         }
     }
 

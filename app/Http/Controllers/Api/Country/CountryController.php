@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Api\Country;
 
 use App\Models\Country;
-use League\Fractal\Manager;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Controllers\Api\ApiController;
-use App\Http\Requests\Api\Country\StoreRequest;
-use App\Http\Requests\Api\Country\UpdateRequest;
+use App\Http\Requests\Api\Country\StoreCountryRequest;
+use App\Http\Requests\Api\Country\UpdateCountryRequest;
 
 class CountryController extends ApiController
 {
@@ -52,19 +51,19 @@ class CountryController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRequest $storeRequest)
+    public function store(StoreCountryRequest $request)
     {
         DB::beginTransaction();
         try {
             $this->country = $this->country->create(
-                $this->country->setCreate($storeRequest)
+                $this->country->setCreate($request)
             );
             DB::commit();
 
             return $this->showOne($this->country);
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage(), 400);
+            return $this->errorResponse($exception->getMessage());
         }
     }
 
@@ -90,18 +89,18 @@ class CountryController extends ApiController
      * @param  \App\Models\Country  $country
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateRequest $updateRequest, Country $country)
+    public function update(UpdateCountryRequest $request, Country $country)
     {
         DB::beginTransaction();
         try {
-            $this->country = $country->setUpdate($updateRequest);
+            $this->country = $country->setUpdate($request);
             $this->country->save();
             DB::commit();
 
             return $this->showOne($this->country);
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage(), 400);
+            return $this->errorResponse($exception->getMessage());
         }
     }
 
@@ -122,7 +121,7 @@ class CountryController extends ApiController
             return $this->showOne($this->country);
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage(), 400);
+            return $this->errorResponse($exception->getMessage());
         }
     }
 

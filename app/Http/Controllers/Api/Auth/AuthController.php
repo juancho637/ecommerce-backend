@@ -5,29 +5,30 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Status;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 use GuzzleHttp\Exception\ClientException;
 use App\Http\Controllers\Api\ApiController;
-use App\Http\Requests\Api\Auth\LoginRequest;
-use App\Http\Requests\Api\Auth\ProviderRequest;
-use App\Http\Requests\Api\Auth\RegisterRequest;
+use App\Http\Requests\Api\Auth\LoginAuthRequest;
+use App\Http\Requests\Api\Auth\ProviderAuthRequest;
+use App\Http\Requests\Api\Auth\RegisterAuthRequest;
 
 class AuthController extends ApiController
 {
-    public function login(LoginRequest $loginRequest)
+    public function login(LoginAuthRequest $request)
     {
-        $fieldType = filter_var($loginRequest->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        $fieldType = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
         if (!Auth::attempt([
-            $fieldType => $loginRequest->username,
-            'password' => $loginRequest->password
+            $fieldType => $request->username,
+            'password' => $request->password
         ])) {
-            return $this->errorResponse(__('Invalid login'), 401);
+            return $this->errorResponse(__('Invalid login'), Response::HTTP_UNAUTHORIZED);
         }
 
-        $user = User::where($fieldType, $loginRequest->username)->firstOrFail();
+        $user = User::where($fieldType, $request->username)->firstOrFail();
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return $this->jsonResponse([
@@ -36,13 +37,13 @@ class AuthController extends ApiController
         ], 200);
     }
 
-    public function register(RegisterRequest $registerRequest)
+    public function register(RegisterAuthRequest $request)
     {
         $user = User::create([
-            'name' => $registerRequest->name,
-            'email' => $registerRequest->email,
-            'username' => $registerRequest->username,
-            'password' => Hash::make($registerRequest->password),
+            'name' => $request->name,
+            'email' => $request->email,
+            'username' => $request->username,
+            'password' => Hash::make($request->password),
             'status_id' => Status::enabled()->value('id'),
         ]);
         $user->syncRoles(Role::user()->value('id'));
@@ -55,7 +56,7 @@ class AuthController extends ApiController
         ], 200);
     }
 
-    public function provider(ProviderRequest $providerRequest, $provider)
+    public function provider(ProviderAuthRequest $request, $provider)
     {
         $validated = $this->validateProvider($provider);
 
@@ -64,9 +65,9 @@ class AuthController extends ApiController
         }
 
         try {
-            $socialUser = Socialite::driver($provider)->userFromToken($providerRequest->token);
+            $socialUser = Socialite::driver($provider)->userFromToken($request->token);
         } catch (ClientException $exception) {
-            return $this->errorResponse(__('Invalid credentials provided.'), 401);
+            return $this->errorResponse(__('Invalid credentials provided.'), Response::HTTP_UNAUTHORIZED);
         }
 
         $user = User::firstOrCreate(
@@ -104,7 +105,7 @@ class AuthController extends ApiController
     protected function validateProvider($provider)
     {
         if (!in_array($provider, ['facebook', 'google'])) {
-            return $this->errorResponse(__('Please login using facebook or google'), 400);
+            return $this->errorResponse(__('Please login using facebook or google'));
         }
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Api\Auth;
+namespace App\Http\Requests\Api\State;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProviderRequest extends FormRequest
+class UpdateStateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,8 @@ class ProviderRequest extends FormRequest
     public function rules()
     {
         return [
-            'token' => 'required|string'
+            'name' => 'string|max:255',
+            'country_id' => 'exists:countries,id',
         ];
     }
 }

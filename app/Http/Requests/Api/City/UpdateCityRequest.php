@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Api\Country;
+namespace App\Http\Requests\Api\City;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRequest extends FormRequest
+class UpdateCityRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,8 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
-            'short_name' => 'required|string|max:5',
-            'phone_code' => 'required|string|max:5',
+            'name' => 'string|max:255',
+            'state_id' => 'exists:states,id',
         ];
     }
 }

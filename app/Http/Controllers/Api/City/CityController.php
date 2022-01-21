@@ -8,8 +8,8 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Controllers\Api\ApiController;
-use App\Http\Requests\Api\City\StoreRequest;
-use App\Http\Requests\Api\City\UpdateRequest;
+use App\Http\Requests\Api\City\StoreCityRequest;
+use App\Http\Requests\Api\City\UpdateCityRequest;
 
 class CityController extends ApiController
 {
@@ -51,19 +51,19 @@ class CityController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRequest $storeRequest)
+    public function store(StoreCityRequest $request)
     {
         DB::beginTransaction();
         try {
             $this->city = $this->city->create(
-                $this->city->setCreate($storeRequest)
+                $this->city->setCreate($request)
             );
             DB::commit();
 
             return $this->showOne($this->city);
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage(), 400);
+            return $this->errorResponse($exception->getMessage());
         }
     }
 
@@ -89,18 +89,18 @@ class CityController extends ApiController
      * @param  \App\Models\City  $city
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateRequest $updateRequest, City $city)
+    public function update(UpdateCityRequest $request, City $city)
     {
         DB::beginTransaction();
         try {
-            $this->city = $city->setUpdate($updateRequest);
+            $this->city = $city->setUpdate($request);
             $this->city->save();
             DB::commit();
 
             return $this->showOne($this->city);
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage(), 400);
+            return $this->errorResponse($exception->getMessage());
         }
     }
 
@@ -121,7 +121,7 @@ class CityController extends ApiController
             return $this->showOne($this->city);
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage(), 400);
+            return $this->errorResponse($exception->getMessage());
         }
     }
 

@@ -8,8 +8,8 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Controllers\Api\ApiController;
-use App\Http\Requests\Api\State\StoreRequest;
-use App\Http\Requests\Api\State\UpdateRequest;
+use App\Http\Requests\Api\State\StoreStateRequest;
+use App\Http\Requests\Api\State\UpdateStateRequest;
 
 class StateController extends ApiController
 {
@@ -51,19 +51,19 @@ class StateController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRequest $storeRequest)
+    public function store(StoreStateRequest $request)
     {
         DB::beginTransaction();
         try {
             $this->state = $this->state->create(
-                $this->state->setCreate($storeRequest)
+                $this->state->setCreate($request)
             );
             DB::commit();
 
             return $this->showOne($this->state);
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage(), 400);
+            return $this->errorResponse($exception->getMessage());
         }
     }
 
@@ -89,18 +89,18 @@ class StateController extends ApiController
      * @param  \App\Models\State  $state
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateRequest $updateRequest, State $state)
+    public function update(UpdateStateRequest $request, State $state)
     {
         DB::beginTransaction();
         try {
-            $this->state = $state->setUpdate($updateRequest);
+            $this->state = $state->setUpdate($request);
             $this->state->save();
             DB::commit();
 
             return $this->showOne($this->state);
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage(), 400);
+            return $this->errorResponse($exception->getMessage());
         }
     }
 
@@ -121,7 +121,7 @@ class StateController extends ApiController
             return $this->showOne($this->state);
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage(), 400);
+            return $this->errorResponse($exception->getMessage());
         }
     }
 
