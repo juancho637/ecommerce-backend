@@ -3,35 +3,44 @@
 namespace App\Models;
 
 use Illuminate\Support\Str;
-use App\Http\Resources\TagResource;
 use Illuminate\Database\Eloquent\Model;
+use App\Http\Resources\ProductResource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Tag extends Model
+class Product extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'status_id',
+        'category_id',
         'name',
         'slug',
+        'short_description',
+        'description',
     ];
 
     protected $casts = [
         'status_id' => 'integer',
+        'category_id' => 'integer',
     ];
 
-    public $transformer = TagResource::class;
+    public $transformer = ProductResource::class;
 
     public function status()
     {
         return $this->belongsTo(Status::class);
     }
 
-    public function products()
+    public function category()
     {
-        return $this->belongsToMany(Product::class);
+        return $this->hasMany(Category::class);
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
     }
 
     public function scopeByRole(Builder $query)
@@ -64,8 +73,11 @@ class Tag extends Model
 
     public function setCreate($attributes)
     {
+        $data['category_id'] = $attributes['category_id'];
         $data['name'] = $attributes['name'];
         $data['slug'] = Str::slug($data['name'], '-');
+        $data['short_description'] = $attributes['short_description'];
+        $data['description'] = $attributes['description'];
         $data['status_id'] = Status::enabled()->value('id');
 
         return $data;
@@ -75,6 +87,9 @@ class Tag extends Model
     {
         !$attributes['name'] ?: $this->name = $attributes['name'];
         !$attributes['name'] ?: $this->slug = Str::slug($attributes['name'], '-');
+        !$attributes['category_id'] ?: $this->category_id = $attributes['category_id'];
+        !$attributes['short_description'] ?: $this->short_description = $attributes['short_description'];
+        !$attributes['description'] ?: $this->description = $attributes['description'];
 
         return $this;
     }

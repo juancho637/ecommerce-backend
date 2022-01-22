@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\City\CityController;
 use App\Http\Controllers\Api\User\UserController;
 use App\Http\Controllers\Api\State\StateController;
 use App\Http\Controllers\Api\Country\CountryController;
+use App\Http\Controllers\Api\Product\ProductController;
 use App\Http\Controllers\Api\Category\CategoryController;
 use App\Http\Controllers\Api\ProductAttribute\ProductAttributeController;
 use App\Http\Controllers\Api\ProductAttributeOption\ProductAttributeOptionController;
@@ -54,5 +55,9 @@ Route::group(['prefix' => 'v1'], function () {
         'parameters' => [
             'product_attribute_option' => 'productAttributeOption'
         ],
+    ]);
+
+    Route::apiResource('products', ProductController::class, [
+        'as' => 'api.v1',
     ]);
 });
