@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\ProductAttribute;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Models\ProductAttribute;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
@@ -33,7 +32,7 @@ class ProductAttributeController extends ApiController
     {
         $includes = explode(',', $request->get('include', ''));
 
-        $productAttributes = $this->productAttribute->query()->byRole();
+        $productAttributes = $this->productAttribute->query();
         $productAttributes = $this->eagerLoadIncludes($productAttributes, $includes)->get();
 
         return $this->showAll($productAttributes);
@@ -69,11 +68,7 @@ class ProductAttributeController extends ApiController
      */
     public function show(ProductAttribute $productAttribute)
     {
-        if ($productAttribute->validByRole()) {
-            return $this->showOne($productAttribute);
-        }
-
-        return $this->errorResponse(__('Not found'), Response::HTTP_NOT_FOUND);
+        return $this->showOne($productAttribute);
     }
 
     /**

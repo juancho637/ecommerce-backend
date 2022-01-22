@@ -38,34 +38,6 @@ class ProductAttribute extends Model
         return $this->belongsTo(Status::class);
     }
 
-    public function scopeByRole(Builder $query)
-    {
-        $user = auth('sanctum')->user();
-
-        if ($user && $user->hasRole(Role::ADMIN)) {
-            return $query;
-        }
-
-        $query->whereHas('status', function ($query) {
-            return $query->where('name', Status::ENABLED);
-        });
-    }
-
-    public function validByRole()
-    {
-        $user = auth('sanctum')->user();
-
-        if ($this->status->name === Status::DISABLED) {
-            if ($user && $user->hasRole(Role::ADMIN)) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return true;
-        }
-    }
-
     public function setCreate($attributes)
     {
         $data['name'] = $attributes['name'];
