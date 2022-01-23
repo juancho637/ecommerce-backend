@@ -19,11 +19,8 @@ class UserController extends ApiController
         $this->user = $user;
 
         $this->middleware('auth:sanctum');
-        $this->middleware('can:view-any,' . User::class)->only('index');
-        $this->middleware('can:create,' . User::class)->only('store');
-        $this->middleware('can:view,user')->only('show');
-        $this->middleware('can:update,user')->only('update');
-        $this->middleware('can:delete,user')->only('destroy');
+
+        $this->authorizeResource(User::class, 'user');
     }
 
     public function index(Request $request)

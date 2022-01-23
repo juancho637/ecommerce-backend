@@ -19,15 +19,11 @@ class TagController extends ApiController
     {
         $this->tag = $tag;
 
-        $this->middleware('auth:sanctum')->only([
-            'store',
-            'update',
-            'destroy',
-        ]);
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
 
-        $this->middleware('can:create,' . Tag::class)->only('store');
-        $this->middleware('can:update,tag')->only('update');
-        $this->middleware('can:delete,tag')->only('destroy');
+        $this->authorizeResource(Tag::class, 'tag', [
+            'except' => ['index', 'show']
+        ]);
     }
 
     /**

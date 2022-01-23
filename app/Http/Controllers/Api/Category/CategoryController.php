@@ -19,15 +19,11 @@ class CategoryController extends ApiController
     {
         $this->category = $category;
 
-        $this->middleware('auth:sanctum')->only([
-            'store',
-            'update',
-            'destroy',
-        ]);
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
 
-        $this->middleware('can:create,' . Category::class)->only('store');
-        $this->middleware('can:update,category')->only('update');
-        $this->middleware('can:delete,category')->only('destroy');
+        $this->authorizeResource(Category::class, 'category', [
+            'except' => ['index', 'show']
+        ]);
     }
 
     /**

@@ -19,15 +19,11 @@ class StateController extends ApiController
     {
         $this->state = $state;
 
-        $this->middleware('auth:sanctum')->only([
-            'store',
-            'update',
-            'destroy'
-        ]);
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
 
-        $this->middleware('can:create,' . State::class)->only('store');
-        $this->middleware('can:update,state')->only('update');
-        $this->middleware('can:delete,state')->only('destroy');
+        $this->authorizeResource(State::class, 'state', [
+            'except' => ['index', 'show']
+        ]);
     }
 
     /**

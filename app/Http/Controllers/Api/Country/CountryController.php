@@ -19,15 +19,11 @@ class CountryController extends ApiController
     {
         $this->country = $country;
 
-        $this->middleware('auth:sanctum')->only([
-            'store',
-            'update',
-            'destroy'
-        ]);
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
 
-        $this->middleware('can:create,' . Country::class)->only('store');
-        $this->middleware('can:update,country')->only('update');
-        $this->middleware('can:delete,country')->only('destroy');
+        $this->authorizeResource(Country::class, 'country', [
+            'except' => ['index', 'show']
+        ]);
     }
 
     /**

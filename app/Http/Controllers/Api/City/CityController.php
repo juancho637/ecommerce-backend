@@ -19,15 +19,11 @@ class CityController extends ApiController
     {
         $this->city = $city;
 
-        $this->middleware('auth:sanctum')->only([
-            'store',
-            'update',
-            'destroy'
-        ]);
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
 
-        $this->middleware('can:create,' . City::class)->only('store');
-        $this->middleware('can:update,city')->only('update');
-        $this->middleware('can:delete,city')->only('destroy');
+        $this->authorizeResource(City::class, 'city', [
+            'except' => ['index', 'show']
+        ]);
     }
 
     /**
