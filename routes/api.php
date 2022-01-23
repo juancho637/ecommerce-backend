@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\Country\CountryController;
 use App\Http\Controllers\Api\Product\ProductController;
 use App\Http\Controllers\Api\Category\CategoryController;
 use App\Http\Controllers\Api\ProductAttribute\ProductAttributeController;
+use App\Http\Controllers\Api\ProductSpecification\ProductSpecificationController;
 use App\Http\Controllers\Api\ProductAttributeOption\ProductAttributeOptionController;
 
 Route::group(['prefix' => 'v1'], function () {
@@ -59,5 +60,12 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::apiResource('products', ProductController::class, [
         'as' => 'api.v1',
+    ]);
+
+    Route::apiResource('product_specifications', ProductSpecificationController::class, [
+        'as' => 'api.v1',
+        'parameters' => [
+            'product_specification' => 'productSpecification'
+        ],
     ]);
 });

@@ -38,6 +38,11 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function productSpecifications()
+    {
+        return $this->hasMany(ProductSpecification::class);
+    }
+
     public function tags()
     {
         return $this->belongsToMany(Tag::class);

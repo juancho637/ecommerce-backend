@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductResource extends JsonResource
+class ProductSpecificationResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,25 +19,15 @@ class ProductResource extends JsonResource
         $resource = [
             'id' => $this->id,
             'name' => $this->name,
-            'slug' => $this->slug,
-            'short_description' => $this->short_description,
-            'description' => $this->description,
+            'value' => $this->value,
         ];
 
         if (in_array('status', $includes)) {
             $resource['status'] = new StatusResource($this->status);
         }
 
-        if (in_array('category', $includes)) {
-            $resource['category'] = new CategoryResource($this->category);
-        }
-
-        if (in_array('product_specifications', $includes)) {
-            $resource['product_specifications'] = ProductSpecificationResource::collection($this->productSpecifications);
-        }
-
-        if (in_array('tags', $includes)) {
-            $resource['tags'] = TagResource::collection($this->tags);
+        if (in_array('product', $includes)) {
+            $resource['product'] = ProductResource::collection($this->product);
         }
 
         return $resource;
@@ -48,10 +38,9 @@ class ProductResource extends JsonResource
         $attributes = [
             'id' => 'id',
             'status' => 'status_id',
-            'category' => 'category_id',
+            'product' => 'product_id',
             'name' => 'name',
-            'slug' => 'slug',
-            'description' => 'description',
+            'product' => 'product',
         ];
 
         return isset($attributes[$index]) ? $attributes[$index] : null;

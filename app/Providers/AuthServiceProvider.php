@@ -18,8 +18,10 @@ use App\Policies\ProductPolicy;
 use App\Policies\CategoryPolicy;
 use App\Models\ProductAttribute;
 use Illuminate\Support\Facades\Gate;
+use App\Models\ProductSpecification;
 use App\Models\ProductAttributeOption;
 use App\Policies\ProductAttributePolicy;
+use App\Policies\ProductSpecificationPolicy;
 use App\Policies\ProductAttributeOptionPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -40,6 +42,7 @@ class AuthServiceProvider extends ServiceProvider
         ProductAttribute::class => ProductAttributePolicy::class,
         ProductAttributeOption::class => ProductAttributeOptionPolicy::class,
         Product::class => ProductPolicy::class,
+        ProductSpecification::class => ProductSpecificationPolicy::class,
     ];
 
     /**
