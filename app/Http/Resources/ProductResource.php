@@ -29,7 +29,7 @@ class ProductResource extends JsonResource
         }
 
         if (in_array('category', $includes)) {
-            $resource['category'] = CategoryResource::collection($this->category);
+            $resource['category'] = new CategoryResource($this->category);
         }
 
         if (in_array('tags', $includes)) {
