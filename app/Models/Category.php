@@ -38,6 +38,11 @@ class Category extends Model
         return $this->hasMany(__CLASS__, 'parent_id', 'id');
     }
 
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
     public function image()
     {
         return $this->morphOne(Resource::class, 'obtainable')
