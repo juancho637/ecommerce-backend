@@ -1,0 +1,23 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\$CLASS_NAME$\$CLASS_NAME$ShowController;
+use App\Http\Controllers\Api\$CLASS_NAME$\$CLASS_NAME$IndexController;
+use App\Http\Controllers\Api\$CLASS_NAME$\$CLASS_NAME$StoreController;
+use App\Http\Controllers\Api\$CLASS_NAME$\$CLASS_NAME$UpdateController;
+use App\Http\Controllers\Api\$CLASS_NAME$\$CLASS_NAME$DestroyController;
+
+Route::get('$PLURAL_NAME$', $CLASS_NAME$IndexController::class)
+    ->name('api.v1.$PLURAL_NAME$.index');
+
+Route::post('$PLURAL_NAME$', $CLASS_NAME$StoreController::class)
+    ->name('api.v1.$PLURAL_NAME$.store');
+
+Route::get('$PLURAL_NAME$/{$SINGULAR_NAME$}', $CLASS_NAME$ShowController::class)
+    ->name('api.v1.$PLURAL_NAME$.show');
+
+Route::put('$PLURAL_NAME$/{$SINGULAR_NAME$}', $CLASS_NAME$UpdateController::class)
+    ->name('api.v1.$PLURAL_NAME$.update');
+
+Route::delete('$PLURAL_NAME$/{$SINGULAR_NAME$}', $CLASS_NAME$DestroyController::class)
+    ->name('api.v1.$PLURAL_NAME$.destroy');

@@ -60,6 +60,10 @@ class CreateModuleCommand extends Command
             "--api" => true,
         ]);
 
+        $this->call('make:route', [
+            "name" => "{$name}",
+        ]);
+
         $this->call('make:resource', [
             "name" => "{$name}Resource",
         ]);
