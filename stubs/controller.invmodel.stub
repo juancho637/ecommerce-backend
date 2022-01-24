@@ -1,0 +1,32 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ namespacedModel }};
+use Illuminate\Http\Request;
+use {{ rootNamespace }}Http\Controllers\Api\ApiController;
+
+class {{ class }} extends ApiController
+{
+    private ${{ modelVariable }};
+
+    public function __construct({{ model }} ${{ modelVariable }})
+    {
+        $this->{{ modelVariable }} = ${{ modelVariable }};
+
+        // $this->middleware('auth:sanctum');
+
+        // $this->middleware('can:')->only('__invoke');
+    }
+
+    /**
+     * Handle the incoming request.
+     *
+     * @param \{{ namespacedModel }}  ${{ modelVariable }}
+     * @return \Illuminate\Http\Response
+     */
+    public function __invoke({{ model }} ${{ modelVariable }})
+    {
+        //
+    }
+}

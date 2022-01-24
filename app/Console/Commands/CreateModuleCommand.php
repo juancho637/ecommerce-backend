@@ -55,9 +55,29 @@ class CreateModuleCommand extends Command
         ]);
 
         $this->call('make:controller', [
-            "name" => "Api/{$name}/{$name}Controller",
-            "-m" => $name,
-            "--api" => true,
+            "name" => "Api/{$name}/{$name}IndexController",
+            "--model" => $name,
+            "--type" => 'invrequest',
+        ]);
+        $this->call('make:controller', [
+            "name" => "Api/{$name}/{$name}StoreController",
+            "--model" => $name,
+            "--type" => 'invrequest',
+        ]);
+        $this->call('make:controller', [
+            "name" => "Api/{$name}/{$name}ShowController",
+            "--model" => $name,
+            "--type" => 'invmodelsimple',
+        ]);
+        $this->call('make:controller', [
+            "name" => "Api/{$name}/{$name}UpdateController",
+            "--model" => $name,
+            "--type" => 'invmodelrequest',
+        ]);
+        $this->call('make:controller', [
+            "name" => "Api/{$name}/{$name}DestroyController",
+            "--model" => $name,
+            "--type" => 'invmodel',
         ]);
 
         $this->call('make:route', [
