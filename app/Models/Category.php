@@ -118,6 +118,17 @@ class Category extends Model
         }
     }
 
+    public function loadEagerLoadIncludes(array $includes)
+    {
+        $this->load(['image']);
+
+        if (in_array('status', $includes)) {
+            $this->load(['status']);
+        }
+
+        return $this;
+    }
+
     public function saveImage($file)
     {
         if (!$file) return;
