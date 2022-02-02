@@ -1,11 +1,23 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\ProductAttribute\ProductAttributeController;
+use App\Http\Controllers\Api\ProductAttribute\ProductAttributeShowController;
+use App\Http\Controllers\Api\ProductAttribute\ProductAttributeIndexController;
+use App\Http\Controllers\Api\ProductAttribute\ProductAttributeStoreController;
+use App\Http\Controllers\Api\ProductAttribute\ProductAttributeUpdateController;
+use App\Http\Controllers\Api\ProductAttribute\ProductAttributeDestroyController;
 
-Route::apiResource('product_attributes', ProductAttributeController::class, [
-    'as' => 'api.v1',
-    'parameters' => [
-        'product_attribute' => 'productAttribute'
-    ],
-]);
+Route::get('product_attributes', ProductAttributeIndexController::class)
+    ->name('api.v1.product_attributes.index');
+
+Route::post('product_attributes', ProductAttributeStoreController::class)
+    ->name('api.v1.product_attributes.store');
+
+Route::get('product_attributes/{productAttribute}', ProductAttributeShowController::class)
+    ->name('api.v1.product_attributes.show');
+
+Route::match(['put', 'patch'], 'product_attributes/{productAttribute}', ProductAttributeUpdateController::class)
+    ->name('api.v1.product_attributes.update');
+
+Route::delete('product_attributes/{productAttribute}', ProductAttributeDestroyController::class)
+    ->name('api.v1.product_attributes.destroy');
