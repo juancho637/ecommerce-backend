@@ -48,6 +48,11 @@ class Product extends Model
         return $this->belongsToMany(Tag::class);
     }
 
+    public function productAttributeOptions()
+    {
+        return $this->belongsToMany(ProductAttributeOption::class);
+    }
+
     public function scopeByRole(Builder $query)
     {
         $user = auth('sanctum')->user();
@@ -59,6 +64,55 @@ class Product extends Model
         $query->whereHas('status', function ($query) {
             return $query->where('name', Status::ENABLED);
         });
+    }
+
+    public function loadEagerLoadIncludes(array $includes)
+    {
+        $user = auth('sanctum')->user();
+
+        if (in_array('status', $includes)) {
+            $this->load(['status']);
+        }
+
+        if (in_array('category', $includes)) {
+            if ($user && $user->hasRole(Role::ADMIN)) {
+                $this->load(['category']);
+            } else {
+                $this->load(['category' => function ($query) {
+                    $query->whereHas('status', function ($query) {
+                        $query->where('name', Status::ENABLED);
+                    });
+                }]);
+            }
+        }
+
+        if (in_array('tags', $includes)) {
+            if ($user && $user->hasRole(Role::ADMIN)) {
+                $this->load(['tags']);
+            } else {
+                $this->load(['tags' => function ($query) {
+                    $query->whereHas('status', function ($query) {
+                        $query->where('name', Status::ENABLED);
+                    });
+                }]);
+            }
+        }
+
+        if (in_array('product_attribute_options', $includes)) {
+            if ($user && $user->hasRole(Role::ADMIN)) {
+                $this->load(['productAttributeOptions.productAttribute']);
+            } else {
+                $this->load([
+                    'productAttributeOptions.productAttribute' => function ($query) {
+                        $query->whereHas('status', function ($query) {
+                            $query->where('name', Status::ENABLED);
+                        });
+                    }
+                ]);
+            }
+        }
+
+        return $this;
     }
 
     public function validByRole()

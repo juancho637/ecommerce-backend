@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductResource extends JsonResource
@@ -14,8 +15,6 @@ class ProductResource extends JsonResource
      */
     public function toArray($request)
     {
-        $includes = explode(',', $request->get('include'));
-
         $resource = [
             'id' => $this->id,
             'name' => $this->name,
@@ -24,20 +23,30 @@ class ProductResource extends JsonResource
             'description' => $this->description,
         ];
 
-        if (in_array('status', $includes)) {
+        if (!$this->whenLoaded('status') instanceof MissingValue) {
             $resource['status'] = new StatusResource($this->status);
         }
 
-        if (in_array('category', $includes)) {
+        if (!$this->whenLoaded('category') instanceof MissingValue) {
             $resource['category'] = new CategoryResource($this->category);
         }
 
-        if (in_array('product_specifications', $includes)) {
-            $resource['product_specifications'] = ProductSpecificationResource::collection($this->productSpecifications);
+        if (!$this->whenLoaded('productSpecifications') instanceof MissingValue) {
+            $resource['product_specifications'] =
+                ProductSpecificationResource::collection($this->productSpecifications);
         }
 
-        if (in_array('tags', $includes)) {
+        if (!$this->whenLoaded('tags') instanceof MissingValue) {
             $resource['tags'] = TagResource::collection($this->tags);
+        }
+
+        if (
+            !$this->whenLoaded('productAttributeOptions') instanceof MissingValue
+            && count($this->productAttributeOptions)
+        ) {
+            $resource['product_attribute_options'] = ProductAttributeOptionResource::collection(
+                $this->productAttributeOptions
+            );
         }
 
         return $resource;

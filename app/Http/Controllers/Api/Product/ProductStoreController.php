@@ -28,6 +28,8 @@ class ProductStoreController extends ApiController
      */
     public function __invoke(StoreProductRequest $request)
     {
+        $includes = explode(',', $request->get('include', ''));
+
         DB::beginTransaction();
         try {
             $this->product = $this->product->create(
@@ -35,9 +37,20 @@ class ProductStoreController extends ApiController
             );
 
             $this->product->tags()->sync($request->tags);
+
+            if (
+                $request->has('product_attribute_options')
+                && count($request->product_attribute_options)
+            ) {
+                $this->product
+                    ->productAttributeOptions()
+                    ->sync($request->product_attribute_options);
+            }
             DB::commit();
 
-            return $this->showOne($this->product);
+            return $this->showOne(
+                $this->product->loadEagerLoadIncludes($includes)
+            );
         } catch (\Exception $exception) {
             DB::rollBack();
             return $this->errorResponse($exception->getMessage());

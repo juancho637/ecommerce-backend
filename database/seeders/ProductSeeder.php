@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Tag;
 use App\Models\Product;
 use Illuminate\Database\Seeder;
+use App\Models\ProductAttributeOption;
 
 class ProductSeeder extends Seeder
 {
@@ -16,12 +17,23 @@ class ProductSeeder extends Seeder
     public function run()
     {
         Product::factory()
-            ->count(10)
+            ->count(5)
             ->create()
             ->each(function ($product) {
                 $tags = Tag::all()->random(3)->pluck('id');
 
                 $product->tags()->sync($tags);
+            });
+
+        Product::factory()
+            ->count(5)
+            ->create()
+            ->each(function ($product) {
+                $tags = Tag::all()->random(3)->pluck('id');
+                $productAttributeOptions = ProductAttributeOption::all()->random(3)->pluck('id');
+
+                $product->tags()->sync($tags);
+                $product->productAttributeOptions()->sync($productAttributeOptions);
             });
     }
 }

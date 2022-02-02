@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\Product;
 
+use App\Models\Role;
+use App\Models\Status;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
@@ -34,16 +36,48 @@ class ProductIndexController extends ApiController
 
     protected function eagerLoadIncludes(Builder $query, array $includes)
     {
+        $user = auth('sanctum')->user();
+
         if (in_array('status', $includes)) {
             $query->with('status');
         }
 
         if (in_array('category', $includes)) {
-            $query->with('category');
+            if ($user && $user->hasRole(Role::ADMIN)) {
+                $query->with(['category']);
+            } else {
+                $query->with(['category' => function ($query) {
+                    $query->whereHas('status', function ($query) {
+                        $query->where('name', Status::ENABLED);
+                    });
+                }]);
+            }
         }
 
         if (in_array('tags', $includes)) {
-            $query->with('tags');
+            if ($user && $user->hasRole(Role::ADMIN)) {
+                $query->with(['tags']);
+            } else {
+                $query->with(['tags' => function ($query) {
+                    $query->whereHas('status', function ($query) {
+                        $query->where('name', Status::ENABLED);
+                    });
+                }]);
+            }
+        }
+
+        if (in_array('product_attribute_options', $includes)) {
+            if ($user && $user->hasRole(Role::ADMIN)) {
+                $query->with(['productAttributeOptions.productAttribute']);
+            } else {
+                $query->with([
+                    'productAttributeOptions.productAttribute' => function ($query) {
+                        $query->whereHas('status', function ($query) {
+                            $query->where('name', Status::ENABLED);
+                        });
+                    }
+                ]);
+            }
         }
 
         return $query;

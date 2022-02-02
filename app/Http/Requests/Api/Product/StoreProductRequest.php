@@ -30,6 +30,8 @@ class StoreProductRequest extends FormRequest
             'description' => 'nullable|string',
             'tags' => 'required|array|min:1',
             'tags.*' => 'exists:tags,id',
+            'product_attribute_options' => 'nullable|array',
+            'product_attribute_options.*' => 'exists:product_attribute_options,id',
         ];
     }
 }
