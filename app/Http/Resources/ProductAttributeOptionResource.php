@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Traits\ValidIncludes;
+use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductAttributeOptionResource extends JsonResource
@@ -15,19 +16,17 @@ class ProductAttributeOptionResource extends JsonResource
      */
     public function toArray($request)
     {
-        $includes = explode(',', $request->get('include'));
-
         $resource = [
             'id' => $this->id,
             'name' => $this->name,
             'option' => $this->option,
         ];
 
-        if (in_array('status', $includes)) {
+        if (!$this->whenLoaded('status') instanceof MissingValue) {
             $resource['status'] = new StatusResource($this->status);
         }
 
-        if (in_array('product_attribute', $includes)) {
+        if (!$this->whenLoaded('productAttribute') instanceof MissingValue) {
             $resource['product_attribute'] = new ProductAttributeResource($this->productAttribute);
         }
 

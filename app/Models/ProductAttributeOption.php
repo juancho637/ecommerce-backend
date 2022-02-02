@@ -63,4 +63,17 @@ class ProductAttributeOption extends Model
 
         return $this;
     }
+
+    public function loadEagerLoadIncludes(array $includes)
+    {
+        if (in_array('status', $includes)) {
+            $this->load(['status']);
+        }
+
+        if (in_array('product_attribute', $includes)) {
+            $this->load(['productAttribute']);
+        }
+
+        return $this;
+    }
 }
