@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 use App\Http\Resources\ProductAttributeResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -36,6 +35,11 @@ class ProductAttribute extends Model
     public function status()
     {
         return $this->belongsTo(Status::class);
+    }
+
+    public function productAttributeOptions()
+    {
+        return $this->hasMany(ProductAttributeOption::class);
     }
 
     public function setCreate($attributes)
