@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\Tag;
 use App\Models\Product;
 use Illuminate\Database\Seeder;
-use App\Models\ProductAttributeOption;
+use App\Models\ProductAttribute;
 
 class ProductSeeder extends Seeder
 {
@@ -30,7 +30,12 @@ class ProductSeeder extends Seeder
             ->create()
             ->each(function ($product) {
                 $tags = Tag::all()->random(3)->pluck('id');
-                $productAttributeOptions = ProductAttributeOption::all()->random(3)->pluck('id');
+                $productAttributeOptions = ProductAttribute::all()
+                    ->load('productAttributeOptions')
+                    ->random(mt_rand(1, 3))
+                    ->pluck('productAttributeOptions')
+                    ->collapse()
+                    ->pluck('id');
 
                 $product->tags()->sync($tags);
                 $product->productAttributeOptions()->sync($productAttributeOptions);
