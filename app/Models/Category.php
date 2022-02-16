@@ -142,21 +142,21 @@ class Category extends Model
                 $resource->deleteFile($oldFile->path);
 
                 return $oldFile->update($resource->saveResource(
-                    $file,
-                    self::class,
-                    $this->id,
-                    self::CATEGORY_IMAGE,
-                    $moduleNamePath,
-                    true
+                    resource: $file,
+                    type: self::class,
+                    id: $this->id,
+                    typeResource: self::CATEGORY_IMAGE,
+                    path: $moduleNamePath,
+                    isImage: true
                 ));
             } else {
                 return $resource->create($resource->saveResource(
-                    $file,
-                    self::class,
-                    $this->id,
-                    self::CATEGORY_IMAGE,
-                    $moduleNamePath,
-                    true
+                    resource: $file,
+                    type: self::class,
+                    id: $this->id,
+                    typeResource: self::CATEGORY_IMAGE,
+                    path: $moduleNamePath,
+                    isImage: true
                 ));
             }
         } catch (\Exception $exception) {
