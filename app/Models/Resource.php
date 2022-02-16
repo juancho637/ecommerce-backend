@@ -38,8 +38,15 @@ class Resource extends Model
         return $query->where('type_resource', $type);
     }
 
-    public function saveResource($resource, $type, $id, $typeResource, $path, $isImage = false, $disk = 'public')
-    {
+    public function saveResource(
+        string $resource,
+        string $type,
+        int $id,
+        string $typeResource,
+        string $path,
+        bool $isImage = false,
+        string $disk = 'public'
+    ) {
         try {
             $disk = config('filesystems.' . $disk);
 
