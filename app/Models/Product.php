@@ -50,7 +50,7 @@ class Product extends Model
 
     public function productAttributeOptions()
     {
-        return $this->belongsToMany(ProductAttributeOption::class);
+        return $this->belongsToMany(ProductAttributeOption::class, 'prod_prod_attr_opt');
     }
 
     public function scopeByRole(Builder $query)

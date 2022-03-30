@@ -13,7 +13,7 @@ class CreateProductProductAttributeOptionTable extends Migration
      */
     public function up()
     {
-        Schema::create('product_product_attribute_option', function (Blueprint $table) {
+        Schema::create('prod_prod_attr_opt', function (Blueprint $table) {
             $table->foreignId('product_id')->constrained();
             $table->foreignId('product_attribute_option_id')->constrained();
         });
@@ -26,6 +26,6 @@ class CreateProductProductAttributeOptionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_product_attribute_option');
+        Schema::dropIfExists('prod_prod_attr_opt');
     }
 }
