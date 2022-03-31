@@ -36,7 +36,7 @@ class ProductAttributeOption extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class);
+        return $this->belongsToMany(Product::class, 'prod_prod_attr_opt');
     }
 
     public function setCreate($attributes)
