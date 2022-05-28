@@ -45,7 +45,8 @@ class Resource extends Model
         string $typeResource,
         string $path,
         bool $isImage = false,
-        string $disk = 'public'
+        string $disk = 'public',
+        object $options = null
     ) {
         try {
             $disk = config('filesystems.' . $disk);
@@ -59,14 +60,25 @@ class Resource extends Model
             $data['obtainable_id'] = $id;
             $data['type_resource'] = $typeResource;
 
+            if ($options) {
+                $data['options'] = $options;
+            }
+
             return $data;
         } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage());
         }
     }
 
-    public function updateResource($resource, $type, $id, $typeResource, $path, $isImage = false, $disk = 'public')
-    {
+    public function updateResource(
+        string $resource,
+        string $type,
+        int $id,
+        string $typeResource,
+        string $path,
+        bool $isImage = false,
+        string $disk = 'public'
+    ) {
         try {
             $disk = config('filesystems.' . $disk);
 

@@ -19,6 +19,7 @@ class CreateResourcesTable extends Migration
             $table->string('path');
             $table->string('type_resource');
             $table->morphs('obtainable');
+            $table->json('options')->nullable();
         });
     }
 
