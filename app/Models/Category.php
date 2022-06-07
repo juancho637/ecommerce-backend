@@ -141,23 +141,27 @@ class Category extends Model
             if ($oldFile) {
                 $resource->deleteFile($oldFile->path);
 
-                return $oldFile->update($resource->saveResource(
-                    resource: $file,
-                    type: self::class,
-                    id: $this->id,
-                    typeResource: self::CATEGORY_IMAGE,
-                    path: $moduleNamePath,
-                    isImage: true
-                ));
+                return $oldFile->update(
+                    $resource->saveResource(
+                        resource: $file,
+                        type: self::class,
+                        id: $this->id,
+                        typeResource: self::CATEGORY_IMAGE,
+                        path: $moduleNamePath,
+                        isImage: true
+                    )
+                );
             } else {
-                return $resource->create($resource->saveResource(
-                    resource: $file,
-                    type: self::class,
-                    id: $this->id,
-                    typeResource: self::CATEGORY_IMAGE,
-                    path: $moduleNamePath,
-                    isImage: true
-                ));
+                return $resource->create(
+                    $resource->saveResource(
+                        resource: $file,
+                        type: self::class,
+                        id: $this->id,
+                        typeResource: self::CATEGORY_IMAGE,
+                        path: $moduleNamePath,
+                        isImage: true
+                    )
+                );
             }
         } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage(), 400);
