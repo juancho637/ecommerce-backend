@@ -3,14 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Support\Str;
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Resources\ProductResource;
 use Illuminate\Database\Eloquent\Builder;
+use Laravel\Scout\Attributes\SearchUsingPrefix;
+use Laravel\Scout\Attributes\SearchUsingFullText;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     protected $fillable = [
         'status_id',
@@ -19,6 +22,7 @@ class Product extends Model
         'slug',
         'short_description',
         'description',
+        'options',
     ];
 
     protected $casts = [
@@ -27,6 +31,19 @@ class Product extends Model
     ];
 
     public $transformer = ProductResource::class;
+
+    #[SearchUsingPrefix(['name', 'slug'])]
+    #[SearchUsingFullText(['short_description', 'description', 'options'])]
+    public function toSearchableArray()
+    {
+        return [
+            'name' => $this->name,
+            'slug' => $this->slug,
+            'short_description' => $this->short_description,
+            'description' => $this->description,
+            'options' => $this->options,
+        ];
+    }
 
     public function status()
     {
@@ -138,6 +155,7 @@ class Product extends Model
         $data['short_description'] = $attributes['short_description'];
         $data['description'] = $attributes['description'];
         $data['status_id'] = Status::enabled()->value('id');
+        $data['options'] = $attributes['options'];
 
         return $data;
     }

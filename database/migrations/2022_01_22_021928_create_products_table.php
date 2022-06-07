@@ -21,7 +21,14 @@ class CreateProductsTable extends Migration
             $table->string('slug');
             $table->string('short_description', 600)->nullable();
             $table->text('description')->nullable();
+            $table->text('options')->nullable();
             $table->timestamps();
+
+            if (env('APP_ENV') !== 'testing') {
+                $table->fullText('short_description');
+                $table->fullText('description');
+                $table->fullText('options');
+            }
         });
     }
 

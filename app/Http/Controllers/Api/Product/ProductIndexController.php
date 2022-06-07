@@ -27,9 +27,12 @@ class ProductIndexController extends ApiController
     public function __invoke(Request $request)
     {
         $includes = explode(',', $request->get('include', ''));
+        $search = $request->get('search', '');
 
-        $products = $this->product->query()->byRole();
-        $products = $this->eagerLoadIncludes($products, $includes)->get();
+        $products = Product::search($search)->query(function ($query) use ($includes) {
+            $query->byRole();
+            $this->eagerLoadIncludes($query, $includes);
+        })->get();
 
         return $this->showAll($products);
     }

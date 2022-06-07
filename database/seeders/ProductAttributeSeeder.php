@@ -15,7 +15,29 @@ class ProductAttributeSeeder extends Seeder
     public function run()
     {
         ProductAttribute::factory()
-            ->count(5)
-            ->create();
+            ->create([
+                'name' => 'color',
+                'type' => ProductAttribute::COLOR_TYPE,
+            ]);
+        ProductAttribute::factory()
+            ->create([
+                'name' => 'talla',
+                'type' => ProductAttribute::SELECT_TYPE,
+            ]);
+        ProductAttribute::factory()
+            ->create([
+                'name' => 'peso',
+                'type' => ProductAttribute::SELECT_TYPE,
+            ]);
+        ProductAttribute::factory()
+            ->create([
+                'name' => 'capacidad',
+                'type' => ProductAttribute::SELECT_TYPE,
+            ]);
+        ProductAttribute::factory()
+            ->create([
+                'name' => 'altura',
+                'type' => ProductAttribute::SELECT_TYPE,
+            ]);
     }
 }
