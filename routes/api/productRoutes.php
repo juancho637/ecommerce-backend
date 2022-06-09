@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Product\ProductIndexController;
 use App\Http\Controllers\Api\Product\ProductStoreController;
 use App\Http\Controllers\Api\Product\ProductUpdateController;
 use App\Http\Controllers\Api\Product\ProductDestroyController;
+use App\Http\Controllers\Api\Product\Resource\ProductResourceStoreController;
 use App\Http\Controllers\Api\Product\Resource\ProductResourceDestroyController;
 
 Route::get('products', ProductIndexController::class)
@@ -22,6 +23,9 @@ Route::match(['put', 'patch'], 'products/{product}', ProductUpdateController::cl
 
 Route::delete('products/{product}', ProductDestroyController::class)
     ->name('api.v1.products.destroy');
+
+Route::post('products/{product}/photos', ProductResourceStoreController::class)
+    ->name('api.v1.products.photos.store');
 
 Route::delete('products/{product}/photos/{resource}', ProductResourceDestroyController::class)
     ->name('api.v1.products.photos.destroy');
