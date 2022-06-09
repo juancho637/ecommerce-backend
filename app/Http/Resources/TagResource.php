@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class TagResource extends JsonResource
@@ -14,15 +15,13 @@ class TagResource extends JsonResource
      */
     public function toArray($request)
     {
-        $includes = explode(',', $request->get('include'));
-
         $resource = [
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
         ];
 
-        if (in_array('status', $includes)) {
+        if (!$this->whenLoaded('status') instanceof MissingValue) {
             $resource['status'] = new StatusResource($this->status);
         }
 

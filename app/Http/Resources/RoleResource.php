@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class RoleResource extends JsonResource
@@ -14,14 +15,12 @@ class RoleResource extends JsonResource
      */
     public function toArray($request)
     {
-        $includes = explode(',', $request->get('include'));
-
         $resource = [
             'id' => $this->id,
             'name' => $this->name,
         ];
 
-        if (in_array('permissions', $includes)) {
+        if (!$this->whenLoaded('permissions') instanceof MissingValue) {
             $resource['permissions'] = new PermissionResource($this->permissions);
         }
 

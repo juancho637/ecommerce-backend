@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductSpecificationResource extends JsonResource
@@ -14,19 +15,17 @@ class ProductSpecificationResource extends JsonResource
      */
     public function toArray($request)
     {
-        $includes = explode(',', $request->get('include'));
-
         $resource = [
             'id' => $this->id,
             'name' => $this->name,
             'value' => $this->value,
         ];
 
-        if (in_array('status', $includes)) {
+        if (!$this->whenLoaded('status') instanceof MissingValue) {
             $resource['status'] = new StatusResource($this->status);
         }
 
-        if (in_array('product', $includes)) {
+        if (!$this->whenLoaded('product') instanceof MissingValue) {
             $resource['product'] = ProductResource::collection($this->product);
         }
 

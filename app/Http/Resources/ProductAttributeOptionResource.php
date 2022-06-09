@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Traits\ValidIncludes;
 use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Http\Resources\Json\JsonResource;
 

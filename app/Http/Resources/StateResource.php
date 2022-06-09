@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class StateResource extends JsonResource
@@ -21,11 +22,11 @@ class StateResource extends JsonResource
             'name' => $this->name,
         ];
 
-        if (in_array('status', $includes)) {
+        if (!$this->whenLoaded('status') instanceof MissingValue) {
             $resource['status'] = new StatusResource($this->status);
         }
 
-        if (in_array('country', $includes)) {
+        if (!$this->whenLoaded('country') instanceof MissingValue) {
             $resource['country'] = new CountryResource($this->country);
         }
 
