@@ -31,6 +31,10 @@ class ProductResource extends JsonResource
             $resource['category'] = new CategoryResource($this->category);
         }
 
+        if (!$this->whenLoaded('photos') instanceof MissingValue) {
+            $resource['photos'] = ResourceResource::collection($this->photos);
+        }
+
         if (!$this->whenLoaded('productSpecifications') instanceof MissingValue) {
             $resource['product_specifications'] =
                 ProductSpecificationResource::collection($this->productSpecifications);

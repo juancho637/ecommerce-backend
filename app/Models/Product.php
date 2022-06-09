@@ -32,6 +32,9 @@ class Product extends Model
 
     public $transformer = ProductResource::class;
 
+    const PRODUCT_PHOTO = 'product photo';
+    const MAX_PHOTOS = 4;
+
     #[SearchUsingPrefix(['name', 'slug'])]
     #[SearchUsingFullText(['short_description', 'description', 'options'])]
     public function toSearchableArray()
@@ -70,6 +73,12 @@ class Product extends Model
         return $this->belongsToMany(ProductAttributeOption::class, 'prod_prod_attr_opt');
     }
 
+    public function photos()
+    {
+        return $this->morphMany(Resource::class, 'obtainable')
+            ->where('type_resource', self::PRODUCT_PHOTO);
+    }
+
     public function scopeByRole(Builder $query)
     {
         $user = auth('sanctum')->user();
@@ -89,6 +98,10 @@ class Product extends Model
 
         if (in_array('status', $includes)) {
             $this->load(['status']);
+        }
+
+        if (in_array('photos', $includes)) {
+            $this->load(['photos']);
         }
 
         if (in_array('category', $includes)) {
@@ -180,5 +193,40 @@ class Product extends Model
         }
 
         return $this;
+    }
+
+    private function saveOnePhoto($resourceModule, $path, $file)
+    {
+        return $resourceModule->create(
+            $resourceModule->saveResource(
+                resource: $file,
+                type: self::class,
+                id: $this->id,
+                typeResource: self::PRODUCT_PHOTO,
+                path: $path,
+                isImage: true
+            )
+        );
+    }
+
+    public function savePhotos($photos)
+    {
+        try {
+            $resource = new Resource();
+            $photosSaved = [];
+            $moduleNamePath = strtolower(class_basename($this));
+
+            if (is_array($photos)) {
+                foreach ($photos as $photo) {
+                    $photosSaved[] = $this->saveOnePhoto($resource, $moduleNamePath, $photo);
+                }
+            } else {
+                return $this->saveOnePhoto($resource, $moduleNamePath, $photos);
+            }
+
+            return $photosSaved;
+        } catch (\Exception $exception) {
+            throw new \Exception($exception->getMessage());
+        }
     }
 }

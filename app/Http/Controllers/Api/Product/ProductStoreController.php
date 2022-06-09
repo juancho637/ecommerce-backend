@@ -43,6 +43,7 @@ class ProductStoreController extends ApiController
                 $this->product->setCreate($request)
             );
 
+            $this->product->savePhotos($request->photos);
             $this->product->tags()->sync($request->tags);
 
             if (

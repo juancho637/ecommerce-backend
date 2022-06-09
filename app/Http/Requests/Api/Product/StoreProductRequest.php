@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\Product;
 
+use App\Models\Product;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreProductRequest extends FormRequest
@@ -28,6 +29,8 @@ class StoreProductRequest extends FormRequest
             'category_id' => 'required|exists:categories,id',
             'short_description' => 'nullable|string|max:600',
             'description' => 'nullable|string',
+            "photos" => "required|array|min:1|max:" . Product::MAX_PHOTOS,
+            "photos.*" => "image",
             'tags' => 'required|array|min:1',
             'tags.*' => 'exists:tags,id',
             'product_attribute_options' => 'nullable|array',
