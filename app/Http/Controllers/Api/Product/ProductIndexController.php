@@ -45,6 +45,10 @@ class ProductIndexController extends ApiController
             $query->with('status');
         }
 
+        if (in_array('photos', $includes)) {
+            $query->with('photos');
+        }
+
         if (in_array('category', $includes)) {
             if ($user && $user->hasRole(Role::ADMIN)) {
                 $query->with(['category']);
