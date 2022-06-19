@@ -24,8 +24,5 @@ Route::match(['put', 'patch'], 'products/{product}', ProductUpdateController::cl
 Route::delete('products/{product}', ProductDestroyController::class)
     ->name('api.v1.products.destroy');
 
-Route::post('products/{product}/photos', ProductResourceStoreController::class)
-    ->name('api.v1.products.photos.store');
-
 Route::delete('products/{product}/photos/{resource}', ProductResourceDestroyController::class)
     ->name('api.v1.products.photos.destroy');
