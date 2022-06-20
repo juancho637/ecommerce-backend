@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Product;
 
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
+use App\Actions\Product\UpdateProduct;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\Api\Product\UpdateProductRequest;
 
@@ -32,21 +33,10 @@ class ProductUpdateController extends ApiController
 
         DB::beginTransaction();
         try {
-            $this->product = $product->setUpdate($request);
-            $this->product->save();
-
-            if ($request->has('tags') && count($request->tags)) {
-                $this->product->tags()->sync($request->tags);
-            }
-
-            if (
-                $request->has('product_attribute_options')
-                && count($request->product_attribute_options)
-            ) {
-                $this->product
-                    ->productAttributeOptions()
-                    ->sync($request->product_attribute_options);
-            }
+            $this->product = app(UpdateProduct::class)(
+                $product,
+                $this->product->setUpdate($request)
+            );
             DB::commit();
 
             return $this->showOne(

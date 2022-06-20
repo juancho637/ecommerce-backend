@@ -47,7 +47,10 @@ class ProductStoreTest extends TestCase
             'tags' => $tags,
             'product_attribute_options' => $productAttributeOptions,
             'photos' => [
-                UploadedFile::fake()->image('image.jpg')
+                [
+                    'file' => UploadedFile::fake()->image('image.jpg'),
+                    'location' => 1,
+                ]
             ],
         ]);
 
@@ -86,7 +89,10 @@ class ProductStoreTest extends TestCase
             'description' => $description,
             'tags' => $tags,
             'photos' => [
-                UploadedFile::fake()->image('image.jpg')
+                [
+                    'file' => UploadedFile::fake()->image('image.jpg'),
+                    'location' => 1,
+                ]
             ],
         ]);
 

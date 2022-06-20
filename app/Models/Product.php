@@ -32,6 +32,7 @@ class Product extends Model
 
     public $transformer = ProductResource::class;
 
+    const DISK_PRODUCT_PHOTO = 'public';
     const PRODUCT_PHOTO = 'product photo';
     const MAX_PHOTOS = 4;
 
@@ -168,20 +169,27 @@ class Product extends Model
         $data['short_description'] = $attributes['short_description'];
         $data['description'] = $attributes['description'];
         $data['status_id'] = Status::enabled()->value('id');
-        $data['options'] = $attributes['options'];
+
+        $data['photos'] = $attributes['photos'];
+        $data['tags'] = $attributes['tags'];
+        !$attributes['product_attribute_options'] ?: $data['product_attribute_options'] = $attributes['product_attribute_options'];
 
         return $data;
     }
 
     public function setUpdate($attributes)
     {
-        !$attributes['name'] ?: $this->name = $attributes['name'];
-        !$attributes['name'] ?: $this->slug = Str::slug($attributes['name'], '-');
-        !$attributes['category_id'] ?: $this->category_id = $attributes['category_id'];
-        !$attributes['short_description'] ?: $this->short_description = $attributes['short_description'];
-        !$attributes['description'] ?: $this->description = $attributes['description'];
+        !$attributes['name'] ?: $data['name'] = $attributes['name'];
+        !$attributes['name'] ?: $data['slug'] = Str::slug($attributes['name'], '-');
+        !$attributes['category_id'] ?: $data['category_id'] = $attributes['category_id'];
+        !$attributes['short_description'] ?: $data['short_description'] = $attributes['short_description'];
+        !$attributes['description'] ?: $data['description'] = $attributes['description'];
 
-        return $this;
+        !$attributes['photos'] ?: $data['photos'] = $attributes['photos'];
+        !$attributes['tags'] ?: $data['tags'] = $attributes['tags'];
+        !$attributes['product_attribute_options'] ?: $data['product_attribute_options'] = $attributes['product_attribute_options'];
+
+        return $data;
     }
 
     public function setDelete()
