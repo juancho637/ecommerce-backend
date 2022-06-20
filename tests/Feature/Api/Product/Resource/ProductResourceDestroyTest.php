@@ -10,6 +10,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Actions\Product\UpdateOrCreateProductPhotos;
 
 class ProductResourceDestroyTest extends TestCase
 {
@@ -29,9 +30,12 @@ class ProductResourceDestroyTest extends TestCase
         Sanctum::actingAs($user, ['*']);
 
         $product = Product::all()->random();
-        $photo = $product->savePhotos(
-            UploadedFile::fake()->image('image.jpg')
-        );
+        $photo = app(UpdateOrCreateProductPhotos::class)($product, [
+            [
+                'file' => UploadedFile::fake()->image('image.jpg'),
+                'location' => 1
+            ]
+        ])[0];
 
         $response = $this->json('DELETE', route('api.v1.products.photos.destroy', [
             $product,

@@ -8,6 +8,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Actions\Product\UpdateOrCreateProductPhotos;
 
 class ProductShowTest extends TestCase
 {
@@ -41,9 +42,12 @@ class ProductShowTest extends TestCase
     public function testGetOneProductWithPhotos()
     {
         $product = Product::all()->random();
-        $product->savePhotos(
-            UploadedFile::fake()->image('image.jpg')
-        );
+        app(UpdateOrCreateProductPhotos::class)($product, [
+            [
+                'file' => UploadedFile::fake()->image('image.jpg'),
+                'location' => 1
+            ]
+        ]);
 
         $response = $this->json('GET', route('api.v1.products.show', [
             $product,

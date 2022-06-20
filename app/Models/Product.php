@@ -202,39 +202,4 @@ class Product extends Model
 
         return $this;
     }
-
-    private function saveOnePhoto($resourceModule, $path, $file)
-    {
-        return $resourceModule->create(
-            $resourceModule->saveResource(
-                resource: $file,
-                type: self::class,
-                id: $this->id,
-                typeResource: self::PRODUCT_PHOTO,
-                path: $path,
-                isImage: true
-            )
-        );
-    }
-
-    public function savePhotos($photos)
-    {
-        try {
-            $resource = new Resource();
-            $photosSaved = [];
-            $moduleNamePath = strtolower(class_basename($this));
-
-            if (is_array($photos)) {
-                foreach ($photos as $photo) {
-                    $photosSaved[] = $this->saveOnePhoto($resource, $moduleNamePath, $photo);
-                }
-            } else {
-                return $this->saveOnePhoto($resource, $moduleNamePath, $photos);
-            }
-
-            return $photosSaved;
-        } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
-        }
-    }
 }
