@@ -18,10 +18,17 @@ class ProductResourceDestroyController extends ApiController
     }
 
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Eliminar foto de producto
+     * 
+     * Elimina una foto de un producto por el id.
+     * 
+     * @group Productos
+     * @authenticated
+     * @apiResource App\Http\Resources\ResourceResource
+     * @apiResourceModel App\Models\Resource
+     * 
+     * @urlParam product_id int required Id del producto.
+     * @urlParam resource int required Id de la foto del producto.
      */
     public function __invoke(Request $request, Product $product, Resource $resource)
     {

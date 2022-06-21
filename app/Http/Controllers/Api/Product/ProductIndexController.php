@@ -19,10 +19,13 @@ class ProductIndexController extends ApiController
     }
 
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Listar productos
+     * 
+     * Lista los productos de la aplicación.
+     * 
+     * @group Productos
+     * @apiResourceCollection App\Http\Resources\ProductResource
+     * @apiResourceModel App\Models\Product with=status,category,tags,productAttributeOptions,photos
      */
     public function __invoke(Request $request)
     {

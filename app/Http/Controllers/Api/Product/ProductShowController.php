@@ -14,10 +14,15 @@ class ProductShowController extends ApiController
     }
 
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Mostrar producto
+     * 
+     * Muestra la información de un producto por el id.
+     * 
+     * @group Productos
+     * @apiResource App\Http\Resources\ProductResource
+     * @apiResourceModel App\Models\Product with=status,category,tags,productAttributeOptions,photos
+     * 
+     * @urlParam id int required Id del producto.
      */
     public function __invoke(Request $request, Product $product)
     {

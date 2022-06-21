@@ -22,10 +22,14 @@ class ProductStoreController extends ApiController
     }
 
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Guardar producto
+     * 
+     * Guarda un producto en la aplicación.
+     * 
+     * @group Productos
+     * @authenticated
+     * @apiResource App\Http\Resources\ProductResource
+     * @apiResourceModel App\Models\Product with=status,category,tags,productAttributeOptions,photos
      */
     public function __invoke(StoreProductRequest $request)
     {

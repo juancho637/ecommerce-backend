@@ -36,11 +36,50 @@ class UpdateProductRequest extends FormRequest
             'description' => 'nullable|string',
             'tags' => 'nullable|array|min:1',
             'tags.*' => 'exists:tags,id',
-            'photos' => 'nullable|array|min:1|max:' . Product::MAX_PHOTOS,
+            'photos' => ['nullable', 'array', 'min:1', 'max:' . Product::MAX_PHOTOS],
             'photos.*.file' => 'required|image',
-            'photos.*.location' => 'required|integer|min:1|max:' . Product::MAX_PHOTOS,
+            'photos.*.location' => ['required', 'integer', 'min:1', 'max:' . Product::MAX_PHOTOS],
             'product_attribute_options' => 'nullable|array',
             'product_attribute_options.*' => 'exists:product_attribute_options,id',
+        ];
+    }
+
+    public function bodyParameters()
+    {
+        return [
+            'name' => [
+                'description' => 'Nombre del producto',
+            ],
+            'category_id' => [
+                'description' => 'Id de la categoría asignada al producto',
+            ],
+            'short_description' => [
+                'description' => 'Descripción corta del producto',
+            ],
+            'description' => [
+                'description' => 'Descripción completa del producto.',
+            ],
+            'photos' => [
+                'description' => 'Fotos del producto',
+            ],
+            'photos.*.file' => [
+                'description' => 'Foto del producto',
+            ],
+            'photos.*.location' => [
+                'description' => 'Localización de la foto del producto',
+            ],
+            'tags' => [
+                'description' => 'Tags asociados al producto',
+            ],
+            'tags.*' => [
+                'description' => 'Ids de los tags asociados al producto',
+            ],
+            'product_attribute_options' => [
+                'description' => 'Opciones de atributos asociados al producto',
+            ],
+            'product_attribute_options.*' => [
+                'description' => 'Ids de las opciones de atributos asociados al producto',
+            ],
         ];
     }
 }
