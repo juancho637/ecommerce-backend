@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\Tag;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateTagRequest extends FormRequest
@@ -24,7 +25,11 @@ class UpdateTagRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'sometimes|string|unique:tags,name,' . $this->tag->id,
+            'name' => [
+                'sometimes',
+                'string',
+                Rule::unique('tags', 'name')->ignore($this->tag),
+            ],
         ];
     }
 }

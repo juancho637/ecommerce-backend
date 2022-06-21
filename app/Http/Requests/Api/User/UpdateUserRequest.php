@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api\User;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -24,8 +25,13 @@ class UpdateUserRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => "sometimes|string|max:255",
-            "username" => "sometimes|string|max:100|unique:users,username" . $this->user->id,
+            'name' => 'sometimes|string|max:255',
+            'username' => [
+                'sometimes',
+                'string',
+                'max:100',
+                Rule::unique('users', 'username')->ignore($this->tag),
+            ],
         ];
     }
 }

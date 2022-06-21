@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api\Product;
 
 use App\Models\Product;
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateProductRequest extends FormRequest
@@ -25,7 +26,11 @@ class UpdateProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'nullable|string|unique:products,name,' . $this->product->id,
+            'name' => [
+                'nullable',
+                'string',
+                Rule::unique('products', 'name')->ignore($this->product),
+            ],
             'category_id' => 'nullable|exists:categories,id',
             'short_description' => 'nullable|string|max:600',
             'description' => 'nullable|string',

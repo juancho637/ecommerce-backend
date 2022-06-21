@@ -33,7 +33,11 @@ class StoreProductAttributeOptionRequest extends FormRequest
                 Rule::requiredIf(function () {
                     $productAttribute = ProductAttribute::find($this->product_attribute_id);
 
-                    return $productAttribute->type === ProductAttribute::COLOR_TYPE;
+                    if (!is_null($productAttribute) && $productAttribute->type) {
+                        return $productAttribute->type === ProductAttribute::COLOR_TYPE;
+                    }
+
+                    return false;
                 }),
                 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
             ],
