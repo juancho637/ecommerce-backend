@@ -14,7 +14,8 @@ class StatusFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->sentence(1, false),
+            'type' => $this->faker->sentence(1, false),
         ];
     }
 }

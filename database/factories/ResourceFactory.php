@@ -14,7 +14,8 @@ class ResourceFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'path' => 'image/' . md5(random_int(1, 10000000) . microtime()) . '.jpg',
+            'type_resource' => $this->faker->sentence(1, false),
         ];
     }
 }

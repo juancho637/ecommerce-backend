@@ -15,8 +15,10 @@ class ProductAttributeOptionFactory extends Factory
      */
     public function definition()
     {
+        $productAttribute = ProductAttribute::all()->random();
+
         return [
-            'product_attribute_id' => $productAttribute = ProductAttribute::all()->random(),
+            'product_attribute_id' => $productAttribute->id,
             'name' => $this->getName($productAttribute),
             'option' => $this->getOption($productAttribute),
             'status_id' => Status::enabled()->value('id'),
