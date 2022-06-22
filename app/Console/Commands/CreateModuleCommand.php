@@ -54,30 +54,8 @@ class CreateModuleCommand extends Command
             "name" => "Api/{$name}/Update{$name}Request",
         ]);
 
-        $this->call('make:controller', [
-            "name" => "Api/{$name}/{$name}IndexController",
-            "--model" => $name,
-            "--type" => 'invrequest',
-        ]);
-        $this->call('make:controller', [
-            "name" => "Api/{$name}/{$name}StoreController",
-            "--model" => $name,
-            "--type" => 'invrequest',
-        ]);
-        $this->call('make:controller', [
-            "name" => "Api/{$name}/{$name}ShowController",
-            "--model" => $name,
-            "--type" => 'invmodelsimple',
-        ]);
-        $this->call('make:controller', [
-            "name" => "Api/{$name}/{$name}UpdateController",
-            "--model" => $name,
-            "--type" => 'invmodelrequest',
-        ]);
-        $this->call('make:controller', [
-            "name" => "Api/{$name}/{$name}DestroyController",
-            "--model" => $name,
-            "--type" => 'invmodel',
+        $this->call('make:modulecontrollers', [
+            "name" => $name,
         ]);
 
         $this->call('make:route', [
@@ -93,20 +71,8 @@ class CreateModuleCommand extends Command
             "-m" => $name,
         ]);
 
-        $this->call('make:test', [
-            "name" => "Api/{$name}/{$name}IndexTest",
-        ]);
-        $this->call('make:test', [
-            "name" => "Api/{$name}/{$name}StoreTest",
-        ]);
-        $this->call('make:test', [
-            "name" => "Api/{$name}/{$name}ShowTest",
-        ]);
-        $this->call('make:test', [
-            "name" => "Api/{$name}/{$name}UpdateTest",
-        ]);
-        $this->call('make:test', [
-            "name" => "Api/{$name}/{$name}DestroyTest",
+        $this->call('make:moduletests', [
+            "name" => $name,
         ]);
     }
 }
