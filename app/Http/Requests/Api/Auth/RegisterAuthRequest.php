@@ -28,6 +28,28 @@ class RegisterAuthRequest extends FormRequest
             'email' => 'required|email|unique:users|max:255',
             'username' => 'sometimes|required|string|unique:users|max:100',
             "password" => "required|string|confirmed|min:6",
+            "password_confirmation" => "required|string",
+        ];
+    }
+
+    public function bodyParameters()
+    {
+        return [
+            'name' => [
+                'description' => 'Nombre completo del usuario',
+            ],
+            'email' => [
+                'description' => 'Correo eléctonico del usuario',
+            ],
+            'username' => [
+                'description' => 'Nickname del usuario',
+            ],
+            'password' => [
+                'description' => 'Contraseña del usuario',
+            ],
+            'password_confirmation' => [
+                'description' => 'Confirmación de la contraseña del usuario',
+            ],
         ];
     }
 }

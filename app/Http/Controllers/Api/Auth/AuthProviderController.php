@@ -6,57 +6,27 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\Status;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 use GuzzleHttp\Exception\ClientException;
 use App\Http\Controllers\Api\ApiController;
-use App\Http\Requests\Api\Auth\LoginAuthRequest;
 use App\Http\Requests\Api\Auth\ProviderAuthRequest;
-use App\Http\Requests\Api\Auth\RegisterAuthRequest;
 
-class AuthController extends ApiController
+class AuthProviderController extends ApiController
 {
-    public function login(LoginAuthRequest $request)
-    {
-        $fieldType = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-
-        if (!Auth::attempt([
-            $fieldType => $request->username,
-            'password' => $request->password
-        ])) {
-            return $this->errorResponse(__('Invalid login'), Response::HTTP_UNAUTHORIZED);
-        }
-
-        $user = User::where($fieldType, $request->username)->firstOrFail();
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return $this->jsonResponse([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-        ], 200);
-    }
-
-    public function register(RegisterAuthRequest $request)
-    {
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'username' => $request->username,
-            'password' => Hash::make($request->password),
-            'status_id' => Status::enabled()->value('id'),
-        ]);
-        $user->syncRoles(Role::user()->value('id'));
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return $this->jsonResponse([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-        ], 200);
-    }
-
-    public function provider(ProviderAuthRequest $request, $provider)
+    /**
+     * Login/registro redes sociales
+     * 
+     * Login y/o registro mediante redes sociales en la aplicación.
+     * 
+     * @urlParam provider string required Proveedor de la red social. Example: facebook
+     * 
+     * @group Auth
+     * @response scenario=success {
+     *  "access_token": <token>,
+     *  "token_type": "Bearer"
+     * }
+     */
+    public function __invoke(ProviderAuthRequest $request, $provider)
     {
         $validated = $this->validateProvider($provider);
 

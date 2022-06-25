@@ -27,4 +27,13 @@ class ProviderAuthRequest extends FormRequest
             'token' => 'required|string'
         ];
     }
+
+    public function bodyParameters()
+    {
+        return [
+            'token' => [
+                'description' => 'Token del proveedor con el que realizo el login',
+            ],
+        ];
+    }
 }
