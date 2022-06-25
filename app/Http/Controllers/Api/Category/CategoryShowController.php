@@ -14,10 +14,15 @@ class CategoryShowController extends ApiController
     }
 
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Mostrar categoría
+     * 
+     * Muestra la información de una categoría por el id.
+     * 
+     * @group Categorías
+     * @apiResource App\Http\Resources\CategoryResource
+     * @apiResourceModel App\Models\Category with=image,status
+     * 
+     * @urlParam id int required Id de la categoría.
      */
     public function __invoke(Request $request, Category $category)
     {

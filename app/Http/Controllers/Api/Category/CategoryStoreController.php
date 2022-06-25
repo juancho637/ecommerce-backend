@@ -21,10 +21,14 @@ class CategoryStoreController extends ApiController
     }
 
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Guardar categoría
+     * 
+     * Guarda una categoría en la aplicación.
+     * 
+     * @group Categorías
+     * @authenticated
+     * @apiResource App\Http\Resources\CategoryResource
+     * @apiResourceModel App\Models\Category with=image,status
      */
     public function __invoke(StoreCategoryRequest $request)
     {

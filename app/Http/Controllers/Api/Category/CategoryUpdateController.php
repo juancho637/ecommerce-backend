@@ -21,10 +21,16 @@ class CategoryUpdateController extends ApiController
     }
 
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Actualizar categoría
+     * 
+     * Actualiza la categoría indicada por el id.
+     * 
+     * @group Categorías
+     * @authenticated
+     * @apiResource App\Http\Resources\CategoryResource
+     * @apiResourceModel App\Models\Category with=image,status
+     * 
+     * @urlParam id int required Id de la categoría.
      */
     public function __invoke(UpdateCategoryRequest $request, Category $category)
     {

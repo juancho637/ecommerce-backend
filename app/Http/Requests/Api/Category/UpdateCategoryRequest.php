@@ -34,4 +34,19 @@ class UpdateCategoryRequest extends FormRequest
             'parent_id' => 'nullable|exists:categories,id',
         ];
     }
+
+    public function bodyParameters()
+    {
+        return [
+            'name' => [
+                'description' => 'Nombre de la categoria',
+            ],
+            'image' => [
+                'description' => 'Imagen asociada a la categoría',
+            ],
+            'parent_id' => [
+                'description' => 'Id de la categoría padre asignada a la categoría en cuestión (opcional)',
+            ],
+        ];
+    }
 }

@@ -21,10 +21,16 @@ class CategoryDestroyController extends ApiController
     }
 
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Eliminar categoría
+     * 
+     * Elimina una categoría por el id.
+     * 
+     * @group Categorías
+     * @authenticated
+     * @apiResource App\Http\Resources\CategoryResource
+     * @apiResourceModel App\Models\Category with=image,status
+     * 
+     * @urlParam id int required Id de la categoría.
      */
     public function __invoke(Request $request, Category $category)
     {

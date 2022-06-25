@@ -17,10 +17,13 @@ class CategoryIndexController extends ApiController
     }
 
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Listar categorías
+     * 
+     * Lista las categorías de la aplicación.
+     * 
+     * @group Categorías
+     * @apiResource App\Http\Resources\CategoryResource
+     * @apiResourceModel App\Models\Category with=image,status
      */
     public function __invoke(Request $request)
     {
