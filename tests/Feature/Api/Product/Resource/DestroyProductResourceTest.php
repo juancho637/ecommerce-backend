@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Actions\Product\UpdateOrCreateProductPhotos;
 
-class ProductResourceDestroyTest extends TestCase
+class DestroyProductResourceTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 

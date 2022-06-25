@@ -10,7 +10,7 @@ use Laravel\Sanctum\Sanctum;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ProductDestroyTest extends TestCase
+class DestroyProductTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 

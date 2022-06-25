@@ -6,7 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ProductIndexTest extends TestCase
+class IndexProductTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 

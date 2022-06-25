@@ -11,7 +11,7 @@ use App\Models\ProductAttributeOption;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ProductUpdateTest extends TestCase
+class UpdateProductTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 

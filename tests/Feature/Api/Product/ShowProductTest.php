@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Actions\Product\UpdateOrCreateProductPhotos;
 
-class ProductShowTest extends TestCase
+class ShowProductTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 

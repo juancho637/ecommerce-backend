@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ProductStoreTest extends TestCase
+class StoreProductTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
