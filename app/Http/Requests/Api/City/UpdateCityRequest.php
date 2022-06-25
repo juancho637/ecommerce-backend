@@ -28,4 +28,16 @@ class UpdateCityRequest extends FormRequest
             'state_id' => 'exists:states,id',
         ];
     }
+
+    public function bodyParameters()
+    {
+        return [
+            'name' => [
+                'description' => 'Nombre de la ciudad',
+            ],
+            'state_id' => [
+                'description' => 'Id de la estado/departamento/provincia asignado a la ciudad',
+            ],
+        ];
+    }
 }

@@ -47,6 +47,21 @@ class City extends Model
         });
     }
 
+    public function loadEagerLoadIncludes(array $includes)
+    {
+        $user = auth('sanctum')->user();
+
+        if (in_array('status', $includes)) {
+            $this->load(['status']);
+        }
+
+        if (in_array('state', $includes)) {
+            $this->load(['state']);
+        }
+
+        return $this;
+    }
+
     public function validByRole()
     {
         $user = auth('sanctum')->user();
