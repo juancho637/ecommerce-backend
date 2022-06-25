@@ -40,19 +40,19 @@ class CreateModuleTestsCommand extends Command
         $name = $this->argument('name');
 
         $this->call('make:test', [
-            "name" => "Api/{$name}/{$name}IndexTest",
+            "name" => "Api/{$name}/Index{$name}Test",
         ]);
         $this->call('make:test', [
-            "name" => "Api/{$name}/{$name}StoreTest",
+            "name" => "Api/{$name}/Store{$name}Test",
         ]);
         $this->call('make:test', [
-            "name" => "Api/{$name}/{$name}ShowTest",
+            "name" => "Api/{$name}/Show{$name}Test",
         ]);
         $this->call('make:test', [
-            "name" => "Api/{$name}/{$name}UpdateTest",
+            "name" => "Api/{$name}/Update{$name}Test",
         ]);
         $this->call('make:test', [
-            "name" => "Api/{$name}/{$name}DestroyTest",
+            "name" => "Api/{$name}/Destroy{$name}Test",
         ]);
     }
 }
