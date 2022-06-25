@@ -29,4 +29,19 @@ class StoreCountryRequest extends FormRequest
             'phone_code' => 'required|string|max:5',
         ];
     }
+
+    public function bodyParameters()
+    {
+        return [
+            'name' => [
+                'description' => 'Nombre de la país',
+            ],
+            'short_name' => [
+                'description' => 'Nombre corto del país',
+            ],
+            'phone_code' => [
+                'description' => 'Indicativo del país',
+            ],
+        ];
+    }
 }

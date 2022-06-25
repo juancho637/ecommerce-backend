@@ -47,6 +47,17 @@ class Country extends Model
         });
     }
 
+    public function loadEagerLoadIncludes(array $includes)
+    {
+        $user = auth('sanctum')->user();
+
+        if (in_array('status', $includes)) {
+            $this->load(['status']);
+        }
+
+        return $this;
+    }
+
     public function validByRole()
     {
         $user = auth('sanctum')->user();
