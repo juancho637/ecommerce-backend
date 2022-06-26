@@ -33,4 +33,16 @@ class StoreProductAttributeRequest extends FormRequest
             ],
         ];
     }
+
+    public function bodyParameters()
+    {
+        return [
+            'name' => [
+                'description' => 'Nombre del atributo de producto',
+            ],
+            'type' => [
+                'description' => 'Tipo del atributo de producto',
+            ],
+        ];
+    }
 }

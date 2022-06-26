@@ -30,4 +30,16 @@ class UpdateProductAttributeRequest extends FormRequest
             'type' => [Rule::in(ProductAttribute::TYPES)],
         ];
     }
+
+    public function bodyParameters()
+    {
+        return [
+            'name' => [
+                'description' => 'Nombre del atributo de producto',
+            ],
+            'type' => [
+                'description' => 'Tipo del atributo de producto',
+            ],
+        ];
+    }
 }

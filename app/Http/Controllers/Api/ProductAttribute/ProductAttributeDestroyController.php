@@ -21,10 +21,16 @@ class ProductAttributeDestroyController extends ApiController
     }
 
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Eliminar atributo de producto
+     * 
+     * Elimina un atributo de producto indicado por el id.
+     * 
+     * @group Atributos de productos
+     * @authenticated
+     * @apiResource App\Http\Resources\ProductAttributeResource
+     * @apiResourceModel App\Models\ProductAttribute with=status
+     * 
+     * @urlParam id int required Id del atributo de producto.
      */
     public function __invoke(Request $request, ProductAttribute $productAttribute)
     {

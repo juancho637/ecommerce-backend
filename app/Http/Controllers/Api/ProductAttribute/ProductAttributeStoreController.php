@@ -21,10 +21,14 @@ class ProductAttributeStoreController extends ApiController
     }
 
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Guardar atributo de producto
+     * 
+     * Guarda una atributo de producto en la aplicación.
+     * 
+     * @group Atributos de productos
+     * @authenticated
+     * @apiResource App\Http\Resources\ProductAttributeResource
+     * @apiResourceModel App\Models\ProductAttribute with=status
      */
     public function __invoke(StoreProductAttributeRequest $request)
     {

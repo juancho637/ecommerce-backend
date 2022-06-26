@@ -21,10 +21,16 @@ class ProductAttributeUpdateController extends ApiController
     }
 
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Actualizar atributo de producto
+     * 
+     * Actualiza el atributo de producto indicado por el id.
+     * 
+     * @group Atributos de productos
+     * @authenticated
+     * @apiResource App\Http\Resources\ProductAttributeResource
+     * @apiResourceModel App\Models\ProductAttribute with=status
+     * 
+     * @urlParam id int required Id del atributo de producto.
      */
     public function __invoke(
         UpdateProductAttributeRequest $request,

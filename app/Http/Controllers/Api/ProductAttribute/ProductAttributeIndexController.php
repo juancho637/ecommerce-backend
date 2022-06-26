@@ -21,10 +21,14 @@ class ProductAttributeIndexController extends ApiController
     }
 
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Listar atributos de productos
+     * 
+     * Lista los atributos de productos de la aplicación.
+     * 
+     * @group Atributos de productos
+     * @authenticated
+     * @apiResourceCollection App\Http\Resources\ProductAttributeResource
+     * @apiResourceModel App\Models\ProductAttribute with=status
      */
     public function __invoke(Request $request)
     {
