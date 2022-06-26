@@ -26,7 +26,7 @@ class ProductSpecificationResource extends JsonResource
         }
 
         if (!$this->whenLoaded('product') instanceof MissingValue) {
-            $resource['product'] = ProductResource::collection($this->product);
+            $resource['product'] = new ProductResource($this->product);
         }
 
         return $resource;

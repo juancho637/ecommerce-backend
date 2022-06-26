@@ -29,4 +29,19 @@ class UpdateProductSpecificationRequest extends FormRequest
             'value' => 'string|max:255',
         ];
     }
+
+    public function bodyParameters()
+    {
+        return [
+            'product_id' => [
+                'description' => 'Id del producto asignado a la especificación del producto',
+            ],
+            'name' => [
+                'description' => 'Nombre de la especificación del producto',
+            ],
+            'value' => [
+                'description' => 'Valor de la especificación del producto',
+            ],
+        ];
+    }
 }

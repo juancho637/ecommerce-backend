@@ -34,6 +34,19 @@ class ProductSpecification extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function loadEagerLoadIncludes(array $includes)
+    {
+        if (in_array('status', $includes)) {
+            $this->load(['status']);
+        }
+
+        if (in_array('product', $includes)) {
+            $this->load(['product']);
+        }
+
+        return $this;
+    }
+
     public function setCreate($attributes)
     {
         $data['name'] = $attributes['name'];
