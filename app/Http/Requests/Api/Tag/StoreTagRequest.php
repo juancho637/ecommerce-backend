@@ -27,4 +27,13 @@ class StoreTagRequest extends FormRequest
             'name' => 'required|string|max:255|unique:tags',
         ];
     }
+
+    public function bodyParameters()
+    {
+        return [
+            'name' => [
+                'description' => 'Nombre del tag',
+            ],
+        ];
+    }
 }

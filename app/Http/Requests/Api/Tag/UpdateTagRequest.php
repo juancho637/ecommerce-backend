@@ -32,4 +32,13 @@ class UpdateTagRequest extends FormRequest
             ],
         ];
     }
+
+    public function bodyParameters()
+    {
+        return [
+            'name' => [
+                'description' => 'Nombre del tag',
+            ],
+        ];
+    }
 }
