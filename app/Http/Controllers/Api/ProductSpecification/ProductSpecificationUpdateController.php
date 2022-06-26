@@ -11,8 +11,10 @@ class ProductSpecificationUpdateController extends ApiController
 {
     private $productSpecification;
 
-    public function __construct()
+    public function __construct(ProductSpecification $productSpecification)
     {
+        $this->productSpecification = $productSpecification;
+
         $this->middleware('auth:sanctum');
 
         $this->middleware('can:update,productSpecification')->only('__invoke');
