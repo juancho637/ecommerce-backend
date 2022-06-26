@@ -52,6 +52,21 @@ class State extends Model
         });
     }
 
+    public function loadEagerLoadIncludes(array $includes)
+    {
+        $user = auth('sanctum')->user();
+
+        if (in_array('status', $includes)) {
+            $this->load(['status']);
+        }
+
+        if (in_array('country', $includes)) {
+            $this->load(['country']);
+        }
+
+        return $this;
+    }
+
     public function validByRole()
     {
         $user = auth('sanctum')->user();

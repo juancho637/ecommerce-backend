@@ -28,4 +28,16 @@ class StoreStateRequest extends FormRequest
             'country_id' => 'required|exists:countries,id',
         ];
     }
+
+    public function bodyParameters()
+    {
+        return [
+            'name' => [
+                'description' => 'Nombre del departamento/estado/provincia',
+            ],
+            'country_id' => [
+                'description' => 'Id del país asignado al departamento/estado/provincia',
+            ],
+        ];
+    }
 }
