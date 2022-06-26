@@ -26,7 +26,7 @@ class UpdateProductAttributeOptionRequest extends FormRequest
     public function rules()
     {
         return [
-            'product_attribute_id' => 'exists:product_attributes,id',
+            'product_attribute_id' => 'integer|exists:product_attributes,id',
             'name' => 'string|max:255',
             'option' => [
                 'nullable',
@@ -40,6 +40,21 @@ class UpdateProductAttributeOptionRequest extends FormRequest
                     return $productAttribute->type === ProductAttribute::COLOR_TYPE;
                 }),
                 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
+            ],
+        ];
+    }
+
+    public function bodyParameters()
+    {
+        return [
+            'product_attribute_id' => [
+                'description' => 'Id del atributo de producto asignado a la opción de atributo',
+            ],
+            'name' => [
+                'description' => 'Nombre de la opción del atributo',
+            ],
+            'option' => [
+                'description' => 'Opción de la opción del atributo (requerido si el atributo es de tipo color)',
             ],
         ];
     }
