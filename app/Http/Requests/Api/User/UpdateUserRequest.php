@@ -34,4 +34,16 @@ class UpdateUserRequest extends FormRequest
             ],
         ];
     }
+
+    public function bodyParameters()
+    {
+        return [
+            'name' => [
+                'description' => 'Nombre completo del usuario',
+            ],
+            'username' => [
+                'description' => 'Nickname del usuario',
+            ],
+        ];
+    }
 }

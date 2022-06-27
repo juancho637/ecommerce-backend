@@ -27,11 +27,11 @@ class UserResource extends JsonResource
         }
 
         if (!$this->whenLoaded('roles') instanceof MissingValue) {
-            $resource['roles'] = new RoleResource($this->roles);
+            $resource['roles'] = RoleResource::collection($this->roles);
         }
 
         if (!$this->whenLoaded('socialNetworks') instanceof MissingValue) {
-            $resource['socialNetworks'] = new SocialNetworkResource($this->socialNetworks);
+            $resource['socialNetworks'] = SocialNetworkResource::collection($this->socialNetworks);
         }
 
         return $resource;

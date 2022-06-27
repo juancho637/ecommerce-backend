@@ -46,6 +46,25 @@ class User extends Authenticatable
         return $this->hasMany(SocialNetwork::class);
     }
 
+    public function loadEagerLoadIncludes(array $includes)
+    {
+        $user = auth('sanctum')->user();
+
+        if (in_array('status', $includes)) {
+            $this->load(['status']);
+        }
+
+        if (in_array('roles', $includes)) {
+            $this->load(['roles']);
+        }
+
+        if (in_array('socialNetworks', $includes)) {
+            $this->load(['socialNetworks']);
+        }
+
+        return $this;
+    }
+
     public function isAdmin()
     {
         return $this->hasRole(Role::ADMIN);
@@ -65,7 +84,7 @@ class User extends Authenticatable
     public function setUpdate($attributes)
     {
         !$attributes['name'] ?: $this->name = $attributes['name'];
-        !$attributes['username'] ?: $this->short_name = $attributes['username'];
+        !$attributes['username'] ?: $this->username = $attributes['username'];
 
         return $this;
     }

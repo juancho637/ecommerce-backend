@@ -28,7 +28,32 @@ class StoreUserRequest extends FormRequest
             "email" => "required|email|max:255",
             "username" => "sometimes|required|string|unique:users|max:100",
             "password" => "required|string|confirmed|min:6",
-            "role" => "required|exists:roles,id",
+            "password_confirmation" => "required|string",
+            "role" => "required|integer|exists:roles,id",
+        ];
+    }
+
+    public function bodyParameters()
+    {
+        return [
+            'name' => [
+                'description' => 'Nombre completo del usuario',
+            ],
+            'email' => [
+                'description' => 'Correo eléctonico del usuario',
+            ],
+            'username' => [
+                'description' => 'Nickname del usuario',
+            ],
+            'password' => [
+                'description' => 'Contraseña del usuario',
+            ],
+            'password_confirmation' => [
+                'description' => 'Confirmación de la contraseña del usuario',
+            ],
+            'role' => [
+                'description' => 'Rol del usuario',
+            ],
         ];
     }
 }
