@@ -10,6 +10,7 @@ use Laravel\Socialite\Facades\Socialite;
 use GuzzleHttp\Exception\ClientException;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\Api\Auth\ProviderAuthRequest;
+use App\Models\SocialNetwork;
 
 class AuthProviderController extends ApiController
 {
@@ -74,7 +75,7 @@ class AuthProviderController extends ApiController
 
     protected function validateProvider($provider)
     {
-        if (!in_array($provider, ['facebook', 'google'])) {
+        if (!in_array($provider, SocialNetwork::PROVIDERS)) {
             return $this->errorResponse(__('Please login using facebook or google'));
         }
     }

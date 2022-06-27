@@ -23,4 +23,13 @@ class SocialNetwork extends Model
     ];
 
     public $transformer = SocialNetworkResource::class;
+
+    //providers
+    const GOOGLE_PROVIDER = 'google';
+    const FACEBOOK_PROVIDER = 'facebook';
+
+    const PROVIDERS = [
+        self::GOOGLE_PROVIDER,
+        self::FACEBOOK_PROVIDER,
+    ];
 }
