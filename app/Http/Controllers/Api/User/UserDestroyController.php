@@ -30,7 +30,7 @@ class UserDestroyController extends ApiController
      * @apiResource App\Http\Resources\UserResource
      * @apiResourceModel App\Models\User with=status,roles,socialNetworks
      * 
-     * @urlParam user int required Id del usuario.
+     * @urlParam id int required Id del usuario.
      */
     public function __invoke(Request $request, User $user)
     {
