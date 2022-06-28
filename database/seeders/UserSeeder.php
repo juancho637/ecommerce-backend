@@ -18,8 +18,8 @@ class UserSeeder extends Seeder
             ->roleAdmin()
             ->create([
                 'name' => 'Administrador Ecommerce',
-                'email' => 'juan_dav.garcia@scriptf.com',
-                'username' => 'juan_dav.garcia',
+                'email' => 'admin@scriptforze.com',
+                'username' => 'admin',
             ]);
 
         if (app()->environment() !== 'production') {
