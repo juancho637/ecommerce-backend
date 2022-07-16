@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Models\User;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Api\ApiController;
+use Illuminate\Auth\AuthenticationException;
 use App\Http\Requests\Api\Auth\LoginAuthRequest;
 
 class AuthLoginController extends ApiController
@@ -73,7 +73,7 @@ class AuthLoginController extends ApiController
             $fieldType => $request->username,
             'password' => $request->password
         ])) {
-            throw new \Exception(__('Invalid login'), Response::HTTP_UNAUTHORIZED);
+            throw new AuthenticationException(__('Invalid login'));
         }
 
         $user = User::where($fieldType, $request->username)->firstOrFail();
