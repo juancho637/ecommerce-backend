@@ -6,6 +6,7 @@ use App\Models\City;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Api\ApiController;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CityShowController extends ApiController
 {
@@ -37,6 +38,6 @@ class CityShowController extends ApiController
             );
         }
 
-        return $this->errorResponse(__('Not found'), Response::HTTP_NOT_FOUND);
+        throw new ModelNotFoundException;
     }
 }
