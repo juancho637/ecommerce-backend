@@ -28,10 +28,6 @@ Homestead.json
 /.vagrant
 .phpunit.result.cache
 
-# Laravel scribe
-.scribe
-public/docs
-
 # Swagger
 storage/api-docs
 
