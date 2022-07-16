@@ -22,8 +22,8 @@ class StoreCityRequest extends FormRequest
     }
 
     /**
-     * @OA\Property(format="string", default="city name", description="city name", property="name"),
-     * @OA\Property(format="number", default=1, description="state id assigned to the city", property="state_id"),
+     * @OA\Property(type="string", description="city name", property="name"),
+     * @OA\Property(type="number", description="state id assigned to the city", property="state_id"),
      */
     public function rules()
     {
