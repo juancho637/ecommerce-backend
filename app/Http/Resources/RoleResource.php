@@ -5,13 +5,19 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @OA\Schema(
+ *     schema="Role",
+ *     required={"id", "name"},
+ * )
+ */
 class RoleResource extends JsonResource
 {
     /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @OA\Property(type="number", title="id", default=1, description="id", property="id"),
+     * @OA\Property(type="string", title="name", default="name", description="name", property="name"),
+     * 
+     * @OA\Property(property="permissions", type="array", @OA\Items(ref="#/components/schemas/Permission")),
      */
     public function toArray($request)
     {

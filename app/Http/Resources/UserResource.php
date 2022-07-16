@@ -5,13 +5,24 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @OA\Schema(
+ *     schema="User",
+ *     required={"id", "name", "slug"},
+ * )
+ */
 class UserResource extends JsonResource
 {
     /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @OA\Property(type="number", title="id", default=1, description="id", property="id"),
+     * @OA\Property(type="string", title="name", default="name", description="name", property="name"),
+     * @OA\Property(type="string", title="email", default="email", description="email", property="email"),
+     * @OA\Property(type="string", title="username", default="username", description="username", property="username"),
+     * 
+     * @OA\Property(property="status", ref="#/components/schemas/Status"),
+     * 
+     * @OA\Property(property="roles", type="array", @OA\Items(ref="#/components/schemas/Role")),
+     * @OA\Property(property="socialNetworks", type="array", @OA\Items(ref="#/components/schemas/SocialNetwork")),
      */
     public function toArray($request)
     {

@@ -4,13 +4,18 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @OA\Schema(
+ *     schema="Permission",
+ *     required={"id", "name", "module"},
+ * )
+ */
 class PermissionResource extends JsonResource
 {
     /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @OA\Property(type="number", title="id", default=1, description="id", property="id"),
+     * @OA\Property(type="string", title="name", default="name", description="name", property="name"),
+     * @OA\Property(type="string", title="module", default="module", description="module", property="module"),
      */
     public function toArray($request)
     {

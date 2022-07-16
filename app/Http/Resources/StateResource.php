@@ -16,6 +16,7 @@ class StateResource extends JsonResource
     /**
      * @OA\Property(type="number", title="id", default=1, description="id", property="id"),
      * @OA\Property(type="string", title="name", default="name", description="name", property="name"),
+     * 
      * @OA\Property(property="status", ref="#/components/schemas/Status")
      * @OA\Property(property="country", ref="#/components/schemas/Country")
      */

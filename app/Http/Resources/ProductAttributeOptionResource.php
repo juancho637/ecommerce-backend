@@ -5,13 +5,21 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @OA\Schema(
+ *     schema="ProductAttributeOption",
+ *     required={"id", "name", "option"},
+ * )
+ */
 class ProductAttributeOptionResource extends JsonResource
 {
     /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @OA\Property(type="number", title="id", default=1, description="id", property="id"),
+     * @OA\Property(type="string", title="name", default="name", description="name", property="name"),
+     * @OA\Property(type="string", title="option", default="option", description="option", property="option"),
+     * 
+     * @OA\Property(property="status", ref="#/components/schemas/Status"),
+     * @OA\Property(property="productAttribute", ref="#/components/schemas/ProductAttribute"),
      */
     public function toArray($request)
     {

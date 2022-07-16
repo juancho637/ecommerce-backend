@@ -18,6 +18,7 @@ class CountryResource extends JsonResource
      * @OA\Property(type="string", title="name", description="name", property="name", default="name"),
      * @OA\Property(type="string", title="short_name", description="short_name", property="short_name", default="short_name"),
      * @OA\Property(type="string", title="phone_code", description="phone_code", property="phone_code", default="phone_code"),
+     * 
      * @OA\Property(property="status", ref="#/components/schemas/Status")
      */
     public function toArray($request)

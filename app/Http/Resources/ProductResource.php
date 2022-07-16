@@ -5,13 +5,28 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @OA\Schema(
+ *     schema="Product",
+ *     required={"id", "name", "slug", "short_description", "description"},
+ * )
+ */
 class ProductResource extends JsonResource
 {
     /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @OA\Property(type="number", title="id", default=1, description="id", property="id"),
+     * @OA\Property(type="string", title="name", default="name", description="name", property="name"),
+     * @OA\Property(type="string", title="slug", default="slug", description="slug", property="slug"),
+     * @OA\Property(type="string", title="short_description", default="short_description", description="short_description", property="short_description"),
+     * @OA\Property(type="string", title="description", default="description", description="description", property="description"),
+     * 
+     * @OA\Property(property="status", ref="#/components/schemas/Status"),
+     * @OA\Property(property="category", ref="#/components/schemas/Category"),
+     * 
+     * @OA\Property(property="photos", type="array", @OA\Items(ref="#/components/schemas/Resource")),
+     * @OA\Property(property="productSpecifications", type="array", @OA\Items(ref="#/components/schemas/ProductSpecification")),
+     * @OA\Property(property="tags", type="array", @OA\Items(ref="#/components/schemas/Tag")),
+     * @OA\Property(property="productAttributeOptions", type="array", @OA\Items(ref="#/components/schemas/ProductAttributeOption")),
      */
     public function toArray($request)
     {

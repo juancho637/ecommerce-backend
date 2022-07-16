@@ -5,13 +5,20 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @OA\Schema(
+ *     schema="Tag",
+ *     required={"id", "name", "slug"},
+ * )
+ */
 class TagResource extends JsonResource
 {
     /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @OA\Property(type="number", title="id", default=1, description="id", property="id"),
+     * @OA\Property(type="string", title="name", default="name", description="name", property="name"),
+     * @OA\Property(type="string", title="slug", default="slug", description="slug", property="slug"),
+     * 
+     * @OA\Property(property="status", ref="#/components/schemas/Status"),
      */
     public function toArray($request)
     {
