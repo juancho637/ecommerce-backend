@@ -21,16 +21,61 @@ class CityDestroyController extends ApiController
     }
 
     /**
-     * Eliminar ciudad
-     * 
-     * Elimina una ciudad por el id.
-     * 
-     * @group Ciudades
-     * @authenticated
-     * @apiResource App\Http\Resources\CityResource
-     * @apiResourceModel App\Models\City with=status,state
-     * 
-     * @urlParam id int required Id de la ciudad.
+     * @OA\Delete(
+     *     path="/api/v1/cities/{city}",
+     *     summary="Delete city",
+     *     operationId="deleteCity",
+     *     tags={"Cities"},
+     *     security={ {"sanctum": {}} },
+     *     @OA\Parameter(
+     *         name="city",
+     *         description="Id of city",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/City",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/BadRequestException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthenticationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="403",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthorizationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/ModelNotFoundException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(Request $request, City $city)
     {

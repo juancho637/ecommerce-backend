@@ -18,15 +18,39 @@ class CityShowController extends ApiController
     }
 
     /**
-     * Mostrar ciudad
-     * 
-     * Muestra la información de una ciudad por el id.
-     * 
-     * @group Ciudades
-     * @apiResource App\Http\Resources\CityResource
-     * @apiResourceModel App\Models\City with=status,state
-     * 
-     * @urlParam id int required Id de la ciudad.
+     * @OA\Get(
+     *     path="/api/v1/cities/{city}",
+     *     summary="Show city by id",
+     *     operationId="getCityById",
+     *     tags={"Cities"},
+     *     @OA\Parameter(
+     *         name="city",
+     *         description="Id of city",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/City",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/ModelNotFoundException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(Request $request, City $city)
     {

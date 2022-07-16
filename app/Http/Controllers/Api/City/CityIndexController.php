@@ -21,13 +21,24 @@ class CityIndexController extends ApiController
     }
 
     /**
-     * Listar ciudades
-     * 
-     * Lista las ciudades de la aplicación.
-     * 
-     * @group Ciudades
-     * @apiResourceCollection App\Http\Resources\CityResource
-     * @apiResourceModel App\Models\City with=status,state
+     * @OA\Get(
+     *     path="/api/v1/cities",
+     *     summary="List of cities",
+     *     operationId="getAllCities",
+     *     tags={"Cities"},
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 type="array",
+     *                 property="data",
+     *                 @OA\Items(ref="#/components/schemas/City")
+     *             ),
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(Request $request)
     {

@@ -4,6 +4,11 @@ namespace App\Http\Requests\Api\City;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *     required={"name", "state_id"},
+ * )
+ */
 class StoreCityRequest extends FormRequest
 {
     /**
@@ -17,27 +22,14 @@ class StoreCityRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
+     * @OA\Property(format="string", default="city name", description="city name", property="name"),
+     * @OA\Property(format="number", default=1, description="state id assigned to the city", property="state_id"),
      */
     public function rules()
     {
         return [
             'name' => 'required|string|max:255',
             'state_id' => 'required|exists:states,id',
-        ];
-    }
-
-    public function bodyParameters()
-    {
-        return [
-            'name' => [
-                'description' => 'Nombre de la ciudad',
-            ],
-            'state_id' => [
-                'description' => 'Id de la estado/departamento/provincia asignado a la ciudad',
-            ],
         ];
     }
 }
