@@ -6,39 +6,86 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\Status;
 use Illuminate\Http\Response;
+use App\Models\SocialNetwork;
 use Laravel\Socialite\Facades\Socialite;
 use GuzzleHttp\Exception\ClientException;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\Api\Auth\ProviderAuthRequest;
-use App\Models\SocialNetwork;
 
 class AuthProviderController extends ApiController
 {
     /**
-     * Login/registro redes sociales
-     * 
-     * Login y/o registro mediante redes sociales en la aplicación.
-     * 
-     * @urlParam provider string required Proveedor de la red social. Example: facebook
-     * 
-     * @group Auth
-     * @response scenario=success {
-     *  "access_token": <token>,
-     *  "token_type": "Bearer"
-     * }
+     * @OA\Post(
+     *     path="/api/v1/auth/{provider}",
+     *     summary="Sign in or sign up a user with social network",
+     *     operationId="signInOrSignUpWithSocialNetwork",
+     *     tags={"Auth"},
+     *     @OA\Parameter(
+     *         name="provider",
+     *         description="Provider name",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 ref="#/components/schemas/ProviderAuthRequest",
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="access_token",
+     *                 type="string",
+     *                 default="<token>",
+     *             ),
+     *             @OA\Property(
+     *                 property="token_type",
+     *                 type="string",
+     *                 default="Bearer",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/BadRequestException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/BadRequestException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/ValidationException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(ProviderAuthRequest $request, $provider)
     {
-        $validated = $this->validateProvider($provider);
-
-        if (!is_null($validated)) {
-            return $validated;
-        }
+        $this->validateProvider($provider);
 
         try {
             $socialUser = Socialite::driver($provider)->userFromToken($request->token);
         } catch (ClientException $exception) {
-            return $this->errorResponse(__('Invalid credentials provided.'), Response::HTTP_UNAUTHORIZED);
+            throw new \Exception(__('Invalid credentials provided'), Response::HTTP_UNAUTHORIZED);
         }
 
         $user = User::firstOrCreate(
@@ -76,7 +123,7 @@ class AuthProviderController extends ApiController
     protected function validateProvider($provider)
     {
         if (!in_array($provider, SocialNetwork::PROVIDERS)) {
-            return $this->errorResponse(__('Please login using facebook or google'));
+            throw new \Exception(__('Please login using facebook or google'));
         }
     }
 }

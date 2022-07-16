@@ -12,13 +12,52 @@ use App\Http\Requests\Api\Auth\RegisterAuthRequest;
 class AuthRegisterController extends ApiController
 {
     /**
-     * Registro
-     * 
-     * Registro de usuarios en la aplicación.
-     * 
-     * @group Auth
-     * @apiResource App\Http\Resources\UserResource
-     * @apiResourceModel App\Models\User with=status
+     * @OA\Post(
+     *     path="/api/v1/auth/register",
+     *     summary="Sign up a user",
+     *     operationId="signUp",
+     *     tags={"Auth"},
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 ref="#/components/schemas/RegisterAuthRequest",
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="access_token",
+     *                 type="string",
+     *                 default="<token>",
+     *             ),
+     *             @OA\Property(
+     *                 property="token_type",
+     *                 type="string",
+     *                 default="Bearer",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/BadRequestException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/ValidationException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(RegisterAuthRequest $request)
     {

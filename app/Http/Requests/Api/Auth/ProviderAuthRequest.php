@@ -4,6 +4,11 @@ namespace App\Http\Requests\Api\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *     required={"token"},
+ * )
+ */
 class ProviderAuthRequest extends FormRequest
 {
     /**
@@ -17,23 +22,12 @@ class ProviderAuthRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
+     * @OA\Property(type="string", property="token", description="token of provider"),
      */
     public function rules()
     {
         return [
             'token' => 'required|string'
-        ];
-    }
-
-    public function bodyParameters()
-    {
-        return [
-            'token' => [
-                'description' => 'Token del proveedor con el que realizo el login',
-            ],
         ];
     }
 }

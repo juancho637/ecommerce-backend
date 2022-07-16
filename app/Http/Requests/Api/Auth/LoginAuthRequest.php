@@ -4,6 +4,11 @@ namespace App\Http\Requests\Api\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *     required={"username", "password"},
+ * )
+ */
 class LoginAuthRequest extends FormRequest
 {
     /**
@@ -17,27 +22,14 @@ class LoginAuthRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
+     * @OA\Property(type="string", property="username", description="email or username"),
+     * @OA\Property(type="string", property="password", description="password"),
      */
     public function rules()
     {
         return [
             "username" => "required|string",
             "password" => "required|string",
-        ];
-    }
-
-    public function bodyParameters()
-    {
-        return [
-            'username' => [
-                'description' => 'Nombre de usuario ó correo eléctonico del usuario',
-            ],
-            'password' => [
-                'description' => 'Contraseña del usuario',
-            ],
         ];
     }
 }

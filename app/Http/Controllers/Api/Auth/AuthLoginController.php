@@ -11,15 +11,59 @@ use App\Http\Requests\Api\Auth\LoginAuthRequest;
 class AuthLoginController extends ApiController
 {
     /**
-     * Login
-     * 
-     * Login en la aplicación.
-     * 
-     * @group Auth
-     * @response scenario=success {
-     *  "access_token": <token>,
-     *  "token_type": "Bearer"
-     * }
+     * @OA\Post(
+     *     path="/api/v1/auth/login",
+     *     summary="Sign in a user",
+     *     operationId="signIn",
+     *     tags={"Auth"},
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 ref="#/components/schemas/LoginAuthRequest",
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="access_token",
+     *                 type="string",
+     *                 default="<token>",
+     *             ),
+     *             @OA\Property(
+     *                 property="token_type",
+     *                 type="string",
+     *                 default="Bearer",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/BadRequestException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/BadRequestException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/ValidationException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(LoginAuthRequest $request)
     {
@@ -29,7 +73,7 @@ class AuthLoginController extends ApiController
             $fieldType => $request->username,
             'password' => $request->password
         ])) {
-            return $this->errorResponse(__('Invalid login'), Response::HTTP_UNAUTHORIZED);
+            throw new \Exception(__('Invalid login'), Response::HTTP_UNAUTHORIZED);
         }
 
         $user = User::where($fieldType, $request->username)->firstOrFail();
