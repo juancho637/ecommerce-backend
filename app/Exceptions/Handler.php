@@ -45,34 +45,120 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
         if ($exception instanceof ValidationException) {
-            return $this->convertValidationExceptionToResponse($exception, $request);
+            return $this->validationException($exception, $request);
         }
 
         if ($exception instanceof AuthorizationException) {
-            return $this->errorResponse(__("Unauthorized"), Response::HTTP_UNAUTHORIZED);
+            return $this->authorizationException();
         }
 
         if ($exception instanceof AuthenticationException) {
-            return $this->errorResponse(__("Unauthenticated"), Response::HTTP_UNAUTHORIZED);
+            return $this->authenticationException();
         }
 
         if ($exception instanceof ModelNotFoundException) {
-            return $this->errorResponse(__("Model not found"), Response::HTTP_NOT_FOUND);
+            return $this->modelNotFoundException();
         }
 
         if ($exception instanceof NotFoundHttpException) {
-            return $this->errorResponse(__("Not found"), Response::HTTP_NOT_FOUND);
+            return $this->notFoundHttpException();
         }
 
         if ($exception instanceof MethodNotAllowedHttpException) {
-            return $this->errorResponse(__("Method not allowed"), Response::HTTP_METHOD_NOT_ALLOWED);
+            return $this->methodNotAllowedHttpException();
         }
 
         if ($exception instanceof \Exception) {
-            return $this->errorResponse($exception->getMessage(), Response::HTTP_BAD_REQUEST);
+            return $this->badRequestException($exception);
         }
 
         return parent::render($request, $exception);
+    }
+
+    /**
+     * @OA\Schema(
+     *     schema="ValidationException",
+     *     @OA\Property(property="error", type="object"),
+     *     @OA\Property(property="code", type="number", example=422),
+     * )
+     */
+    protected function validationException($exception, $request)
+    {
+        return $this->convertValidationExceptionToResponse($exception, $request);
+    }
+
+    /**
+     * @OA\Schema(
+     *     schema="AuthorizationException",
+     *     @OA\Property(property="error", type="string", example="Unauthorized"),
+     *     @OA\Property(property="code", type="number", example=403),
+     * )
+     */
+    protected function authorizationException()
+    {
+        return $this->errorResponse(__("Unauthorized"), Response::HTTP_FORBIDDEN);
+    }
+
+    /**
+     * @OA\Schema(
+     *     schema="AuthenticationException",
+     *     @OA\Property(property="error", type="string", example="Unauthenticated"),
+     *     @OA\Property(property="code", type="number", example=401),
+     * )
+     */
+    protected function authenticationException()
+    {
+        return $this->errorResponse(__("Unauthenticated"), Response::HTTP_UNAUTHORIZED);
+    }
+
+    /**
+     * @OA\Schema(
+     *     schema="ModelNotFoundException",
+     *     @OA\Property(property="error", type="string", example="Model not found"),
+     *     @OA\Property(property="code", type="number", example=404),
+     * )
+     */
+    protected function modelNotFoundException()
+    {
+        return $this->errorResponse(__("Model not found"), Response::HTTP_NOT_FOUND);
+    }
+
+    /**
+     * @OA\Schema(
+     *     schema="NotFoundHttpException",
+     *     @OA\Property(property="error", type="string", example="Not found"),
+     *     @OA\Property(property="code", type="number", example=404),
+     * )
+     */
+    protected function notFoundHttpException()
+    {
+        return $this->errorResponse(__("Not found"), Response::HTTP_NOT_FOUND);
+    }
+
+    /**
+     * @OA\Schema(
+     *     schema="MethodNotAllowedHttpException",
+     *     @OA\Property(property="error", type="string", example="Method not allowed"),
+     *     @OA\Property(property="code", type="number", example=405),
+     * )
+     */
+    protected function methodNotAllowedHttpException()
+    {
+        return $this->errorResponse(__("Method not allowed"), Response::HTTP_METHOD_NOT_ALLOWED);
+    }
+
+    /**
+     * @OA\Schema(
+     *     schema="BadRequestException",
+     *     @OA\Property(property="error", type="string", example="Some error description"),
+     *     @OA\Property(property="code", type="number", example=400),
+     * )
+     */
+    protected function badRequestException($exception)
+    {
+        $code = ($exception->getCode() !== 0) ? $exception->getCode() : Response::HTTP_BAD_REQUEST;
+
+        return $this->errorResponse($exception->getMessage(), $code);
     }
 
     protected function convertValidationExceptionToResponse(ValidationException $e, $request)
