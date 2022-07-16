@@ -5,13 +5,20 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @OA\Schema(
+ *     schema="Country",
+ *     required={"id", "name", "short_name", "phone_code"},
+ * )
+ */
 class CountryResource extends JsonResource
 {
     /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @OA\Property(type="number", title="id", description="id", property="id", default=1),
+     * @OA\Property(type="string", title="name", description="name", property="name", default="name"),
+     * @OA\Property(type="string", title="short_name", description="short_name", property="short_name", default="short_name"),
+     * @OA\Property(type="string", title="phone_code", description="phone_code", property="phone_code", default="phone_code"),
+     * @OA\Property(property="status", ref="#/components/schemas/Status")
      */
     public function toArray($request)
     {

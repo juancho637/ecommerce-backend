@@ -4,13 +4,18 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @OA\Schema(
+ *     schema="Status",
+ *     required={"id", "name", "type"},
+ * )
+ */
 class StatusResource extends JsonResource
 {
     /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @OA\Property(type="number", title="id", default=1, description="id", property="id"),
+     * @OA\Property(type="string", title="name", default="name", description="name", property="name"),
+     * @OA\Property(type="string", title="type", default="type", description="type", property="type"),
      */
     public function toArray($request)
     {
