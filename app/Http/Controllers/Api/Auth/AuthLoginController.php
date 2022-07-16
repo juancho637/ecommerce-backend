@@ -53,7 +53,8 @@ class AuthLoginController extends ApiController
      *         response="401",
      *         description="fail",
      *         @OA\JsonContent(
-     *             ref="#/components/schemas/BadRequestException",
+     *             @OA\Property(property="error", type="string", example="Invalid login"),
+     *             @OA\Property(property="code", type="number", example=401),
      *         ),
      *     ),
      *     @OA\Response(
