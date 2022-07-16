@@ -32,6 +32,9 @@ Homestead.json
 .scribe
 public/docs
 
+# Swagger
+storage/api-docs
+
 ### Linux ###
 *~
 
