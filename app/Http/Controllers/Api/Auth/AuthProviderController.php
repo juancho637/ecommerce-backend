@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Status;
-use Illuminate\Http\Response;
 use App\Models\SocialNetwork;
 use Laravel\Socialite\Facades\Socialite;
 use GuzzleHttp\Exception\ClientException;
 use App\Http\Controllers\Api\ApiController;
+use Illuminate\Auth\AuthenticationException;
 use App\Http\Requests\Api\Auth\ProviderAuthRequest;
 
 class AuthProviderController extends ApiController
@@ -66,7 +66,8 @@ class AuthProviderController extends ApiController
      *         response="401",
      *         description="fail",
      *         @OA\JsonContent(
-     *             ref="#/components/schemas/BadRequestException",
+     *             @OA\Property(property="error", type="string", example="Invalid login"),
+     *             @OA\Property(property="code", type="number", example=401),
      *         ),
      *     ),
      *     @OA\Response(
@@ -85,7 +86,7 @@ class AuthProviderController extends ApiController
         try {
             $socialUser = Socialite::driver($provider)->userFromToken($request->token);
         } catch (ClientException $exception) {
-            throw new \Exception(__('Invalid credentials provided'), Response::HTTP_UNAUTHORIZED);
+            throw new AuthenticationException(__('Invalid login'));
         }
 
         $user = User::firstOrCreate(
