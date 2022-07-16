@@ -53,7 +53,7 @@ class Handler extends ExceptionHandler
         }
 
         if ($exception instanceof AuthenticationException) {
-            return $this->authenticationException();
+            return $this->authenticationException($exception);
         }
 
         if ($exception instanceof ModelNotFoundException) {
@@ -106,9 +106,9 @@ class Handler extends ExceptionHandler
      *     @OA\Property(property="code", type="number", example=401),
      * )
      */
-    protected function authenticationException()
+    protected function authenticationException($exception)
     {
-        return $this->errorResponse(__("Unauthenticated"), Response::HTTP_UNAUTHORIZED);
+        return $this->errorResponse($exception->getMessage(), Response::HTTP_UNAUTHORIZED);
     }
 
     /**
