@@ -22,7 +22,7 @@ class CityUpdateController extends ApiController
 
     /**
      * @OA\Put(
-     *     path="/api/v1/cities",
+     *     path="/api/v1/cities/{city}",
      *     summary="Update city",
      *     operationId="updateCity",
      *     tags={"Cities"},

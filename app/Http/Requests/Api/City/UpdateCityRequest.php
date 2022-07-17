@@ -20,8 +20,8 @@ class UpdateCityRequest extends FormRequest
     }
 
     /**
-     * @OA\Property(type="string", default="city name", description="city name", property="name"),
-     * @OA\Property(type="number", default=1, description="state id assigned to the city", property="state_id"),
+     * @OA\Property(type="string", description="name", property="name", nullable=true),
+     * @OA\Property(type="number", description="state id assigned", property="state_id", nullable=true),
      */
     public function rules()
     {
