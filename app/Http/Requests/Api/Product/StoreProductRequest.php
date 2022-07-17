@@ -5,6 +5,17 @@ namespace App\Http\Requests\Api\Product;
 use App\Models\Product;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *     required={
+ *         "name",
+ *         "category_id",
+ *         "description",
+ *         "photos",
+ *         "tags",
+ *     },
+ * )
+ */
 class StoreProductRequest extends FormRequest
 {
     /**
@@ -18,9 +29,39 @@ class StoreProductRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
+     * @OA\Property(type="string", description="name", property="name"),
+     * @OA\Property(type="number", description="category id assigned", property="category_id"),
+     * @OA\Property(type="string", description="short description", property="short_description"),
+     * @OA\Property(type="string", description="description", property="description"),
+     * @OA\Property(
+     *     type="array",
+     *     minItems=1,
+     *     description="photos",
+     *     property="photos",
+     *     @OA\Items(
+     *         type="object",
+     *         required={"file", "location"},
+     *         @OA\Property(type="file", description="file", property="file"),
+     *         @OA\Property(type="number", description="location", property="location"),
+     *     ),
+     * ),
+     * @OA\Property(
+     *     type="array",
+     *     minItems=1,
+     *     description="tags",
+     *     property="tags",
+     *     @OA\Items(
+     *         type="number",
+     *     ),
+     * ),
+     * @OA\Property(
+     *     type="array",
+     *     description="product attribute options",
+     *     property="product_attribute_options",
+     *     @OA\Items(
+     *         type="number",
+     *     ),
+     * ),
      */
     public function rules()
     {
@@ -36,45 +77,6 @@ class StoreProductRequest extends FormRequest
             'tags.*' => 'integer|exists:tags,id',
             'product_attribute_options' => 'nullable|array',
             'product_attribute_options.*' => 'integer|exists:product_attribute_options,id',
-        ];
-    }
-
-    public function bodyParameters()
-    {
-        return [
-            'name' => [
-                'description' => 'Nombre del producto',
-            ],
-            'category_id' => [
-                'description' => 'Id de la categoría asignada al producto',
-            ],
-            'short_description' => [
-                'description' => 'Descripción corta del producto',
-            ],
-            'description' => [
-                'description' => 'Descripción completa del producto.',
-            ],
-            'photos' => [
-                'description' => 'Fotos del producto',
-            ],
-            'photos.*.file' => [
-                'description' => 'Foto del producto',
-            ],
-            'photos.*.location' => [
-                'description' => 'Localización de la foto del producto',
-            ],
-            'tags' => [
-                'description' => 'Tags asociados al producto',
-            ],
-            'tags.*' => [
-                'description' => 'Ids de los tags asociados al producto',
-            ],
-            'product_attribute_options' => [
-                'description' => 'Opciones de atributos asociados al producto',
-            ],
-            'product_attribute_options.*' => [
-                'description' => 'Ids de las opciones de atributos asociados al producto',
-            ],
         ];
     }
 }

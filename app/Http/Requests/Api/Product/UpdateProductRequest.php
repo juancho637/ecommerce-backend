@@ -6,6 +6,9 @@ use App\Models\Product;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema()
+ */
 class UpdateProductRequest extends FormRequest
 {
     /**
@@ -19,9 +22,40 @@ class UpdateProductRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
+     * @OA\Property(type="string", description="name", property="name", nullable=true),
+     * @OA\Property(type="number", description="category id assigned", property="category_id", nullable=true),
+     * @OA\Property(type="string", description="short description", property="short_description", nullable=true),
+     * @OA\Property(type="string", description="description", property="description", nullable=true),
+     * @OA\Property(
+     *     type="array",
+     *     description="photos",
+     *     property="photos",
+     *     nullable=true,
+     *     @OA\Items(
+     *         type="object",
+     *         required={"file", "location"},
+     *         @OA\Property(type="file", description="file", property="file"),
+     *         @OA\Property(type="number", description="location", property="location"),
+     *     ),
+     * ),
+     * @OA\Property(
+     *     type="array",
+     *     description="tags",
+     *     property="tags",
+     *     nullable=true,
+     *     @OA\Items(
+     *         type="number",
+     *     ),
+     * ),
+     * @OA\Property(
+     *     type="array",
+     *     nullable=true,
+     *     description="product attribute options",
+     *     property="product_attribute_options",
+     *     @OA\Items(
+     *         type="number",
+     *     ),
+     * ),
      */
     public function rules()
     {
@@ -41,45 +75,6 @@ class UpdateProductRequest extends FormRequest
             'photos.*.location' => ['required', 'integer', 'min:1', 'max:' . Product::MAX_PHOTOS],
             'product_attribute_options' => 'nullable|array',
             'product_attribute_options.*' => 'exists:product_attribute_options,id',
-        ];
-    }
-
-    public function bodyParameters()
-    {
-        return [
-            'name' => [
-                'description' => 'Nombre del producto',
-            ],
-            'category_id' => [
-                'description' => 'Id de la categoría asignada al producto',
-            ],
-            'short_description' => [
-                'description' => 'Descripción corta del producto',
-            ],
-            'description' => [
-                'description' => 'Descripción completa del producto.',
-            ],
-            'photos' => [
-                'description' => 'Fotos del producto',
-            ],
-            'photos.*.file' => [
-                'description' => 'Foto del producto',
-            ],
-            'photos.*.location' => [
-                'description' => 'Localización de la foto del producto',
-            ],
-            'tags' => [
-                'description' => 'Tags asociados al producto',
-            ],
-            'tags.*' => [
-                'description' => 'Ids de los tags asociados al producto',
-            ],
-            'product_attribute_options' => [
-                'description' => 'Opciones de atributos asociados al producto',
-            ],
-            'product_attribute_options.*' => [
-                'description' => 'Ids de las opciones de atributos asociados al producto',
-            ],
         ];
     }
 }

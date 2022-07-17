@@ -22,16 +22,70 @@ class ProductUpdateController extends ApiController
     }
 
     /**
-     * Actualizar producto
-     * 
-     * Actualiza el producto indicado por el id.
-     * 
-     * @group Productos
-     * @authenticated
-     * @apiResource App\Http\Resources\ProductResource
-     * @apiResourceModel App\Models\Product with=status,category,tags,productAttributeOptions,photos
-     * 
-     * @urlParam id int required Id del product.
+     * @OA\Put(
+     *     path="/api/v1/products/{product}",
+     *     summary="Update product",
+     *     operationId="updateProduct",
+     *     tags={"Products"},
+     *     security={ {"sanctum": {}} },
+     *     @OA\Parameter(
+     *         name="product",
+     *         description="Id of product",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 ref="#/components/schemas/UpdateProductRequest",
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/Product",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/BadRequestException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthenticationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="403",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthorizationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/ValidationException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(UpdateProductRequest $request, Product $product)
     {

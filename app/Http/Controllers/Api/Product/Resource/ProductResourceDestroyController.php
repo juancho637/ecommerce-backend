@@ -18,17 +18,70 @@ class ProductResourceDestroyController extends ApiController
     }
 
     /**
-     * Eliminar foto de producto
-     * 
-     * Elimina una foto de un producto por el id.
-     * 
-     * @group Productos
-     * @authenticated
-     * @apiResource App\Http\Resources\ResourceResource
-     * @apiResourceModel App\Models\Resource
-     * 
-     * @urlParam product_id int required Id del producto.
-     * @urlParam resource int required Id de la foto del producto.
+     * @OA\Delete(
+     *     path="/api/v1/products/{product}/photos/{resource}",
+     *     summary="Delete a product photo",
+     *     operationId="deleteProductPhoto",
+     *     tags={"Products"},
+     *     security={ {"sanctum": {}} },
+     *     @OA\Parameter(
+     *         name="product",
+     *         description="Id of product",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="resource",
+     *         description="Id of photo",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/Resource",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/BadRequestException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthenticationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="403",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthorizationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/ModelNotFoundException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(Request $request, Product $product, Resource $resource)
     {
@@ -45,7 +98,7 @@ class ProductResourceDestroyController extends ApiController
             return $this->showOne($resource);
         } catch (\Exception $exception) {
             DB::rollback();
-            return $this->errorResponse($exception->getMessage());
+            throw new \Exception($exception->getMessage(), $exception->getCode());
         }
     }
 }

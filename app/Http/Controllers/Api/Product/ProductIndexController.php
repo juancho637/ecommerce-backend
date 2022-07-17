@@ -19,13 +19,24 @@ class ProductIndexController extends ApiController
     }
 
     /**
-     * Listar productos
-     * 
-     * Lista los productos de la aplicación.
-     * 
-     * @group Productos
-     * @apiResourceCollection App\Http\Resources\ProductResource
-     * @apiResourceModel App\Models\Product with=status,category,tags,productAttributeOptions,photos
+     * @OA\Get(
+     *     path="/api/v1/products",
+     *     summary="List of products",
+     *     operationId="getAllProducts",
+     *     tags={"Products"},
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 type="array",
+     *                 property="data",
+     *                 @OA\Items(ref="#/components/schemas/Product")
+     *             ),
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(Request $request)
     {
