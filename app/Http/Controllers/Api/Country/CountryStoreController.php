@@ -21,14 +21,61 @@ class CountryStoreController extends ApiController
     }
 
     /**
-     * Guardar país
-     * 
-     * Guarda una país en la aplicación.
-     * 
-     * @group Países
-     * @authenticated
-     * @apiResource App\Http\Resources\CountryResource
-     * @apiResourceModel App\Models\Country with=status
+     * @OA\Post(
+     *     path="/api/v1/countries",
+     *     summary="Save country",
+     *     operationId="saveCountry",
+     *     tags={"Countries"},
+     *     security={ {"sanctum": {}} },
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 ref="#/components/schemas/StoreCountryRequest",
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/Country",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/BadRequestException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthenticationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="403",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthorizationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/ValidationException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(StoreCountryRequest $request)
     {
@@ -46,7 +93,7 @@ class CountryStoreController extends ApiController
             );
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage());
+            throw new \Exception($exception->getMessage(), $exception->getCode());
         }
     }
 }

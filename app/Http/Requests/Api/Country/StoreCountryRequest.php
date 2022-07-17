@@ -4,6 +4,11 @@ namespace App\Http\Requests\Api\Country;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *     required={"name", "short_name", "phone_code"},
+ * )
+ */
 class StoreCountryRequest extends FormRequest
 {
     /**
@@ -17,9 +22,9 @@ class StoreCountryRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
+     * @OA\Property(type="string", description="name", property="name"),
+     * @OA\Property(type="string", description="short name", property="short_name"),
+     * @OA\Property(type="string", description="phone code", property="phone_code"),
      */
     public function rules()
     {
@@ -27,21 +32,6 @@ class StoreCountryRequest extends FormRequest
             'name' => 'required|string|max:255',
             'short_name' => 'required|string|max:5',
             'phone_code' => 'required|string|max:5',
-        ];
-    }
-
-    public function bodyParameters()
-    {
-        return [
-            'name' => [
-                'description' => 'Nombre de la país',
-            ],
-            'short_name' => [
-                'description' => 'Nombre corto del país',
-            ],
-            'phone_code' => [
-                'description' => 'Indicativo del país',
-            ],
         ];
     }
 }

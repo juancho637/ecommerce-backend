@@ -21,16 +21,70 @@ class CountryUpdateController extends ApiController
     }
 
     /**
-     * Actualizar país
-     * 
-     * Actualiza el país indicado por el id.
-     * 
-     * @group Países
-     * @authenticated
-     * @apiResource App\Http\Resources\CountryResource
-     * @apiResourceModel App\Models\Country with=status
-     * 
-     * @urlParam id int required Id del país.
+     * @OA\Put(
+     *     path="/api/v1/countries/{country}",
+     *     summary="Update country",
+     *     operationId="updateCountry",
+     *     tags={"Countries"},
+     *     security={ {"sanctum": {}} },
+     *     @OA\Parameter(
+     *         name="country",
+     *         description="Id of country",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 ref="#/components/schemas/UpdateCountryRequest",
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/Country",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/BadRequestException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthenticationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="403",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthorizationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/ValidationException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(UpdateCountryRequest $request, Country $country)
     {
@@ -43,7 +97,7 @@ class CountryUpdateController extends ApiController
             return $this->showOne($this->country);
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage());
+            throw new \Exception($exception->getMessage(), $exception->getCode());
         }
     }
 }

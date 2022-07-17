@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api\Country;
 
 use App\Models\Country;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Api\ApiController;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Api\ApiController;
 
 class CountryDestroyController extends ApiController
 {
@@ -21,16 +21,61 @@ class CountryDestroyController extends ApiController
     }
 
     /**
-     * Eliminar país
-     * 
-     * Elimina un país indicado por el id.
-     * 
-     * @group Países
-     * @authenticated
-     * @apiResource App\Http\Resources\CountryResource
-     * @apiResourceModel App\Models\Country with=status
-     * 
-     * @urlParam id int required Id del país.
+     * @OA\Delete(
+     *     path="/api/v1/countries/{country}",
+     *     summary="Delete country",
+     *     operationId="deleteCountry",
+     *     tags={"Countries"},
+     *     security={ {"sanctum": {}} },
+     *     @OA\Parameter(
+     *         name="country",
+     *         description="Id of country",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/Country",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/BadRequestException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthenticationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="403",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthorizationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/ModelNotFoundException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(Request $request, Country $country)
     {
@@ -47,7 +92,7 @@ class CountryDestroyController extends ApiController
             );
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage());
+            throw new \Exception($exception->getMessage(), $exception->getCode());
         }
     }
 }

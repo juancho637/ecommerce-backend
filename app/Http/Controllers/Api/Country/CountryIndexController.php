@@ -21,13 +21,24 @@ class CountryIndexController extends ApiController
     }
 
     /**
-     * Listar países
-     * 
-     * Lista los países de la aplicación.
-     * 
-     * @group Países
-     * @apiResourceCollection App\Http\Resources\CountryResource
-     * @apiResourceModel App\Models\Country with=status
+     * @OA\Get(
+     *     path="/api/v1/countries",
+     *     summary="List of countries",
+     *     operationId="getAllCountries",
+     *     tags={"Countries"},
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 type="array",
+     *                 property="data",
+     *                 @OA\Items(ref="#/components/schemas/Country")
+     *             ),
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(Request $request)
     {

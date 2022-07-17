@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api\Country;
 
 use App\Models\Country;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Http\Controllers\Api\ApiController;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CountryShowController extends ApiController
 {
@@ -17,15 +17,39 @@ class CountryShowController extends ApiController
     }
 
     /**
-     * Mostrar país
-     * 
-     * Muestra la información de un país indicado por el id.
-     * 
-     * @group Países
-     * @apiResource App\Http\Resources\CountryResource
-     * @apiResourceModel App\Models\Country with=status
-     * 
-     * @urlParam id int required Id del país.
+     * @OA\Get(
+     *     path="/api/v1/countries/{country}",
+     *     summary="Show country by id",
+     *     operationId="getCountryById",
+     *     tags={"Countries"},
+     *     @OA\Parameter(
+     *         name="country",
+     *         description="Id of country",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/Country",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/ModelNotFoundException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(Request $request, Country $country)
     {
@@ -37,6 +61,6 @@ class CountryShowController extends ApiController
             );
         }
 
-        return $this->errorResponse(__('Not found'), Response::HTTP_NOT_FOUND);
+        throw new ModelNotFoundException;
     }
 }
