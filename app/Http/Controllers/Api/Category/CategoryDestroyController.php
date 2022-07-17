@@ -21,16 +21,61 @@ class CategoryDestroyController extends ApiController
     }
 
     /**
-     * Eliminar categoría
-     * 
-     * Elimina una categoría por el id.
-     * 
-     * @group Categorías
-     * @authenticated
-     * @apiResource App\Http\Resources\CategoryResource
-     * @apiResourceModel App\Models\Category with=image,status
-     * 
-     * @urlParam id int required Id de la categoría.
+     * @OA\Delete(
+     *     path="/api/v1/categories/{category}",
+     *     summary="Delete category",
+     *     operationId="deleteCategory",
+     *     tags={"Categories"},
+     *     security={ {"sanctum": {}} },
+     *     @OA\Parameter(
+     *         name="category",
+     *         description="Id of category",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/Category",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/BadRequestException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthenticationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="403",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthorizationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/ModelNotFoundException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(Request $request, Category $category)
     {
@@ -47,7 +92,7 @@ class CategoryDestroyController extends ApiController
             );
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage());
+            throw new \Exception($exception->getMessage(), $exception->getCode());
         }
     }
 }

@@ -5,6 +5,9 @@ namespace App\Http\Requests\Api\Category;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema()
+ */
 class UpdateCategoryRequest extends FormRequest
 {
     /**
@@ -18,9 +21,9 @@ class UpdateCategoryRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
+     * @OA\Property(type="string", description="name", property="name", nullable=true),
+     * @OA\Property(type="file", description="image", property="image", nullable=true),
+     * @OA\Property(type="number", description="category parent id assigned", property="parent_id", nullable=true),
      */
     public function rules()
     {
@@ -32,21 +35,6 @@ class UpdateCategoryRequest extends FormRequest
             ],
             'image' => 'nullable|image',
             'parent_id' => 'nullable|exists:categories,id',
-        ];
-    }
-
-    public function bodyParameters()
-    {
-        return [
-            'name' => [
-                'description' => 'Nombre de la categoria',
-            ],
-            'image' => [
-                'description' => 'Imagen asociada a la categoría',
-            ],
-            'parent_id' => [
-                'description' => 'Id de la categoría padre asignada a la categoría en cuestión (opcional)',
-            ],
         ];
     }
 }

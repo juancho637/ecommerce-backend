@@ -17,13 +17,24 @@ class CategoryIndexController extends ApiController
     }
 
     /**
-     * Listar categorías
-     * 
-     * Lista las categorías de la aplicación.
-     * 
-     * @group Categorías
-     * @apiResource App\Http\Resources\CategoryResource
-     * @apiResourceModel App\Models\Category with=image,status
+     * @OA\Get(
+     *     path="/api/v1/categories",
+     *     summary="List of categories",
+     *     operationId="getAllCategories",
+     *     tags={"Categories"},
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 type="array",
+     *                 property="data",
+     *                 @OA\Items(ref="#/components/schemas/Category")
+     *             ),
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(Request $request)
     {

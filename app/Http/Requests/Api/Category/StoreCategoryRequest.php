@@ -4,6 +4,11 @@ namespace App\Http\Requests\Api\Category;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *     required={"name", "image"},
+ * )
+ */
 class StoreCategoryRequest extends FormRequest
 {
     /**
@@ -17,9 +22,9 @@ class StoreCategoryRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
+     * @OA\Property(type="string", description="name", property="name"),
+     * @OA\Property(type="file", description="image", property="image"),
+     * @OA\Property(type="number", description="category parent id assigned", property="parent_id", nullable=true),
      */
     public function rules()
     {

@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api\Category;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Http\Controllers\Api\ApiController;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CategoryShowController extends ApiController
 {
@@ -14,15 +14,39 @@ class CategoryShowController extends ApiController
     }
 
     /**
-     * Mostrar categoría
-     * 
-     * Muestra la información de una categoría por el id.
-     * 
-     * @group Categorías
-     * @apiResource App\Http\Resources\CategoryResource
-     * @apiResourceModel App\Models\Category with=image,status
-     * 
-     * @urlParam id int required Id de la categoría.
+     * @OA\Get(
+     *     path="/api/v1/categories/{category}",
+     *     summary="Show category by id",
+     *     operationId="getCategoryById",
+     *     tags={"Categories"},
+     *     @OA\Parameter(
+     *         name="category",
+     *         description="Id of category",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/Category",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/ModelNotFoundException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(Request $request, Category $category)
     {
@@ -34,6 +58,6 @@ class CategoryShowController extends ApiController
             );
         }
 
-        return $this->errorResponse(__('Not found'), Response::HTTP_NOT_FOUND);
+        throw new ModelNotFoundException;
     }
 }
