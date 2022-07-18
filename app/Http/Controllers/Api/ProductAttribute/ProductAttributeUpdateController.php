@@ -29,7 +29,7 @@ class ProductAttributeUpdateController extends ApiController
      *     security={ {"sanctum": {}} },
      *     @OA\Parameter(
      *         name="productAttribute",
-     *         description="Id of productAttribute",
+     *         description="Id of product attribute",
      *         required=true,
      *         in="path",
      *         @OA\Schema(
