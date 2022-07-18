@@ -21,14 +21,39 @@ class UserIndexController extends ApiController
     }
 
     /**
-     * Listar usuarios
-     * 
-     * Lista las usuarios de la aplicación.
-     * 
-     * @group Usuarios
-     * @authenticated
-     * @apiResourceCollection App\Http\Resources\UserResource
-     * @apiResourceModel App\Models\User with=status,roles,socialNetworks
+     * @OA\Get(
+     *     path="/api/v1/users",
+     *     summary="List of users",
+     *     operationId="getAllUser",
+     *     tags={"Users"},
+     *     security={ {"sanctum": {}} },
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 type="array",
+     *                 property="data",
+     *                 @OA\Items(ref="#/components/schemas/User")
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthenticationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="403",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthorizationException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(Request $request)
     {

@@ -4,6 +4,18 @@ namespace App\Http\Requests\Api\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *     required={
+ *         "name",
+ *         "email",
+ *         "username",
+ *         "password",
+ *         "password_confirmation",
+ *         "role",
+ *     },
+ * )
+ */
 class StoreUserRequest extends FormRequest
 {
     /**
@@ -17,9 +29,12 @@ class StoreUserRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
+     * @OA\Property(type="string", description="name", property="name"),
+     * @OA\Property(type="string", description="email", property="email"),
+     * @OA\Property(type="string", description="username", property="username"),
+     * @OA\Property(type="string", description="password", property="password"),
+     * @OA\Property(type="string", description="password confirmation", property="password_confirmation"),
+     * @OA\Property(type="number", description="role assigned", property="role"),
      */
     public function rules()
     {
@@ -30,30 +45,6 @@ class StoreUserRequest extends FormRequest
             "password" => "required|string|confirmed|min:6",
             "password_confirmation" => "required|string",
             "role" => "required|integer|exists:roles,id",
-        ];
-    }
-
-    public function bodyParameters()
-    {
-        return [
-            'name' => [
-                'description' => 'Nombre completo del usuario',
-            ],
-            'email' => [
-                'description' => 'Correo eléctonico del usuario',
-            ],
-            'username' => [
-                'description' => 'Nickname del usuario',
-            ],
-            'password' => [
-                'description' => 'Contraseña del usuario',
-            ],
-            'password_confirmation' => [
-                'description' => 'Confirmación de la contraseña del usuario',
-            ],
-            'role' => [
-                'description' => 'Rol del usuario',
-            ],
         ];
     }
 }

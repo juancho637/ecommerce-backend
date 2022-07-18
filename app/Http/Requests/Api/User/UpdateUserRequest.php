@@ -5,6 +5,9 @@ namespace App\Http\Requests\Api\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * @OA\Schema()
+ */
 class UpdateUserRequest extends FormRequest
 {
     /**
@@ -18,9 +21,8 @@ class UpdateUserRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
+     * @OA\Property(type="string", description="name", property="name"),
+     * @OA\Property(type="string", description="username", property="username"),
      */
     public function rules()
     {
@@ -31,18 +33,6 @@ class UpdateUserRequest extends FormRequest
                 'string',
                 'max:100',
                 Rule::unique('users', 'username')->ignore($this->tag),
-            ],
-        ];
-    }
-
-    public function bodyParameters()
-    {
-        return [
-            'name' => [
-                'description' => 'Nombre completo del usuario',
-            ],
-            'username' => [
-                'description' => 'Nickname del usuario',
             ],
         ];
     }

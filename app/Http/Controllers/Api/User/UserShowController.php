@@ -16,16 +16,54 @@ class UserShowController extends ApiController
     }
 
     /**
-     * Mostrar usuario
-     * 
-     * Muestra la información de un usuario indicado por el id.
-     * 
-     * @group Usuarios
-     * @authenticated
-     * @apiResource App\Http\Resources\UserResource
-     * @apiResourceModel App\Models\User with=status,roles,socialNetworks
-     * 
-     * @urlParam id int required Id del usuario.
+     * @OA\Get(
+     *     path="/api/v1/users/{user}",
+     *     summary="Show user by id",
+     *     operationId="getUserById",
+     *     tags={"Users"},
+     *     security={ {"sanctum": {}} },
+     *     @OA\Parameter(
+     *         name="user",
+     *         description="Id of user",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/User",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthenticationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="403",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthorizationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/ModelNotFoundException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(Request $request, User $user)
     {

@@ -21,16 +21,70 @@ class UserUpdateController extends ApiController
     }
 
     /**
-     * Actualizar usuario
-     * 
-     * Actualiza el usuario indicado por el id.
-     * 
-     * @group Usuarios
-     * @authenticated
-     * @apiResource App\Http\Resources\UserResource
-     * @apiResourceModel App\Models\User with=status,roles,socialNetworks
-     * 
-     * @urlParam id int required Id del usuario.
+     * @OA\Put(
+     *     path="/api/v1/users/{user}",
+     *     summary="Update user",
+     *     operationId="updateUser",
+     *     tags={"Users"},
+     *     security={ {"sanctum": {}} },
+     *     @OA\Parameter(
+     *         name="user",
+     *         description="Id of user",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 ref="#/components/schemas/UpdateUserRequest",
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/User",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/BadRequestException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthenticationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="403",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthorizationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/ValidationException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(UpdateUserRequest $request, User $user)
     {
@@ -48,7 +102,7 @@ class UserUpdateController extends ApiController
             );
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage());
+            throw new \Exception($exception->getMessage(), $exception->getCode());
         }
     }
 }
