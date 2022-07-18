@@ -21,14 +21,39 @@ class ProductAttributeOptionIndexController extends ApiController
     }
 
     /**
-     * Listar opciones de atributos
-     * 
-     * Lista los opciones de atributos de la aplicación.
-     * 
-     * @group Opciones de atributos
-     * @authenticated
-     * @apiResourceCollection App\Http\Resources\ProductAttributeOptionResource
-     * @apiResourceModel App\Models\ProductAttributeOption with=status,productAttribute
+     * @OA\Get(
+     *     path="/api/v1/product_attribute_options",
+     *     summary="List of product attribute options",
+     *     operationId="getAllProductAttributeOptions",
+     *     tags={"Product attribute options"},
+     *     security={ {"sanctum": {}} },
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 type="array",
+     *                 property="data",
+     *                 @OA\Items(ref="#/components/schemas/ProductAttributeOption")
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthenticationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="403",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthorizationException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(Request $request)
     {

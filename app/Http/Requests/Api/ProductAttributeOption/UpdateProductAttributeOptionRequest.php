@@ -6,6 +6,9 @@ use Illuminate\Validation\Rule;
 use App\Models\ProductAttribute;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema()
+ */
 class UpdateProductAttributeOptionRequest extends FormRequest
 {
     /**
@@ -19,9 +22,9 @@ class UpdateProductAttributeOptionRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
+     * @OA\Property(type="string", description="name", property="name", nullable=true),
+     * @OA\Property(type="number", description="product attribute id assigned", property="product_attribute_id", nullable=true),
+     * @OA\Property(type="string", description="option (required if attribute type is color)", property="option", nullable=true),
      */
     public function rules()
     {
@@ -40,21 +43,6 @@ class UpdateProductAttributeOptionRequest extends FormRequest
                     return $productAttribute->type === ProductAttribute::COLOR_TYPE;
                 }),
                 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
-            ],
-        ];
-    }
-
-    public function bodyParameters()
-    {
-        return [
-            'product_attribute_id' => [
-                'description' => 'Id del atributo de producto asignado a la opción de atributo',
-            ],
-            'name' => [
-                'description' => 'Nombre de la opción del atributo',
-            ],
-            'option' => [
-                'description' => 'Opción de la opción del atributo (requerido si el atributo es de tipo color)',
             ],
         ];
     }
