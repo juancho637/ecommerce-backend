@@ -21,16 +21,70 @@ class TagUpdateController extends ApiController
     }
 
     /**
-     * Actualizar tag
-     * 
-     * Actualiza el tag indicada por el id.
-     * 
-     * @group Tags
-     * @authenticated
-     * @apiResource App\Http\Resources\TagResource
-     * @apiResourceModel App\Models\Tag with=status
-     * 
-     * @urlParam id int required Id del tag.
+     * @OA\Put(
+     *     path="/api/v1/tags/{tag}",
+     *     summary="Update tag",
+     *     operationId="updateTag",
+     *     tags={"Tags"},
+     *     security={ {"sanctum": {}} },
+     *     @OA\Parameter(
+     *         name="tag",
+     *         description="Id of tag",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 ref="#/components/schemas/UpdateTagRequest",
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/Tag",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/BadRequestException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthenticationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="403",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthorizationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/ValidationException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(UpdateTagRequest $request, Tag $tag)
     {
@@ -47,7 +101,7 @@ class TagUpdateController extends ApiController
             );
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage());
+            throw new \Exception($exception->getMessage(), $exception->getCode());
         }
     }
 }

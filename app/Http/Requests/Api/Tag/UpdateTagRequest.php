@@ -5,6 +5,9 @@ namespace App\Http\Requests\Api\Tag;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema()
+ */
 class UpdateTagRequest extends FormRequest
 {
     /**
@@ -18,9 +21,7 @@ class UpdateTagRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
+     * @OA\Property(type="string", description="name", property="name", nullable=true),
      */
     public function rules()
     {
@@ -29,15 +30,6 @@ class UpdateTagRequest extends FormRequest
                 'sometimes',
                 'string',
                 Rule::unique('tags', 'name')->ignore($this->tag),
-            ],
-        ];
-    }
-
-    public function bodyParameters()
-    {
-        return [
-            'name' => [
-                'description' => 'Nombre del tag',
             ],
         ];
     }

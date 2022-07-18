@@ -4,6 +4,11 @@ namespace App\Http\Requests\Api\Tag;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *     required={"name"},
+ * )
+ */
 class StoreTagRequest extends FormRequest
 {
     /**
@@ -17,23 +22,12 @@ class StoreTagRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
+     * @OA\Property(type="string", description="name", property="name"),
      */
     public function rules()
     {
         return [
             'name' => 'required|string|max:255|unique:tags',
-        ];
-    }
-
-    public function bodyParameters()
-    {
-        return [
-            'name' => [
-                'description' => 'Nombre del tag',
-            ],
         ];
     }
 }

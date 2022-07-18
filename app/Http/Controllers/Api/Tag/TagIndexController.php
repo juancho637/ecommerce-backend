@@ -21,13 +21,24 @@ class TagIndexController extends ApiController
     }
 
     /**
-     * Listar tags
-     * 
-     * Lista los tags de la aplicación.
-     * 
-     * @group Tags
-     * @apiResourceCollection App\Http\Resources\TagResource
-     * @apiResourceModel App\Models\Tag with=status
+     * @OA\Get(
+     *     path="/api/v1/tags",
+     *     summary="List of tags",
+     *     operationId="getAllTags",
+     *     tags={"Tags"},
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 type="array",
+     *                 property="data",
+     *                 @OA\Items(ref="#/components/schemas/Tag")
+     *             ),
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(Request $request)
     {
