@@ -21,14 +21,39 @@ class ProductSpecificationIndexController extends ApiController
     }
 
     /**
-     * Listar especificaciones de los productos
-     * 
-     * Lista las especificaciones de los productos de la aplicación.
-     * 
-     * @group Especificaciones de productos
-     * @authenticated
-     * @apiResourceCollection App\Http\Resources\ProductSpecificationResource
-     * @apiResourceModel App\Models\ProductSpecification with=status,product
+     * @OA\Get(
+     *     path="/api/v1/product_specifications",
+     *     summary="List of product specifications",
+     *     operationId="getAllProductSpecification",
+     *     tags={"Product specifications"},
+     *     security={ {"sanctum": {}} },
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 type="array",
+     *                 property="data",
+     *                 @OA\Items(ref="#/components/schemas/ProductSpecification")
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthenticationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="403",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthorizationException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(Request $request)
     {

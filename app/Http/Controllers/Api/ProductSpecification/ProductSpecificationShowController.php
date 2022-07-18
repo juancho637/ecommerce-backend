@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\ProductSpecification;
 
+use Illuminate\Http\Request;
 use App\Models\ProductSpecification;
 use App\Http\Controllers\Api\ApiController;
-use Illuminate\Http\Request;
 
 class ProductSpecificationShowController extends ApiController
 {
@@ -16,16 +16,54 @@ class ProductSpecificationShowController extends ApiController
     }
 
     /**
-     * Mostrar especificación del producto
-     * 
-     * Muestra la información de una especificación del producto indicado por el id.
-     * 
-     * @group Especificaciones de productos
-     * @authenticated
-     * @apiResource App\Http\Resources\ProductSpecificationResource
-     * @apiResourceModel App\Models\ProductSpecification with=status,product
-     * 
-     * @urlParam productSpecification int required Id de la especificación del producto.
+     * @OA\Get(
+     *     path="/api/v1/product_specifications/{productSpecification}",
+     *     summary="Show product specification by id",
+     *     operationId="getProductSpecificationById",
+     *     tags={"Product specifications"},
+     *     security={ {"sanctum": {}} },
+     *     @OA\Parameter(
+     *         name="productSpecification",
+     *         description="Id of product specification",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/ProductSpecification",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthenticationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="403",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthorizationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/ModelNotFoundException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(Request $request, ProductSpecification $productSpecification)
     {

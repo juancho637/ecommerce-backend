@@ -4,6 +4,11 @@ namespace App\Http\Requests\Api\ProductSpecification;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *     required={"name", "product_id", "value"},
+ * )
+ */
 class StoreProductSpecificationRequest extends FormRequest
 {
     /**
@@ -17,9 +22,9 @@ class StoreProductSpecificationRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
+     * @OA\Property(type="string", description="name", property="name"),
+     * @OA\Property(type="number", description="product id assigned", property="product_id"),
+     * @OA\Property(type="string", description="value", property="value"),
      */
     public function rules()
     {
@@ -27,21 +32,6 @@ class StoreProductSpecificationRequest extends FormRequest
             'product_id' => 'required|exists:products,id',
             'name' => 'required|string|max:255',
             'value' => 'required|string|max:255',
-        ];
-    }
-
-    public function bodyParameters()
-    {
-        return [
-            'product_id' => [
-                'description' => 'Id del producto asignado a la especificación del producto',
-            ],
-            'name' => [
-                'description' => 'Nombre de la especificación del producto',
-            ],
-            'value' => [
-                'description' => 'Valor de la especificación del producto',
-            ],
         ];
     }
 }

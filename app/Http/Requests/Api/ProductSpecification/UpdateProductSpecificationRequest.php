@@ -4,6 +4,9 @@ namespace App\Http\Requests\Api\ProductSpecification;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema()
+ */
 class UpdateProductSpecificationRequest extends FormRequest
 {
     /**
@@ -17,9 +20,9 @@ class UpdateProductSpecificationRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
+     * @OA\Property(type="string", description="name", property="name", nullable=true),
+     * @OA\Property(type="number", description="product id assigned", property="product_id", nullable=true),
+     * @OA\Property(type="string", description="value", property="value", nullable=true),
      */
     public function rules()
     {
@@ -27,21 +30,6 @@ class UpdateProductSpecificationRequest extends FormRequest
             'product_id' => 'exists:products,id',
             'name' => 'string|max:255',
             'value' => 'string|max:255',
-        ];
-    }
-
-    public function bodyParameters()
-    {
-        return [
-            'product_id' => [
-                'description' => 'Id del producto asignado a la especificación del producto',
-            ],
-            'name' => [
-                'description' => 'Nombre de la especificación del producto',
-            ],
-            'value' => [
-                'description' => 'Valor de la especificación del producto',
-            ],
         ];
     }
 }

@@ -21,16 +21,70 @@ class ProductSpecificationUpdateController extends ApiController
     }
 
     /**
-     * Actualizar especificación del producto
-     * 
-     * Actualiza la especificación del producto indicado por el id.
-     * 
-     * @group Especificaciones de productos
-     * @authenticated
-     * @apiResource App\Http\Resources\ProductSpecificationResource
-     * @apiResourceModel App\Models\ProductSpecification with=status,product
-     * 
-     * @urlParam productSpecification int required Id de la especificación del producto.
+     * @OA\Put(
+     *     path="/api/v1/product_specifications/{productSpecification}",
+     *     summary="Update product specification",
+     *     operationId="updateProductSpecification",
+     *     tags={"Product specifications"},
+     *     security={ {"sanctum": {}} },
+     *     @OA\Parameter(
+     *         name="productSpecification",
+     *         description="Id of product specification",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 ref="#/components/schemas/UpdateProductSpecificationRequest",
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/ProductSpecification",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/BadRequestException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthenticationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="403",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthorizationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/ValidationException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(
         UpdateProductSpecificationRequest $request,
@@ -50,7 +104,7 @@ class ProductSpecificationUpdateController extends ApiController
             );
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage());
+            throw new \Exception($exception->getMessage(), $exception->getCode());
         }
     }
 }
