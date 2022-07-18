@@ -4,6 +4,11 @@ namespace App\Http\Requests\Api\State;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *     required={"name", "country_id"},
+ * )
+ */
 class StoreStateRequest extends FormRequest
 {
     /**
@@ -17,27 +22,14 @@ class StoreStateRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
+     * @OA\Property(type="string", description="name", property="name"),
+     * @OA\Property(type="number", description="country id assigned", property="country_id"),
      */
     public function rules()
     {
         return [
             'name' => 'required|string|max:255',
             'country_id' => 'required|exists:countries,id',
-        ];
-    }
-
-    public function bodyParameters()
-    {
-        return [
-            'name' => [
-                'description' => 'Nombre del departamento/estado/provincia',
-            ],
-            'country_id' => [
-                'description' => 'Id del país asignado al departamento/estado/provincia',
-            ],
         ];
     }
 }

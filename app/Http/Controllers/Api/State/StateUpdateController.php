@@ -21,16 +21,70 @@ class StateUpdateController extends ApiController
     }
 
     /**
-     * Actualizar departamento/estado/provincia
-     * 
-     * Actualiza el departamento/estado/provincia indicada por el id.
-     * 
-     * @group Departamentos/Estados/Provincias
-     * @authenticated
-     * @apiResource App\Http\Resources\StateResource
-     * @apiResourceModel App\Models\State with=status,country
-     * 
-     * @urlParam id int required Id del departamento/estado/provincia.
+     * @OA\Put(
+     *     path="/api/v1/states/{state}",
+     *     summary="Update state",
+     *     operationId="updateState",
+     *     tags={"States"},
+     *     security={ {"sanctum": {}} },
+     *     @OA\Parameter(
+     *         name="state",
+     *         description="Id of state",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 ref="#/components/schemas/UpdateStateRequest",
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/State",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/BadRequestException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthenticationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="403",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthorizationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/ValidationException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(UpdateStateRequest $request, State $state)
     {
@@ -47,7 +101,7 @@ class StateUpdateController extends ApiController
             );
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage());
+            throw new \Exception($exception->getMessage(), $exception->getCode());
         }
     }
 }

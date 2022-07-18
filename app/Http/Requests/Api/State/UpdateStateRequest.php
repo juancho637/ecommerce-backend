@@ -4,6 +4,9 @@ namespace App\Http\Requests\Api\State;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema()
+ */
 class UpdateStateRequest extends FormRequest
 {
     /**
@@ -17,9 +20,8 @@ class UpdateStateRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
+     * @OA\Property(type="string", description="name", property="name", nullable=true),
+     * @OA\Property(type="number", description="country id assigned", property="country_id", nullable=true),
      */
     public function rules()
     {

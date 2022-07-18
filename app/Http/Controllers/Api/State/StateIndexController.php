@@ -21,13 +21,24 @@ class StateIndexController extends ApiController
     }
 
     /**
-     * Listar departamentos/estados/provincias
-     * 
-     * Lista los departamentos/estados/provincias de la aplicación.
-     * 
-     * @group Departamentos/Estados/Provincias
-     * @apiResourceCollection App\Http\Resources\StateResource
-     * @apiResourceModel App\Models\State with=status,country
+     * @OA\Get(
+     *     path="/api/v1/states",
+     *     summary="List of states",
+     *     operationId="getAllStates",
+     *     tags={"States"},
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 type="array",
+     *                 property="data",
+     *                 @OA\Items(ref="#/components/schemas/State")
+     *             ),
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(Request $request)
     {

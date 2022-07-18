@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api\State;
 
 use App\Models\State;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Http\Controllers\Api\ApiController;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class StateShowController extends ApiController
 {
@@ -17,15 +17,39 @@ class StateShowController extends ApiController
     }
 
     /**
-     * Mostrar departamento/estado/provincia
-     * 
-     * Muestra la información de un departamento/estado/provincia por el id.
-     * 
-     * @group Departamentos/Estados/Provincias
-     * @apiResource App\Http\Resources\StateResource
-     * @apiResourceModel App\Models\State with=status,country
-     * 
-     * @urlParam id int required Id del departamento/estado/provincia.
+     * @OA\Get(
+     *     path="/api/v1/states/{state}",
+     *     summary="Show state by id",
+     *     operationId="getStateById",
+     *     tags={"States"},
+     *     @OA\Parameter(
+     *         name="state",
+     *         description="Id of state",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/State",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/ModelNotFoundException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(Request $request, State $state)
     {
@@ -37,6 +61,6 @@ class StateShowController extends ApiController
             );
         }
 
-        return $this->errorResponse(__('Not found'), Response::HTTP_NOT_FOUND);
+        throw new ModelNotFoundException;
     }
 }
