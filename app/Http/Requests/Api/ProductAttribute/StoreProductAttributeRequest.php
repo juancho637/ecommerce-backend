@@ -6,6 +6,11 @@ use Illuminate\Validation\Rule;
 use App\Models\ProductAttribute;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *     required={"name", "type"},
+ * )
+ */
 class StoreProductAttributeRequest extends FormRequest
 {
     /**
@@ -19,9 +24,8 @@ class StoreProductAttributeRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
+     * @OA\Property(type="string", description="name", property="name"),
+     * @OA\Property(type="string", description="type", property="type"),
      */
     public function rules()
     {
@@ -30,18 +34,6 @@ class StoreProductAttributeRequest extends FormRequest
             'type' => [
                 'required',
                 Rule::in(ProductAttribute::TYPES)
-            ],
-        ];
-    }
-
-    public function bodyParameters()
-    {
-        return [
-            'name' => [
-                'description' => 'Nombre del atributo de producto',
-            ],
-            'type' => [
-                'description' => 'Tipo del atributo de producto',
             ],
         ];
     }

@@ -21,14 +21,61 @@ class ProductAttributeStoreController extends ApiController
     }
 
     /**
-     * Guardar atributo de producto
-     * 
-     * Guarda una atributo de producto en la aplicación.
-     * 
-     * @group Atributos de productos
-     * @authenticated
-     * @apiResource App\Http\Resources\ProductAttributeResource
-     * @apiResourceModel App\Models\ProductAttribute with=status
+     * @OA\Post(
+     *     path="/api/v1/product_attributes",
+     *     summary="Save product attribute",
+     *     operationId="saveProductAttribute",
+     *     tags={"Product attributes"},
+     *     security={ {"sanctum": {}} },
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 ref="#/components/schemas/StoreProductAttributeRequest",
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/ProductAttribute",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/BadRequestException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthenticationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="403",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthorizationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/ValidationException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(StoreProductAttributeRequest $request)
     {
@@ -47,7 +94,7 @@ class ProductAttributeStoreController extends ApiController
             );
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse($exception->getMessage());
+            throw new \Exception($exception->getMessage(), $exception->getCode());
         }
     }
 }

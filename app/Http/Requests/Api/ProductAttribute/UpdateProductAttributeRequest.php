@@ -6,6 +6,9 @@ use Illuminate\Validation\Rule;
 use App\Models\ProductAttribute;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema()
+ */
 class UpdateProductAttributeRequest extends FormRequest
 {
     /**
@@ -19,27 +22,14 @@ class UpdateProductAttributeRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
+     * @OA\Property(type="string", description="name", property="name", nullable=true),
+     * @OA\Property(type="string", description="type", property="type", nullable=true),
      */
     public function rules()
     {
         return [
             'name' => 'string|max:255',
             'type' => [Rule::in(ProductAttribute::TYPES)],
-        ];
-    }
-
-    public function bodyParameters()
-    {
-        return [
-            'name' => [
-                'description' => 'Nombre del atributo de producto',
-            ],
-            'type' => [
-                'description' => 'Tipo del atributo de producto',
-            ],
         ];
     }
 }

@@ -16,16 +16,54 @@ class ProductAttributeShowController extends ApiController
     }
 
     /**
-     * Mostrar atributo de producto
-     * 
-     * Muestra la información de un atributo de producto indicado por el id.
-     * 
-     * @group Atributos de productos
-     * @authenticated
-     * @apiResource App\Http\Resources\ProductAttributeResource
-     * @apiResourceModel App\Models\ProductAttribute with=status
-     * 
-     * @urlParam id int required Id del atributo de producto.
+     * @OA\Get(
+     *     path="/api/v1/product_attributes/{productAttribute}",
+     *     summary="Show product attribute by id",
+     *     operationId="getProductAttributeById",
+     *     tags={"Product attributes"},
+     *     security={ {"sanctum": {}} },
+     *     @OA\Parameter(
+     *         name="productAttribute",
+     *         description="Id of product attribute",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/ProductAttribute",
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthenticationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="403",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/AuthorizationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/ModelNotFoundException",
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(Request $request, ProductAttribute $productAttribute)
     {
