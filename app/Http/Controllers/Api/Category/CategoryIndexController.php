@@ -117,9 +117,11 @@ class CategoryIndexController extends ApiController
             ->with('image')
             ->get();
 
-        $rootCategories = $categories->whereNull('parent_id');
+        if (in_array('children', $includes)) {
+            $rootCategories = $categories->whereNull('parent_id');
 
-        Category::formatTree($rootCategories, $categories);
+            Category::formatTree($rootCategories, $categories);
+        }
 
         return $this->showAll($categories);
     }
