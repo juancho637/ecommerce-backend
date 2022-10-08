@@ -22,6 +22,51 @@ class CategoryIndexController extends ApiController
      *     summary="List of categories",
      *     operationId="getAllCategories",
      *     tags={"Categories"},
+     *     @OA\Parameter(
+     *         name="include",
+     *         description="Relationships of categories",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="id",
+     *         description="Id of category",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="status",
+     *         description="Status id of category",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="name",
+     *         description="Name of category",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="slug",
+     *         description="Slug of category",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
      *     @OA\Response(
      *         response="200",
      *         description="success",
