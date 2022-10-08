@@ -119,8 +119,9 @@ class CategoryIndexController extends ApiController
 
         if (in_array('children', $includes)) {
             $rootCategories = $categories->whereNull('parent_id');
-
             Category::formatTree($rootCategories, $categories);
+
+            return $this->showAll($rootCategories);
         }
 
         return $this->showAll($categories);

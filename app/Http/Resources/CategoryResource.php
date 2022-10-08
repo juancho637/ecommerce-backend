@@ -17,6 +17,7 @@ class CategoryResource extends JsonResource
      * @OA\Property(type="number", title="id", default=1, description="id", property="id"),
      * @OA\Property(type="string", title="name", default="name", description="name", property="name"),
      * @OA\Property(type="string", title="slug", default="slug", description="slug", property="slug"),
+     * @OA\Property(type="number", title="parent_id", default=1, description="id of parent", property="parent_id"),
      * 
      * @OA\Property(property="status", ref="#/components/schemas/Status"),
      * @OA\Property(property="image", ref="#/components/schemas/Resource"),
@@ -27,6 +28,7 @@ class CategoryResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
+            'parent_id' => $this->parent_id,
         ];
 
         if (!$this->whenLoaded('image') instanceof MissingValue) {
