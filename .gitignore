@@ -28,6 +28,9 @@ Homestead.json
 /.vagrant
 .phpunit.result.cache
 
+# TNTsearch
+/storage/*.index
+
 # Swagger
 storage/api-docs
 

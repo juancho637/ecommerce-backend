@@ -29,7 +29,7 @@ class CategoryStoreController extends ApiController
      *     security={ {"sanctum": {}} },
      *     @OA\RequestBody(
      *         @OA\MediaType(
-     *             mediaType="application/x-www-form-urlencoded",
+     *             mediaType="multipart/form-data",
      *             @OA\Schema(
      *                 type="object",
      *                 ref="#/components/schemas/StoreCategoryRequest",
