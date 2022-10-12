@@ -24,7 +24,7 @@ class CategoryIndexController extends ApiController
      *     tags={"Categories"},
      *     @OA\Parameter(
      *         name="include",
-     *         description="Relationships of categories",
+     *         description="Relationships of resource",
      *         required=false,
      *         in="query",
      *         @OA\Schema(
@@ -32,35 +32,8 @@ class CategoryIndexController extends ApiController
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="id",
-     *         description="Id of category",
-     *         required=false,
-     *         in="query",
-     *         @OA\Schema(
-     *             type="number"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="status",
-     *         description="Status id of category",
-     *         required=false,
-     *         in="query",
-     *         @OA\Schema(
-     *             type="number"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="name",
-     *         description="Name of category",
-     *         required=false,
-     *         in="query",
-     *         @OA\Schema(
-     *             type="string"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="slug",
-     *         description="Slug of category",
+     *         name="search",
+     *         description="String to search",
      *         required=false,
      *         in="query",
      *         @OA\Schema(
@@ -111,11 +84,23 @@ class CategoryIndexController extends ApiController
     public function __invoke(Request $request)
     {
         $includes = explode(',', $request->get('include', ''));
+        $categories = $this->category;
 
-        $categories = $this->category->query()->byRole();
-        $categories = $this->eagerLoadIncludes($categories, $includes)
-            ->with('image')
-            ->get();
+        if ($request->search) {
+            $categories = $categories->search($request->search)
+                ->query(function (Builder $query) use ($includes) {
+                    $query->byRole();
+
+                    $this->eagerLoadIncludes($query, $includes)
+                        ->with('image');
+                })
+                ->get();
+        } else {
+            $categories = $categories->query()->byRole();
+            $categories = $this->eagerLoadIncludes($categories, $includes)
+                ->with('image')
+                ->get();
+        }
 
         if (in_array('children', $includes)) {
             $rootCategories = $categories->whereNull('parent_id');

@@ -7,8 +7,6 @@ use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Resources\ProductResource;
 use Illuminate\Database\Eloquent\Builder;
-use Laravel\Scout\Attributes\SearchUsingPrefix;
-use Laravel\Scout\Attributes\SearchUsingFullText;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
@@ -36,11 +34,10 @@ class Product extends Model
     const PRODUCT_PHOTO = 'product photo';
     const MAX_PHOTOS = 4;
 
-    #[SearchUsingPrefix(['name', 'slug'])]
-    #[SearchUsingFullText(['short_description', 'description', 'options'])]
     public function toSearchableArray()
     {
         return [
+            'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
             'short_description' => $this->short_description,

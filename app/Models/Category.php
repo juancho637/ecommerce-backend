@@ -31,11 +31,11 @@ class Category extends Model
 
     public function toSearchableArray()
     {
-        $array = $this->toArray();
-
-        // Customize array...
-
-        return $array;
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'slug' => $this->slug,
+        ];
     }
 
     public function status()
