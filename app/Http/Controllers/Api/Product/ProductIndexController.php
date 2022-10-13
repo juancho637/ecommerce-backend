@@ -79,6 +79,11 @@ class ProductIndexController extends ApiController
      *                 property="data",
      *                 @OA\Items(ref="#/components/schemas/Product")
      *             ),
+     *             @OA\Property(
+     *                 type="object",
+     *                 property="meta",
+     *                 ref="#/components/schemas/Pagination",
+     *             ),
      *         ),
      *     ),
      * )

@@ -81,6 +81,11 @@ class CityIndexController extends ApiController
      *                 property="data",
      *                 @OA\Items(ref="#/components/schemas/City")
      *             ),
+     *             @OA\Property(
+     *                 type="object",
+     *                 property="meta",
+     *                 ref="#/components/schemas/Pagination",
+     *             ),
      *         ),
      *     ),
      * )

@@ -43,7 +43,7 @@ trait ApiResponse
 
         $transformer = $collection->first()->transformer;
 
-        $collection = $this->filterData($collection, $transformer);
+        // $collection = $this->filterData($collection, $transformer);
         $collection = $this->sortData($collection, $transformer);
         $collection = $this->paginateData($collection);
         $collection = $this->cacheResponse($collection);
@@ -123,7 +123,15 @@ trait ApiResponse
     }
 
     /**
-     * función para la paginación.
+     * @OA\Schema(
+     *     schema="Pagination",
+     *     @OA\Property(property="current_page", type="number", example=1),
+     *     @OA\Property(property="from", type="number", example=1),
+     *     @OA\Property(property="last_page", type="number", example=1),
+     *     @OA\Property(property="per_page", type="number", example=1),
+     *     @OA\Property(property="to", type="number", example=1),
+     *     @OA\Property(property="total", type="number", example=1),
+     * )
      */
     protected function paginateData(Collection $collection)
     {
