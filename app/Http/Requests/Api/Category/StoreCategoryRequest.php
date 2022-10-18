@@ -23,7 +23,7 @@ class StoreCategoryRequest extends FormRequest
 
     /**
      * @OA\Property(type="string", description="name", property="name"),
-     * @OA\Property(type="file", description="image", property="image"),
+     * @OA\Property(type="string", format="binary", description="image", property="image"),
      * @OA\Property(type="number", description="category parent id assigned", property="parent_id"),
      */
     public function rules()

@@ -96,14 +96,12 @@ class CategoryIndexController extends ApiController
                 ->query(function (Builder $query) use ($includes) {
                     $query->byRole();
 
-                    $this->eagerLoadIncludes($query, $includes)
-                        ->with('image');
+                    $this->eagerLoadIncludes($query, $includes);
                 })
                 ->get();
         } else {
             $categories = $categories->query()->byRole();
             $categories = $this->eagerLoadIncludes($categories, $includes)
-                ->with('image')
                 ->get();
         }
 
@@ -121,6 +119,10 @@ class CategoryIndexController extends ApiController
     {
         if (in_array('status', $includes)) {
             $query->with('status');
+        }
+
+        if (in_array('image', $includes)) {
+            $query->with('image');
         }
 
         return $query;
