@@ -67,9 +67,14 @@ trait ApiResponse
     protected function sortData(Collection $collection, $transformer)
     {
         if (request()->has('sort_by')) {
-            $attribute = $transformer::originalAttribute(request()->sort_by);
+            $attribute = explode('|', request()->sort_by);
+            $attributeTransformed = $transformer::originalAttribute($attribute[0]);
 
-            $collection = $collection->sortBy->{$attribute};
+            if (($attribute[1] && $attribute[1] == 'desc')) {
+                $collection = $collection->sortByDesc->{$attributeTransformed};
+            } else {
+                $collection = $collection->sortBy->{$attributeTransformed};
+            }
         }
 
         return $collection;
@@ -105,11 +110,6 @@ trait ApiResponse
                             break;
                         case '!=':
                             $collection = $collection->where($attribute, '<>', $values[1]);
-                            break;
-                        case 'like':
-                            $collection = $collection->reject(function ($model) use ($attribute, $values) {
-                                return mb_strpos($model[$attribute], $values[1]) === false;
-                            });
                             break;
                         case 'in':
                             $collection = $collection->whereIn($query, explode(',', $values[1]));
