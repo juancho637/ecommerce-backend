@@ -21,7 +21,7 @@ class CategoryUpdateController extends ApiController
     }
 
     /**
-     * @OA\Put(
+     * @OA\Post(
      *     path="/api/v1/categories/{category}",
      *     summary="Update category",
      *     operationId="updateCategory",
@@ -47,7 +47,7 @@ class CategoryUpdateController extends ApiController
      *     ),
      *     @OA\RequestBody(
      *         @OA\MediaType(
-     *             mediaType="application/x-www-form-urlencoded",
+     *             mediaType="multipart/form-data",
      *             @OA\Schema(
      *                 type="object",
      *                 ref="#/components/schemas/UpdateCategoryRequest",

@@ -6,7 +6,9 @@ use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * @OA\Schema()
+ * @OA\Schema(
+ *     required={"_method"},
+ * )
  */
 class UpdateCategoryRequest extends FormRequest
 {
@@ -21,6 +23,7 @@ class UpdateCategoryRequest extends FormRequest
     }
 
     /**
+     * @OA\Property(type="string", description="method", property="_method", default="PUT", enum={"PUT"}),
      * @OA\Property(type="string", description="name", property="name"),
      * @OA\Property(type="string", format="binary", description="image", property="image"),
      * @OA\Property(type="number", description="category parent id assigned", property="parent_id"),
