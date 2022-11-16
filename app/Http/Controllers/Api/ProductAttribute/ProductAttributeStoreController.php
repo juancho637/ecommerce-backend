@@ -27,6 +27,15 @@ class ProductAttributeStoreController extends ApiController
      *     operationId="saveProductAttribute",
      *     tags={"Product attributes"},
      *     security={ {"sanctum": {}} },
+     *     @OA\Parameter(
+     *         name="include",
+     *         description="Relationships of resource",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
      *     @OA\RequestBody(
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
