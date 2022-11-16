@@ -81,6 +81,11 @@ class CountryIndexController extends ApiController
      *                 property="data",
      *                 @OA\Items(ref="#/components/schemas/Country")
      *             ),
+     *             @OA\Property(
+     *                 type="object",
+     *                 property="meta",
+     *                 ref="#/components/schemas/Pagination",
+     *             ),
      *         ),
      *     ),
      * )
