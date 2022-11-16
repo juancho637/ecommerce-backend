@@ -81,6 +81,11 @@ class StateIndexController extends ApiController
      *                 property="data",
      *                 @OA\Items(ref="#/components/schemas/State")
      *             ),
+     *             @OA\Property(
+     *                 type="object",
+     *                 property="meta",
+     *                 ref="#/components/schemas/Pagination",
+     *             ),
      *         ),
      *     ),
      * )
