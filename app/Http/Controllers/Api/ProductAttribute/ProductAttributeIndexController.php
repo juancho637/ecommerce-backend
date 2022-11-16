@@ -27,6 +27,51 @@ class ProductAttributeIndexController extends ApiController
      *     operationId="getAllProductAttributes",
      *     tags={"Product attributes"},
      *     security={ {"sanctum": {}} },
+     *     @OA\Parameter(
+     *         name="include",
+     *         description="Relationships of resource",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="search",
+     *         description="String to search",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         description="Number of resources per page",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="page",
+     *         description="Number of current page",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_by",
+     *         description="Name of field to sort",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
      *     @OA\Response(
      *         response="200",
      *         description="success",
@@ -36,6 +81,11 @@ class ProductAttributeIndexController extends ApiController
      *                 type="array",
      *                 property="data",
      *                 @OA\Items(ref="#/components/schemas/ProductAttribute")
+     *             ),
+     *             @OA\Property(
+     *                 type="object",
+     *                 property="meta",
+     *                 ref="#/components/schemas/Pagination",
      *             ),
      *         ),
      *     ),
@@ -58,9 +108,20 @@ class ProductAttributeIndexController extends ApiController
     public function __invoke(Request $request)
     {
         $includes = explode(',', $request->get('include', ''));
+        $productAttributes = $this->productAttribute;
 
-        $productAttributes = $this->productAttribute->query();
-        $productAttributes = $this->eagerLoadIncludes($productAttributes, $includes)->get();
+        if ($request->search) {
+            $productAttributes = $productAttributes->search($request->search)
+                ->query(function (Builder $query) use ($includes) {
+                    $query->byRole();
+
+                    $this->eagerLoadIncludes($query, $includes);
+                })
+                ->get();
+        } else {
+            $productAttributes = $productAttributes->query()->byRole();
+            $productAttributes = $this->eagerLoadIncludes($productAttributes, $includes)->get();
+        }
 
         return $this->showAll($productAttributes);
     }

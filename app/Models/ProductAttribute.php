@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Resources\ProductAttributeResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ProductAttribute extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     protected $fillable = [
         'status_id',
@@ -31,6 +32,15 @@ class ProductAttribute extends Model
         self::SELECT_TYPE,
         self::COLOR_TYPE,
     ];
+
+    public function toSearchableArray()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'type' => $this->type,
+        ];
+    }
 
     public function status()
     {
