@@ -159,6 +159,20 @@ class ProductIndexController extends ApiController
             }
         }
 
+        if (in_array('product_stocks', $includes)) {
+            if ($user && $user->hasRole(Role::ADMIN)) {
+                $query->with(['productStocks']);
+            } else {
+                $query->with([
+                    'productStocks' => function ($query) {
+                        $query->whereHas('status', function ($query) {
+                            $query->where('name', Status::ENABLED);
+                        });
+                    }
+                ]);
+            }
+        }
+
         return $query;
     }
 }

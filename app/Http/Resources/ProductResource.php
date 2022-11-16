@@ -27,6 +27,7 @@ class ProductResource extends JsonResource
      * @OA\Property(property="productSpecifications", type="array", @OA\Items(ref="#/components/schemas/ProductSpecification")),
      * @OA\Property(property="tags", type="array", @OA\Items(ref="#/components/schemas/Tag")),
      * @OA\Property(property="productAttributeOptions", type="array", @OA\Items(ref="#/components/schemas/ProductAttributeOption")),
+     * @OA\Property(property="productStocks", type="array", @OA\Items(ref="#/components/schemas/ProductStock")),
      */
     public function toArray($request)
     {
@@ -66,6 +67,10 @@ class ProductResource extends JsonResource
             $resource['product_attribute_options'] = ProductAttributeOptionResource::collection(
                 $this->productAttributeOptions
             );
+        }
+
+        if (!$this->whenLoaded('productStocks') instanceof MissingValue) {
+            $resource['product_stocks'] = ProductStockResource::collection($this->productStocks);
         }
 
         return $resource;

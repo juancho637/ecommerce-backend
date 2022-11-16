@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Policies\TagPolicy;
 use App\Policies\CityPolicy;
+use App\Models\ProductStock;
 use App\Policies\UserPolicy;
 use App\Policies\StatePolicy;
 use App\Policies\CountryPolicy;
@@ -19,6 +20,7 @@ use App\Policies\CategoryPolicy;
 use App\Models\ProductAttribute;
 use Illuminate\Support\Facades\Gate;
 use App\Models\ProductSpecification;
+use App\Policies\ProductStockPolicy;
 use App\Models\ProductAttributeOption;
 use App\Policies\ProductAttributePolicy;
 use App\Policies\ProductSpecificationPolicy;
@@ -43,6 +45,7 @@ class AuthServiceProvider extends ServiceProvider
         ProductAttributeOption::class => ProductAttributeOptionPolicy::class,
         Product::class => ProductPolicy::class,
         ProductSpecification::class => ProductSpecificationPolicy::class,
+        ProductStock::class => ProductStockPolicy::class,
     ];
 
     /**

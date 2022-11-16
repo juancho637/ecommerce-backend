@@ -39,6 +39,11 @@ class ProductAttributeOption extends Model
         return $this->belongsToMany(Product::class, 'prod_prod_attr_opt');
     }
 
+    public function productStocks()
+    {
+        return $this->belongsToMany(ProductStock::class, 'prod_attr_opt_prod_stk');
+    }
+
     public function setCreate($attributes)
     {
         $data['name'] = $attributes['name'];

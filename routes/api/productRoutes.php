@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Product\ProductStoreController;
 use App\Http\Controllers\Api\Product\ProductUpdateController;
 use App\Http\Controllers\Api\Product\ProductDestroyController;
 use App\Http\Controllers\Api\Product\Resource\ProductResourceDestroyController;
+use App\Http\Controllers\Api\Product\ProductStock\ProductProductStockIndexController;
 
 Route::get('products', ProductIndexController::class)
     ->name('api.v1.products.index');
@@ -25,3 +26,6 @@ Route::delete('products/{product}', ProductDestroyController::class)
 
 Route::delete('products/{product}/photos/{resource}', ProductResourceDestroyController::class)
     ->name('api.v1.products.photos.destroy');
+
+Route::get('products/{product}/product_stocks', ProductProductStockIndexController::class)
+    ->name('api.v1.products.product_stocks.index');

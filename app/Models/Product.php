@@ -61,6 +61,11 @@ class Product extends Model
         return $this->hasMany(ProductSpecification::class);
     }
 
+    public function productStocks()
+    {
+        return $this->hasMany(ProductStock::class);
+    }
+
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
@@ -132,6 +137,20 @@ class Product extends Model
             } else {
                 $this->load([
                     'productAttributeOptions.productAttribute' => function ($query) {
+                        $query->whereHas('status', function ($query) {
+                            $query->where('name', Status::ENABLED);
+                        });
+                    }
+                ]);
+            }
+        }
+
+        if (in_array('product_stocks', $includes)) {
+            if ($user && $user->hasRole(Role::ADMIN)) {
+                $this->load(['productStocks.productAttributeOptions']);
+            } else {
+                $this->load([
+                    'productStocks.productAttributeOptions' => function ($query) {
                         $query->whereHas('status', function ($query) {
                             $query->where('name', Status::ENABLED);
                         });
