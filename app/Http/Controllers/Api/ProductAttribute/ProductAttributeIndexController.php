@@ -113,13 +113,11 @@ class ProductAttributeIndexController extends ApiController
         if ($request->search) {
             $productAttributes = $productAttributes->search($request->search)
                 ->query(function (Builder $query) use ($includes) {
-                    $query->byRole();
-
                     $this->eagerLoadIncludes($query, $includes);
                 })
                 ->get();
         } else {
-            $productAttributes = $productAttributes->query()->byRole();
+            $productAttributes = $productAttributes->query();
             $productAttributes = $this->eagerLoadIncludes($productAttributes, $includes)->get();
         }
 
