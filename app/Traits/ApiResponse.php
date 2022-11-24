@@ -70,7 +70,7 @@ trait ApiResponse
             $attribute = explode('|', request()->sort_by);
             $attributeTransformed = $transformer::originalAttribute($attribute[0]);
 
-            if (($attribute[1] && $attribute[1] == 'desc')) {
+            if ((count($attribute) > 1 && $attribute[1] == 'desc')) {
                 $collection = $collection->sortByDesc->{$attributeTransformed};
             } else {
                 $collection = $collection->sortBy->{$attributeTransformed};
