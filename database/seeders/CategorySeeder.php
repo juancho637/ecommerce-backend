@@ -15,16 +15,16 @@ class CategorySeeder extends Seeder
     public function run()
     {
         Category::factory()
-            ->count(20)
+            ->count(15)
             ->create();
 
         Category::factory()
-            ->count(2)
+            ->count(10)
             ->withoutParent()
             ->create();
 
         Category::factory()
-            ->count(1)
+            ->count(10)
             ->withParent()
             ->create();
     }

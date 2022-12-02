@@ -43,9 +43,10 @@ class Category extends Model
         return $this->belongsTo(Status::class);
     }
 
-    public function childrenCategories()
+    public function children()
     {
-        return $this->hasMany(__CLASS__, 'parent_id', 'id');
+        return $this->hasMany(Category::class, 'parent_id', 'id')
+            ->with('children');
     }
 
     public function products()
@@ -115,17 +116,6 @@ class Category extends Model
         }
 
         return $this;
-    }
-
-    public static function formatTree($categories, $allCategories)
-    {
-        foreach ($categories as $category) {
-            $category->children = $allCategories->where('parent_id', $category->id)->values();
-
-            if ($category->children->isNotEmpty()) {
-                self::formatTree($category->children, $allCategories);
-            }
-        }
     }
 
     public function loadEagerLoadIncludes(array $includes)

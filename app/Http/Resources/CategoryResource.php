@@ -14,13 +14,18 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class CategoryResource extends JsonResource
 {
     /**
-     * @OA\Property(type="number", title="id", default=1, description="id", property="id"),
-     * @OA\Property(type="string", title="name", default="name", description="name", property="name"),
-     * @OA\Property(type="string", title="slug", default="slug", description="slug", property="slug"),
-     * @OA\Property(type="number", title="parent_id", default=1, description="id of parent", property="parent_id"),
+     * @OA\Property(property="id", type="number"),
+     * @OA\Property(property="name", type="string"),
+     * @OA\Property(property="slug", type="string"),
+     * @OA\Property(property="parent_id", type="number"),
      * 
      * @OA\Property(property="status", ref="#/components/schemas/Status"),
      * @OA\Property(property="image", ref="#/components/schemas/Resource"),
+     * @OA\Property(
+     *     property="children", 
+     *     type="array", 
+     *     @OA\Items(ref="#/components/schemas/Category")
+     * ),
      */
     public function toArray($request)
     {
@@ -39,7 +44,10 @@ class CategoryResource extends JsonResource
             $resource['status'] = new StatusResource($this->status);
         }
 
-        if ($this->children && count($this->children)) {
+        if (
+            !$this->whenLoaded('children') instanceof MissingValue
+            && count($this->children)
+        ) {
             $resource['children'] = CategoryResource::collection($this->children);
         }
 
