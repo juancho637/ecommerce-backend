@@ -101,15 +101,13 @@ class CategoryIndexController extends ApiController
                 ->get();
         } else {
             $categories = $categories->query()->byRole();
+
+            if (in_array('children', $includes)) {
+                $categories = $categories->whereNull('parent_id');
+            }
+
             $categories = $this->eagerLoadIncludes($categories, $includes)
                 ->get();
-        }
-
-        if (in_array('children', $includes)) {
-            $rootCategories = $categories->whereNull('parent_id');
-            Category::formatTree($rootCategories, $categories);
-
-            return $this->showAll($rootCategories);
         }
 
         return $this->showAll($categories);
@@ -123,6 +121,10 @@ class CategoryIndexController extends ApiController
 
         if (in_array('image', $includes)) {
             $query->with('image');
+        }
+
+        if (in_array('children', $includes)) {
+            $query->with('children');
         }
 
         return $query;
