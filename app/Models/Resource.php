@@ -6,6 +6,7 @@ use Intervention\Image\Facades\Image;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\ResourceResource;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Resource extends Model
@@ -18,6 +19,7 @@ class Resource extends Model
         'type_resource',
         'obtainable_type',
         'obtainable_id',
+        'options',
     ];
 
     public $timestamps = false;
@@ -27,6 +29,30 @@ class Resource extends Model
     ];
 
     public $transformer = ResourceResource::class;
+
+    protected function url(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => json_decode($value, true),
+            set: fn ($value) => json_encode($value),
+        );
+    }
+
+    protected function path(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => json_decode($value, true),
+            set: fn ($value) => json_encode($value),
+        );
+    }
+
+    protected function options(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => json_decode($value, true),
+            set: fn ($value) => json_encode($value),
+        );
+    }
 
     public function obtainable()
     {

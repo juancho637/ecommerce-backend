@@ -7,22 +7,56 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @OA\Schema(
  *     schema="Resource",
- *     required={"id", "url", "type_resource"},
- * )
+ *     required={
+ *         "id",
+ *         "owner_id",
+ *         "type_resource",
+ *     },
+ * ),
+ * @OA\Schema(
+ *     schema="ResourceUrls",
+ *     required={"original"},
+ *     @OA\Property(property="original", type="string"),
+ *     @OA\Property(property="thumb", type="string"),
+ *     @OA\Property(property="small", type="string"),
+ *     @OA\Property(property="medium", type="string"),
+ * ),
  */
 class ResourceResource extends JsonResource
 {
     /**
-     * @OA\Property(type="number", title="id", default=1, description="id", property="id"),
-     * @OA\Property(type="string", title="url", default="url", description="url", property="url"),
-     * @OA\Property(type="string", title="type_resource", default="type_resource", description="type_resource", property="type_resource"),
+     * @OA\Property(
+     *     property="id",
+     *     type="number",
+     * ),
+     * @OA\Property(
+     *     property="owner_id",
+     *     type="number",
+     * ),
+     * @OA\Property(
+     *     property="type_resource",
+     *     type="string",
+     * ),
+     * @OA\Property(
+     *     property="urls",
+     *     ref="#/components/schemas/ResourceUrls",
+     * ),
+     * @OA\Property(
+     *     property="options",
+     *     type="object",
+     * ),
      */
     public function toArray($request)
     {
-        return [
+        $resource = [
             'id' => $this->id,
-            'url' => $this->url,
+            'owner_id' => $this->obtainable_id,
             'type_resource' => $this->type_resource,
         ];
+
+        !$this->url ?: $resource['urls'] = $this->url;
+        !$this->options ?: $resource['options'] = $this->options;
+
+        return $resource;
     }
 }

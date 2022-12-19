@@ -25,15 +25,25 @@ class ProductStoreController extends ApiController
      * @OA\Post(
      *     path="/api/v1/products",
      *     summary="Save product",
+     *     description="<strong>Method:</strong> saveProduct<br/><strong>Includes:</strong> status, images, stock_images, category, tags, product_attribute_options, product_stocks",
      *     operationId="saveProduct",
      *     tags={"Products"},
      *     security={ {"sanctum": {}} },
+     *     @OA\Parameter(
+     *         name="include",
+     *         description="Relationships of resource",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
      *     @OA\RequestBody(
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
      *                 type="object",
-     *                 ref="#/components/schemas/StoreProductRequest",
+     *                 ref="#/components/schemas/StoreProductDTO",
      *             )
      *         )
      *     ),

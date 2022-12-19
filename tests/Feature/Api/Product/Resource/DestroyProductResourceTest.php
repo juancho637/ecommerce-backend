@@ -9,8 +9,8 @@ use Laravel\Sanctum\Sanctum;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
+use App\Actions\Product\UpsertProductImages;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Actions\Product\UpdateOrCreateProductPhotos;
 
 class DestroyProductResourceTest extends TestCase
 {
@@ -30,16 +30,16 @@ class DestroyProductResourceTest extends TestCase
         Sanctum::actingAs($user, ['*']);
 
         $product = Product::all()->random();
-        $photo = app(UpdateOrCreateProductPhotos::class)($product, [
+        $image = app(UpsertProductImages::class)($product, [
             [
                 'file' => UploadedFile::fake()->image('image.jpg'),
                 'location' => 1
             ]
         ])[0];
 
-        $response = $this->json('DELETE', route('api.v1.products.photos.destroy', [
+        $response = $this->json('DELETE', route('api.v1.products.images.destroy', [
             $product,
-            $photo,
+            $image,
         ]));
 
         $response->assertStatus(200)
@@ -51,9 +51,9 @@ class DestroyProductResourceTest extends TestCase
                 ]
             ])->assertJson([
                 'data' => [
-                    'id' => $photo->id,
-                    'url' => $photo->url,
-                    'type_resource' => $photo->type_resource,
+                    'id' => $image->id,
+                    'url' => $image->url,
+                    'type_resource' => $image->type_resource,
                 ]
             ]);
     }

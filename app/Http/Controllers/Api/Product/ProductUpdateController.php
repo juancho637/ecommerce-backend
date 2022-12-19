@@ -25,6 +25,7 @@ class ProductUpdateController extends ApiController
      * @OA\Put(
      *     path="/api/v1/products/{product}",
      *     summary="Update product",
+     *     description="<strong>Method:</strong> updateProduct<br/><strong>Includes:</strong> status, images, stock_images, category, tags, product_attribute_options, product_stocks",
      *     operationId="updateProduct",
      *     tags={"Products"},
      *     security={ {"sanctum": {}} },
@@ -37,13 +38,19 @@ class ProductUpdateController extends ApiController
      *             type="number"
      *         )
      *     ),
+     *     @OA\Parameter(
+     *         name="include",
+     *         description="Relationships of resource",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
      *     @OA\RequestBody(
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
-     *             @OA\Schema(
-     *                 type="object",
-     *                 ref="#/components/schemas/UpdateProductRequest",
-     *             )
+     *             @OA\Schema(ref="#/components/schemas/UpdateProductDTO")
      *         )
      *     ),
      *     @OA\Response(

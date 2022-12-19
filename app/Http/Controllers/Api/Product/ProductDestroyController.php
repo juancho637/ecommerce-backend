@@ -24,6 +24,7 @@ class ProductDestroyController extends ApiController
      * @OA\Delete(
      *     path="/api/v1/products/{product}",
      *     summary="Delete product",
+     *     description="<strong>Method:</strong> deleteProduct<br/><strong>Includes:</strong> status, images, stock_images, category, tags, product_attribute_options, product_stocks",
      *     operationId="deleteProduct",
      *     tags={"Products"},
      *     security={ {"sanctum": {}} },
@@ -34,6 +35,15 @@ class ProductDestroyController extends ApiController
      *         in="path",
      *         @OA\Schema(
      *             type="number"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="include",
+     *         description="Relationships of resource",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="string"
      *         )
      *     ),
      *     @OA\Response(

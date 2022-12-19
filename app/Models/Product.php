@@ -8,31 +8,63 @@ use Illuminate\Database\Eloquent\Model;
 use App\Http\Resources\ProductResource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 class Product extends Model
 {
-    use HasFactory, Searchable;
+    use HasFactory, Searchable, HasRelationships;
 
     protected $fillable = [
         'status_id',
         'category_id',
+        'type',
         'name',
         'slug',
+        'price',
+        'tax',
+        'sku',
+        'is_variable',
+        'stock',
         'short_description',
         'description',
         'options',
+        'width',
+        'height',
+        'length',
+        'weight',
     ];
 
     protected $casts = [
         'status_id' => 'integer',
         'category_id' => 'integer',
+        'is_variable' => 'boolean',
+        'price' => 'decimal:2',
+        'tax' => 'decimal:2',
+        'stock' => 'integer',
+        'width' => 'decimal:2',
+        'height' => 'decimal:2',
+        'length' => 'decimal:2',
+        'weight' => 'decimal:2',
     ];
 
     public $transformer = ProductResource::class;
 
-    const DISK_PRODUCT_PHOTO = 'public';
-    const PRODUCT_PHOTO = 'product photo';
-    const MAX_PHOTOS = 4;
+    const CLASS_NAME = 'product';
+
+    const DISK_PRODUCT_IMAGE = 'public';
+    const PRODUCT_IMAGE = 'product image';
+    const MAX_IMAGES = 4;
+
+    // statuses
+    const PENDING = 'pending';
+
+    // types
+    const PRODUCT_TYPE = 'product';
+    const SERVICE_TYPE = 'service';
+    const TYPES = [
+        self::PRODUCT_TYPE,
+        self::SERVICE_TYPE,
+    ];
 
     public function toSearchableArray()
     {
@@ -61,6 +93,11 @@ class Product extends Model
         return $this->hasMany(ProductSpecification::class);
     }
 
+    public function productStocks()
+    {
+        return $this->hasMany(ProductStock::class);
+    }
+
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
@@ -71,10 +108,19 @@ class Product extends Model
         return $this->belongsToMany(ProductAttributeOption::class, 'prod_prod_attr_opt');
     }
 
-    public function photos()
+    public function images()
     {
         return $this->morphMany(Resource::class, 'obtainable')
-            ->where('type_resource', self::PRODUCT_PHOTO);
+            ->where('type_resource', self::PRODUCT_IMAGE);
+    }
+
+    public function stockImages()
+    {
+        return $this->hasManyDeep(
+            Resource::class,
+            [ProductStock::class],
+            [null, ['obtainable_type', 'obtainable_id']]
+        );
     }
 
     public function scopeByRole(Builder $query)
@@ -98,8 +144,12 @@ class Product extends Model
             $this->load(['status']);
         }
 
-        if (in_array('photos', $includes)) {
-            $this->load(['photos']);
+        if (in_array('images', $includes)) {
+            $this->load(['images']);
+        }
+
+        if (in_array('stock_images', $includes)) {
+            $this->load(['stockImages']);
         }
 
         if (in_array('category', $includes)) {
@@ -140,6 +190,20 @@ class Product extends Model
             }
         }
 
+        if (in_array('product_stocks', $includes)) {
+            if ($user && $user->hasRole(Role::ADMIN)) {
+                $this->load(['productStocks.productAttributeOptions']);
+            } else {
+                $this->load([
+                    'productStocks.productAttributeOptions' => function ($query) {
+                        $query->whereHas('status', function ($query) {
+                            $query->where('name', Status::ENABLED);
+                        });
+                    }
+                ]);
+            }
+        }
+
         return $this;
     }
 
@@ -160,16 +224,33 @@ class Product extends Model
 
     public function setCreate($attributes)
     {
+        $data['status_id'] = Status::productPending()->value('id');
         $data['category_id'] = $attributes['category_id'];
+        $data['type'] = $attributes['type'];
         $data['name'] = $attributes['name'];
         $data['slug'] = Str::slug($data['name'], '-');
+        $data['price'] = $attributes['price'];
+        $data['tax'] = $attributes['tax'];
+        $attributes['sku']
+            ? $data['sku'] = $attributes['sku']
+            : $data['sku'] = Str::random(10);
         $data['short_description'] = $attributes['short_description'];
         $data['description'] = $attributes['description'];
-        $data['status_id'] = Status::enabled()->value('id');
-
-        $data['photos'] = $attributes['photos'];
+        $data['is_variable'] = $attributes['is_variable'];
+        $data['images'] = $attributes['images'];
         $data['tags'] = $attributes['tags'];
-        !$attributes['product_attribute_options'] ?: $data['product_attribute_options'] = $attributes['product_attribute_options'];
+
+        if (!$attributes['is_variable'] && $attributes['type'] === self::PRODUCT_TYPE) {
+            $data['stock'] = $attributes['stock'];
+            $data['width'] = $attributes['width'];
+            $data['height'] = $attributes['height'];
+            $data['length'] = $attributes['length'];
+            $data['weight'] = $attributes['weight'];
+        }
+
+        if ($attributes['is_variable']) {
+            $data['product_attribute_options'] = $attributes['product_attribute_options'];
+        }
 
         return $data;
     }
@@ -178,11 +259,16 @@ class Product extends Model
     {
         !$attributes['name'] ?: $data['name'] = $attributes['name'];
         !$attributes['name'] ?: $data['slug'] = Str::slug($attributes['name'], '-');
+        !$attributes['price'] ?: $data['price'] = $attributes['price'];
+        !$attributes['tax'] ?: $data['tax'] = $attributes['tax'];
+        !$attributes['sku'] ?: $data['sku'] = $attributes['sku'];
         !$attributes['category_id'] ?: $data['category_id'] = $attributes['category_id'];
         !$attributes['short_description'] ?: $data['short_description'] = $attributes['short_description'];
         !$attributes['description'] ?: $data['description'] = $attributes['description'];
+        !$attributes['is_variable'] ?: $data['is_variable'] = $attributes['is_variable'];
+        !$attributes['stock'] ?: $data['stock'] = $attributes['stock'];
 
-        !$attributes['photos'] ?: $data['photos'] = $attributes['photos'];
+        !$attributes['images'] ?: $data['images'] = $attributes['images'];
         !$attributes['tags'] ?: $data['tags'] = $attributes['tags'];
         !$attributes['product_attribute_options'] ?: $data['product_attribute_options'] = $attributes['product_attribute_options'];
 
