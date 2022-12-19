@@ -1,34 +1,44 @@
 <?php
 
-namespace App\Http\Controllers\Api\Product;
+namespace App\Http\Controllers\Api\Product\ProductStock;
 
 use App\Models\Product;
+use App\Models\ProductStock;
 use Illuminate\Support\Facades\DB;
-use App\Actions\Product\StoreProduct;
 use App\Http\Controllers\Api\ApiController;
-use App\Http\Requests\Api\Product\StoreProductRequest;
+use App\Actions\ProductStock\StoreProductStock;
+use App\Http\Requests\Api\Product\ProductStock\StoreProductProductStockRequest;
 
-class ProductStoreController extends ApiController
+class ProductProductStockStoreController extends ApiController
 {
-    private $product;
+    private $productStock;
 
-    public function __construct(Product $product)
+    public function __construct(ProductStock $productStock)
     {
-        $this->product = $product;
+        $this->productStock = $productStock;
 
         $this->middleware('auth:sanctum');
 
-        $this->middleware('can:create,' . Product::class)->only('__invoke');
+        $this->middleware('can:create,' . ProductStock::class)->only('__invoke');
     }
 
     /**
      * @OA\Post(
-     *     path="/api/v1/products",
-     *     summary="Save product",
-     *     description="<strong>Method:</strong> saveProduct<br/><strong>Includes:</strong> status, images, stock_images, category, tags, product_attribute_options, product_stocks",
-     *     operationId="saveProduct",
-     *     tags={"Products"},
+     *     path="/api/v1/products/{product}/product_stocks",
+     *     summary="Save product stocks by product",
+     *     description="<strong>Method:</strong> saveProductStockByProduct<br/><strong>Includes:</strong> status, product, product_attribute_options, images",
+     *     operationId="saveProductStockByProduct",
+     *     tags={"Product stocks by product"},
      *     security={ {"sanctum": {}} },
+     *     @OA\Parameter(
+     *         name="product",
+     *         description="Id of product",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
      *     @OA\Parameter(
      *         name="include",
      *         description="Relationships of resource",
@@ -43,7 +53,7 @@ class ProductStoreController extends ApiController
      *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
      *                 type="object",
-     *                 ref="#/components/schemas/StoreProductDTO",
+     *                 ref="#/components/schemas/StoreProductStockDTO",
      *             )
      *         )
      *     ),
@@ -54,7 +64,7 @@ class ProductStoreController extends ApiController
      *             type="object",
      *             @OA\Property(
      *                 property="data",
-     *                 ref="#/components/schemas/Product",
+     *                 ref="#/components/schemas/ProductStock",
      *             ),
      *         ),
      *     ),
@@ -88,23 +98,24 @@ class ProductStoreController extends ApiController
      *     ),
      * )
      */
-    public function __invoke(StoreProductRequest $request)
+    public function __invoke(StoreProductProductStockRequest $request, Product $product)
     {
         $includes = explode(',', $request->get('include', ''));
 
         DB::beginTransaction();
         try {
-            $this->product = app(StoreProduct::class)(
-                $this->product->setCreate($request)
+            $this->productStock = app(StoreProductStock::class)(
+                $product,
+                $this->productStock->setCreate($request, $product->type)
             );
             DB::commit();
 
             return $this->showOne(
-                $this->product->loadEagerLoadIncludes($includes)
+                $this->productStock->loadEagerLoadIncludes($includes)
             );
         } catch (\Exception $exception) {
             DB::rollBack();
-            throw new \Exception($exception->getMessage(), $exception->getCode());
+            return $this->errorResponse($exception->getMessage());
         }
     }
 }

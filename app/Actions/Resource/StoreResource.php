@@ -20,12 +20,12 @@ class StoreResource
     public function __invoke(
         string $file,
         string $type,
-        int $id,
+        int $typeId,
         string $typeResource,
         string $path,
         bool $isImage = false,
         string $disk = 'public',
-        string $options = null
+        array $options = null
     ) {
         try {
             $disk = config('filesystems.' . $disk);
@@ -44,7 +44,7 @@ class StoreResource
 
             $data['url'] = Storage::disk($disk)->url($data['path']);
             $data['obtainable_type'] = $type;
-            $data['obtainable_id'] = $id;
+            $data['obtainable_id'] = $typeId;
             $data['type_resource'] = $typeResource;
             $data['options'] = $options;
 

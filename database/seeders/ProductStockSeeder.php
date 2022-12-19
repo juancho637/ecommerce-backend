@@ -19,11 +19,12 @@ class ProductStockSeeder extends Seeder
             if ($product->productAttributeOptions()->exists()) {
                 $productAttributeOptions = $product->load('productAttributeOptions')
                     ->productAttributeOptions
-                    ->groupBy('product_attribute_id')
-                    ->pluck('*.id');
+                    ->groupBy('product_attribute_id');
 
-                $combination = collect($productAttributeOptions
-                    ->shift())->crossJoin(...$productAttributeOptions);
+                $productAttributeOptionIds = $productAttributeOptions->pluck('*.id');
+
+                $combination = collect($productAttributeOptionIds
+                    ->shift())->crossJoin(...$productAttributeOptionIds);
 
                 $combination->each(function ($combination) use ($product) {
                     ProductStock::factory()
@@ -31,10 +32,6 @@ class ProductStockSeeder extends Seeder
                         ->combination($combination)
                         ->create();
                 });
-            } else {
-                ProductStock::factory()
-                    ->product($product)
-                    ->create();
             }
         });
     }

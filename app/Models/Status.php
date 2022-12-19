@@ -27,8 +27,9 @@ class Status extends Model
     const GENERAL = 'general';
 
     const STATUSES = [
-        ['name' => self::ENABLED, 'type' => self::GENERAL],
-        ['name' => self::DISABLED, 'type' => self::GENERAL],
+        ['type' => self::GENERAL, 'name' => self::ENABLED],
+        ['type' => self::GENERAL, 'name' => self::DISABLED],
+        ['type' => Product::CLASS_NAME, 'name' => Product::PENDING],
     ];
 
     public function scopeEnabled($query)
@@ -39,5 +40,11 @@ class Status extends Model
     public function scopeDisabled($query)
     {
         return $query->where('name', self::DISABLED);
+    }
+
+    public function scopeProductPending($query)
+    {
+        return $query->where('type', Product::CLASS_NAME)
+            ->where('name', Product::PENDING);
     }
 }

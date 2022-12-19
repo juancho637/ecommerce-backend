@@ -17,10 +17,12 @@ class CreateProductStocksTable extends Migration
             $table->id();
             $table->foreignId('status_id')->constrained();
             $table->foreignId('product_id')->constrained();
-            $table->unsignedInteger('stock');
-            $table->unsignedInteger('min_stock');
+            $table->unsignedInteger('stock')->nullable();
             $table->unsignedDecimal('price', 12, 2);
-            $table->unsignedDecimal('tax', 4, 2);
+            $table->unsignedDecimal('width', 12, 2)->nullable();
+            $table->unsignedDecimal('height', 12, 2)->nullable();
+            $table->unsignedDecimal('length', 12, 2)->nullable();
+            $table->unsignedDecimal('weight', 12, 2)->nullable();
             $table->string('sku');
             $table->timestamps();
         });

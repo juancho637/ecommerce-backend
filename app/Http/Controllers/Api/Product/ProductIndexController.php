@@ -22,6 +22,7 @@ class ProductIndexController extends ApiController
      * @OA\Get(
      *     path="/api/v1/products",
      *     summary="List of products",
+     *     description="<strong>Method:</strong> getAllProducts<br/><strong>Includes:</strong> status, images, stock_images, category, tags, product_attribute_options, product_stocks",
      *     operationId="getAllProducts",
      *     tags={"Products"},
      *     @OA\Parameter(
@@ -117,8 +118,12 @@ class ProductIndexController extends ApiController
             $query->with('status');
         }
 
-        if (in_array('photos', $includes)) {
-            $query->with('photos');
+        if (in_array('images', $includes)) {
+            $query->with('images');
+        }
+
+        if (in_array('stock_images', $includes)) {
+            $this->load(['stockImages']);
         }
 
         if (in_array('category', $includes)) {

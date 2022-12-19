@@ -14,7 +14,7 @@ class UpdateResource
         Resource $resource,
         string $file,
         string $type,
-        int $id,
+        int $typeId,
         string $typeResource,
         string $path,
         bool $isImage = false,
@@ -39,7 +39,7 @@ class UpdateResource
 
             $resource->url = Storage::disk($disk)->url($resource->path);
             $resource->obtainable_type = $type;
-            $resource->obtainable_id = $id;
+            $resource->obtainable_id = $typeId;
             $resource->type_resource = $typeResource;
             $resource->$options = $options;
             $resource->save();

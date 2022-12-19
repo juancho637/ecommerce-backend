@@ -19,9 +19,9 @@ class ProductResourceDestroyController extends ApiController
 
     /**
      * @OA\Delete(
-     *     path="/api/v1/products/{product}/photos/{resource}",
-     *     summary="Delete a product photo",
-     *     operationId="deleteProductPhoto",
+     *     path="/api/v1/products/{product}/images/{resource}",
+     *     summary="Delete a product image",
+     *     operationId="deleteProductImage",
      *     tags={"Products"},
      *     security={ {"sanctum": {}} },
      *     @OA\Parameter(
@@ -35,7 +35,7 @@ class ProductResourceDestroyController extends ApiController
      *     ),
      *     @OA\Parameter(
      *         name="resource",
-     *         description="Id of photo",
+     *         description="Id of image",
      *         required=true,
      *         in="path",
      *         @OA\Schema(
@@ -85,7 +85,7 @@ class ProductResourceDestroyController extends ApiController
      */
     public function __invoke(Request $request, Product $product, Resource $resource)
     {
-        if (!$product->photos->contains($resource)) {
+        if (!$product->images->contains($resource)) {
             throw new \Exception(__("The file does not belong to the product"));
         }
 

@@ -10,13 +10,11 @@ use App\Http\Controllers\Api\ApiController;
 
 class ProductProductStockIndexController extends ApiController
 {
-    private $product;
-    private $productStock;
+    private $productStocks;
 
-    public function __construct(Product $product, ProductStock $productStock)
+    public function __construct(ProductStock $productStock)
     {
-        $this->product = $product;
-        $this->productStock = $productStock;
+        $this->productStocks = $productStock;
 
         $this->middleware('auth:sanctum');
 
@@ -24,33 +22,112 @@ class ProductProductStockIndexController extends ApiController
     }
 
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *     path="/api/v1/products/{product}/product_stocks",
+     *     summary="List of product stocks by product",
+     *     description="<strong>Method:</strong> getAllProductStocksByProduct<br/><strong>Includes:</strong> status, product, product_attribute_options, images",
+     *     operationId="getAllProductStocksByProduct",
+     *     tags={"Product stocks by product"},
+     *     security={ {"sanctum": {}} },
+     *     @OA\Parameter(
+     *         name="product",
+     *         description="Id of product",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="include",
+     *         description="Relationships of resource",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="search",
+     *         description="String to search",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         description="Number of resources per page",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="page",
+     *         description="Number of current page",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_by",
+     *         description="Name of field to sort",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 type="array",
+     *                 property="data",
+     *                 @OA\Items(ref="#/components/schemas/ProductStock")
+     *             ),
+     *             @OA\Property(
+     *                 type="object",
+     *                 property="meta",
+     *                 ref="#/components/schemas/Pagination",
+     *             ),
+     *         ),
+     *     ),
+     * )
      */
     public function __invoke(Request $request, Product $product)
     {
         $includes = explode(',', $request->get('include', ''));
 
-        $productStocks = $product->productStocks->query();
-        $productStocks = $this->eagerLoadIncludes($productStocks, $includes)->get();
+        $this->productStocks = $product->productStocks->toQuery();
+        $this->productStocks = $this->eagerLoadIncludes($this->productStocks, $includes)->get();
 
-        return $this->showAll($productStocks);
+        return $this->showAll($this->productStocks);
     }
 
     protected function eagerLoadIncludes(Builder $query, array $includes)
     {
         if (in_array('status', $includes)) {
-            $this->with(['status']);
+            $query->with(['status']);
         }
 
         if (in_array('product', $includes)) {
-            $this->with(['product']);
+            $query->with(['product']);
+        }
+
+        if (in_array('images', $includes)) {
+            $query->with(['images']);
         }
 
         if (in_array('product_attribute_options', $includes)) {
-            $this->with(['productAttributeOptions.productAttribute']);
+            $query->with(['productAttributeOptions.productAttribute']);
         }
 
         return $query;

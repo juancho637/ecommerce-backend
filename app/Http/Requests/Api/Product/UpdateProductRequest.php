@@ -7,7 +7,9 @@ use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * @OA\Schema()
+ * @OA\Schema(
+ *     schema="UpdateProductDTO",
+ * )
  */
 class UpdateProductRequest extends FormRequest
 {
@@ -22,36 +24,31 @@ class UpdateProductRequest extends FormRequest
     }
 
     /**
-     * @OA\Property(type="string", description="name", property="name", nullable=true),
-     * @OA\Property(type="number", description="category id assigned", property="category_id", nullable=true),
-     * @OA\Property(type="string", description="short description", property="short_description", nullable=true),
-     * @OA\Property(type="string", description="description", property="description", nullable=true),
+     * @OA\Property(property="name", type="string"),
+     * @OA\Property(property="category_id", type="number"),
+     * @OA\Property(property="short_description", type="string"),
+     * @OA\Property(property="description", type="string"),
+     * @OA\Property(property="is_variable", type="boolean"),
      * @OA\Property(
+     *     property="images",
      *     type="array",
-     *     description="photos",
-     *     property="photos",
-     *     nullable=true,
      *     @OA\Items(
      *         type="object",
      *         required={"file", "location"},
-     *         @OA\Property(type="file", description="file", property="file"),
-     *         @OA\Property(type="number", description="location", property="location"),
+     *         @OA\Property(property="file", type="file"),
+     *         @OA\Property(property="location", type="number"),
      *     ),
      * ),
      * @OA\Property(
-     *     type="array",
-     *     description="tags",
      *     property="tags",
-     *     nullable=true,
+     *     type="array",
      *     @OA\Items(
      *         type="number",
      *     ),
      * ),
      * @OA\Property(
-     *     type="array",
-     *     nullable=true,
-     *     description="product attribute options",
      *     property="product_attribute_options",
+     *     type="array",
      *     @OA\Items(
      *         type="number",
      *     ),
@@ -66,15 +63,31 @@ class UpdateProductRequest extends FormRequest
                 Rule::unique('products', 'name')->ignore($this->product),
             ],
             'category_id' => 'nullable|exists:categories,id',
+            'price' => 'nullable|numeric|between:0.00,9999999999.99|regex:/^\d+(\.\d{1,2})?$/',
+            'tax' => 'nullable|numeric|between:0.00,99.99|regex:/^\d+(\.\d{1,2})?$/',
             'short_description' => 'nullable|string|max:600',
             'description' => 'nullable|string',
+            'is_bool' => 'nullable|boolean',
             'tags' => 'nullable|array|min:1',
             'tags.*' => 'exists:tags,id',
-            'photos' => ['nullable', 'array', 'min:1', 'max:' . Product::MAX_PHOTOS],
-            'photos.*.file' => 'required|image',
-            'photos.*.location' => ['required', 'integer', 'min:1', 'max:' . Product::MAX_PHOTOS],
+            'images' => ['nullable', 'array', 'min:1', 'max:' . Product::MAX_IMAGES],
+            'images.*.file' => 'required|image',
+            'images.*.location' => ['required', 'integer', 'min:1', 'max:' . Product::MAX_IMAGES],
             'product_attribute_options' => 'nullable|array',
             'product_attribute_options.*' => 'exists:product_attribute_options,id',
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'price.regex' => 'The price format must be between 0.00 and 9999999999.99',
+            'tax.regex' => 'The tax format must be between 0.00 and 99.99',
         ];
     }
 }

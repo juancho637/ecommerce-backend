@@ -17,6 +17,7 @@ class ProductShowController extends ApiController
      * @OA\Get(
      *     path="/api/v1/products/{product}",
      *     summary="Show product by id",
+     *     description="<strong>Method:</strong> getProductById<br/><strong>Includes:</strong> status, images, stock_images, category, tags, product_attribute_options, product_stocks",
      *     operationId="getProductById",
      *     tags={"Products"},
      *     @OA\Parameter(
@@ -26,6 +27,15 @@ class ProductShowController extends ApiController
      *         in="path",
      *         @OA\Schema(
      *             type="number"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="include",
+     *         description="Relationships of resource",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="string"
      *         )
      *     ),
      *     @OA\Response(

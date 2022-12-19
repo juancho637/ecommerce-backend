@@ -15,10 +15,10 @@ class CreateResourcesTable extends Migration
     {
         Schema::create('resources', function (Blueprint $table) {
             $table->id();
-            $table->text('url')->nullable();
-            $table->string('path');
             $table->string('type_resource');
             $table->morphs('obtainable');
+            $table->json('url');
+            $table->json('path');
             $table->json('options')->nullable();
         });
     }

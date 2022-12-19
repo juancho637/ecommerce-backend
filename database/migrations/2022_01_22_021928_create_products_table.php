@@ -17,10 +17,20 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->foreignId('status_id')->constrained();
             $table->foreignId('category_id')->constrained();
+            $table->string('type');
             $table->string('name');
             $table->string('slug');
+            $table->unsignedDecimal('price', 12, 2);
+            $table->unsignedDecimal('tax', 4, 2);
+            $table->string('sku')->unique();
+            $table->boolean('is_variable')->default(false);
             $table->string('short_description', 600)->nullable();
             $table->text('description')->nullable();
+            $table->unsignedInteger('stock')->nullable();
+            $table->unsignedDecimal('width', 12, 2)->nullable();
+            $table->unsignedDecimal('height', 12, 2)->nullable();
+            $table->unsignedDecimal('length', 12, 2)->nullable();
+            $table->unsignedDecimal('weight', 12, 2)->nullable();
             $table->text('options')->nullable();
             $table->timestamps();
 

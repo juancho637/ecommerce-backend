@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Status;
 use App\Models\Product;
+use Illuminate\Support\Str;
 use App\Models\ProductStock;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -20,10 +21,8 @@ class ProductStockFactory extends Factory
             'status_id' => Status::enabled()->value('id'),
             'product_id' => Product::all()->random()->id,
             'stock' => $this->faker->numberBetween(50, 100),
-            'min_stock' => 10,
             'price' => $this->faker->numberBetween(10, 100),
-            'tax' => $this->faker->randomFloat(2, 0, 20),
-            'sku' => sha1(time()),
+            'sku' => Str::random(10),
         ];
     }
 

@@ -14,8 +14,8 @@ class UpdateProduct
         try {
             $product->update($fields);
 
-            if (array_key_exists('photos', $fields) && count($fields['photos'])) {
-                app(UpdateOrCreateProductPhotos::class)($product, $fields['photos']);
+            if (array_key_exists('images', $fields) && count($fields['images'])) {
+                app(UpsertProductImages::class)($product, $fields['images']);
             }
 
             if (array_key_exists('tags', $fields) && count($fields['tags'])) {

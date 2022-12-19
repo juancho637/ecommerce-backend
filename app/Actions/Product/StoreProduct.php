@@ -21,8 +21,8 @@ class StoreProduct
         try {
             $this->product = $this->product->create($fields);
 
-            if (array_key_exists('photos', $fields) && count($fields['photos'])) {
-                app(UpdateOrCreateProductPhotos::class)($this->product, $fields['photos']);
+            if (array_key_exists('images', $fields) && count($fields['images'])) {
+                app(UpsertProductImages::class)($this->product, $fields['images']);
             }
 
             if (array_key_exists('tags', $fields) && count($fields['tags'])) {

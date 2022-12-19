@@ -67,6 +67,7 @@ class ProductSeeder extends Seeder
 
         Product::factory()
             ->count(5)
+            ->isVariable()
             ->create()
             ->each(function ($product) {
                 $tags = Tag::all()->random(3)->pluck('id');
