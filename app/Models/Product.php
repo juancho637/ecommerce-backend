@@ -152,6 +152,10 @@ class Product extends Model
             $this->load(['stockImages']);
         }
 
+        if (in_array('specifications', $includes)) {
+            $this->load(['productSpecifications']);
+        }
+
         if (in_array('category', $includes)) {
             if ($user && $user->hasRole(Role::ADMIN)) {
                 $this->load(['category']);
@@ -251,6 +255,13 @@ class Product extends Model
         if ($attributes['is_variable']) {
             $data['product_attribute_options'] = $attributes['product_attribute_options'];
         }
+
+        return $data;
+    }
+
+    public function setFinish($attributes)
+    {
+        $data['specifications'] = $attributes['specifications'];
 
         return $data;
     }

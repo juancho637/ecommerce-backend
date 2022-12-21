@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @OA\Schema(
  *     schema="FinishProductDTO",
  *     required={
- *         "",
+ *         "specifications",
  *     },
  * )
  */
@@ -25,14 +25,23 @@ class FinishProductRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
+     * @OA\Property(
+     *     property="specifications",
+     *     type="array",
+     *     @OA\Items(
+     *         type="object",
+     *         required={"name", "value"},
+     *         @OA\Property(property="name", type="string"),
+     *         @OA\Property(property="value", type="string"),
+     *     ),
+     * ),
      */
     public function rules()
     {
         return [
-            //
+            'specifications' => 'required|array',
+            'specifications.*.name' => 'required|string',
+            'specifications.*.value' => 'required|string',
         ];
     }
 }
