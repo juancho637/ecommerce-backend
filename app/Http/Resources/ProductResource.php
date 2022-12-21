@@ -66,6 +66,11 @@ class ProductResource extends JsonResource
      *     type="array", 
      *     @OA\Items(ref="#/components/schemas/ProductStock")
      * ),
+     * @OA\Property(
+     *     property="specifications",
+     *     type="array", 
+     *     @OA\Items(ref="#/components/schemas/ProductSpecification")
+     * ),
      */
     public function toArray($request)
     {
@@ -107,7 +112,7 @@ class ProductResource extends JsonResource
         }
 
         if (!$this->whenLoaded('productSpecifications') instanceof MissingValue) {
-            $resource['product_specifications'] =
+            $resource['specifications'] =
                 ProductSpecificationResource::collection($this->productSpecifications);
         }
 
