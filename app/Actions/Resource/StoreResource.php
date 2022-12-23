@@ -29,20 +29,29 @@ class StoreResource
     ) {
         try {
             $disk = config('filesystems.' . $disk);
+            $fileName = md5(random_int(1, 10000000) . microtime());
 
-            $data['path'] = $isImage
-                ? app(ResizeImage::class)(
+            if ($isImage) {
+                $data['path'] = app(ResizeImage::class)(
                     file: $file,
+                    name: $fileName,
                     path: $path,
                     disk: $disk
-                )
-                : app(UploadFile::class)(
+                );
+
+                foreach ($data['path'] as $imageKey => $imagePath) {
+                    $data['url'][$imageKey] = Storage::disk($disk)->url($imagePath);
+                }
+            } else {
+                $data['path'] = app(UploadFile::class)(
                     file: $file,
                     path: $path,
                     disk: $disk
                 );
 
-            $data['url'] = Storage::disk($disk)->url($data['path']);
+                $data['url']['original'] = Storage::disk($disk)->url($data['path']);
+            }
+
             $data['obtainable_type'] = $type;
             $data['obtainable_id'] = $typeId;
             $data['type_resource'] = $typeResource;

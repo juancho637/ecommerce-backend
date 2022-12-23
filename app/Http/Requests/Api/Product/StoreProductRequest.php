@@ -73,6 +73,10 @@ class StoreProductRequest extends FormRequest
      */
     public function rules()
     {
+        filter_var($this->is_variable, FILTER_VALIDATE_BOOLEAN)
+            ? $isVariable = true
+            : $isVariable = false;
+
         return [
             'type' => 'required|string|in:' . implode(',', Product::TYPES),
             'name' => 'required|string|max:255|unique:products',
@@ -80,30 +84,30 @@ class StoreProductRequest extends FormRequest
             'price' => 'required|numeric|between:0.00,9999999999.99|regex:/^\d+(\.\d{1,2})?$/',
             'tax' => 'required|numeric|between:0.00,99.99|regex:/^\d+(\.\d{1,2})?$/',
             'stock' => [
-                Rule::requiredIf(!$this->is_variable && $this->type === Product::PRODUCT_TYPE),
+                Rule::requiredIf(!$isVariable && $this->type === Product::PRODUCT_TYPE),
                 'integer',
                 'min:1',
             ],
             'width' => [
-                Rule::requiredIf(!$this->is_variable && $this->type === Product::PRODUCT_TYPE),
+                Rule::requiredIf(!$isVariable && $this->type === Product::PRODUCT_TYPE),
                 'numeric',
                 'between:0.00,9999999999.99',
                 'regex:/^\d+(\.\d{1,2})?$/',
             ],
             'height' => [
-                Rule::requiredIf(!$this->is_variable && $this->type === Product::PRODUCT_TYPE),
+                Rule::requiredIf(!$isVariable && $this->type === Product::PRODUCT_TYPE),
                 'numeric',
                 'between:0.00,9999999999.99',
                 'regex:/^\d+(\.\d{1,2})?$/',
             ],
             'length' => [
-                Rule::requiredIf(!$this->is_variable && $this->type === Product::PRODUCT_TYPE),
+                Rule::requiredIf(!$isVariable && $this->type === Product::PRODUCT_TYPE),
                 'numeric',
                 'between:0.00,9999999999.99',
                 'regex:/^\d+(\.\d{1,2})?$/',
             ],
             'weight' => [
-                Rule::requiredIf(!$this->is_variable && $this->type === Product::PRODUCT_TYPE),
+                Rule::requiredIf(!$isVariable && $this->type === Product::PRODUCT_TYPE),
                 'numeric',
                 'between:0.00,9999999999.99',
                 'regex:/^\d+(\.\d{1,2})?$/',
@@ -117,7 +121,7 @@ class StoreProductRequest extends FormRequest
             'tags' => 'required|array|min:1',
             'tags.*' => 'integer|exists:tags,id',
             'product_attribute_options' => [
-                Rule::requiredIf($this->is_variable),
+                Rule::requiredIf($isVariable),
                 'array',
             ],
             'product_attribute_options.*' => 'integer|exists:product_attribute_options,id',
