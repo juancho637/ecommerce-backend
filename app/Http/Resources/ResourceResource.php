@@ -9,8 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *     schema="Resource",
  *     required={
  *         "id",
- *         "owner_id",
- *         "type_resource",
+ *         "urls",
  *     },
  * ),
  * @OA\Schema(
@@ -50,11 +49,11 @@ class ResourceResource extends JsonResource
     {
         $resource = [
             'id' => $this->id,
-            'owner_id' => $this->obtainable_id,
-            'type_resource' => $this->type_resource,
+            'urls' => $this->url,
         ];
 
-        !$this->url ?: $resource['urls'] = $this->url;
+        !$this->obtainable_id ?: $resource['owner_id'] = $this->obtainable_id;
+        !$this->type_resource ?: $resource['type_resource'] = $this->type_resource;
         !$this->options ?: $resource['options'] = $this->options;
 
         return $resource;

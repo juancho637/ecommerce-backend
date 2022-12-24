@@ -163,4 +163,11 @@ class Resource extends Model
             throw new \Exception($exception->getMessage());
         }
     }
+
+    public function setCreate($attributes)
+    {
+        $data['file'] = $attributes['file'];
+
+        return $data;
+    }
 }
