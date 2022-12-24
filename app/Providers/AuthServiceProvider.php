@@ -9,6 +9,7 @@ use App\Models\State;
 use App\Models\Country;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Resource;
 use App\Policies\TagPolicy;
 use App\Policies\CityPolicy;
 use App\Models\ProductStock;
@@ -18,6 +19,7 @@ use App\Policies\CountryPolicy;
 use App\Policies\ProductPolicy;
 use App\Policies\CategoryPolicy;
 use App\Models\ProductAttribute;
+use App\Policies\ResourcePolicy;
 use Illuminate\Support\Facades\Gate;
 use App\Models\ProductSpecification;
 use App\Policies\ProductStockPolicy;
@@ -38,6 +40,7 @@ class AuthServiceProvider extends ServiceProvider
         Country::class => CountryPolicy::class,
         State::class => StatePolicy::class,
         City::class => CityPolicy::class,
+        Resource::class => ResourcePolicy::class,
         User::class => UserPolicy::class,
         Category::class => CategoryPolicy::class,
         Tag::class => TagPolicy::class,

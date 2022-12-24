@@ -9,7 +9,7 @@ class ResizeImage
     /**
      * Handle the incoming action.
      */
-    public function __invoke(string $file, string $name, string $path, string $disk)
+    public function __invoke(string $file, string $name, string $mimeType, string $disk)
     {
         try {
             $originalImage = Image::make($file);
@@ -38,12 +38,10 @@ class ResizeImage
                 $constraint->aspectRatio();
             })->resizeCanvas(600, 600);
 
-            $extension = explode('/', $originalImage->mime())[1];
-
-            $originalImagePath = 'images/' . $path . '/' . $name . '-original.' . $extension;
-            $thumbImagePath = 'images/' . $path . '/' . $name . '-thumb.' . $extension;
-            $smallImagePath = 'images/' . $path . '/' . $name . '-small.' . $extension;
-            $mediumImagePath = 'images/' . $path . '/' . $name . '-medium.' . $extension;
+            $originalImagePath = $name . '-original.' . $mimeType;
+            $thumbImagePath = $name . '-thumb.' . $mimeType;
+            $smallImagePath = $name . '-small.' . $mimeType;
+            $mediumImagePath = $name . '-medium.' . $mimeType;
 
             app(UploadFile::class)(
                 file: $originalImage->encode(),

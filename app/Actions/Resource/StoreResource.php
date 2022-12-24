@@ -17,25 +17,19 @@ class StoreResource
     /**
      * Handle the incoming action.
      */
-    public function __invoke(
-        string $file,
-        string $type,
-        int $typeId,
-        string $typeResource,
-        string $path,
-        bool $isImage = false,
-        string $disk = 'public',
-        array $options = null
-    ) {
+    public function __invoke(array $fields)
+    {
         try {
-            $disk = config('filesystems.' . $disk);
+            $file = $fields['file'];
             $fileName = md5(random_int(1, 10000000) . microtime());
+            $disk = config('filesystems.public');
+            $mimeType = explode('/', $file->getMimeType());
 
-            if ($isImage) {
+            if (strpos($mimeType[0], 'image') !== false) {
                 $data['path'] = app(ResizeImage::class)(
                     file: $file,
                     name: $fileName,
-                    path: $path,
+                    mimeType: $mimeType[1],
                     disk: $disk
                 );
 
@@ -43,19 +37,16 @@ class StoreResource
                     $data['url'][$imageKey] = Storage::disk($disk)->url($imagePath);
                 }
             } else {
-                $data['path'] = app(UploadFile::class)(
+                $data['path'] = $fileName . '.' . $mimeType[1];
+
+                app(UploadFile::class)(
                     file: $file,
-                    path: $path,
+                    path: $data['path'],
                     disk: $disk
                 );
 
                 $data['url']['original'] = Storage::disk($disk)->url($data['path']);
             }
-
-            $data['obtainable_type'] = $type;
-            $data['obtainable_id'] = $typeId;
-            $data['type_resource'] = $typeResource;
-            $data['options'] = $options;
 
             return $this->resource->create($data);
         } catch (\Exception $exception) {
