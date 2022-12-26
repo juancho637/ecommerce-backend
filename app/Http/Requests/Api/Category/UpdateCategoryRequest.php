@@ -25,7 +25,7 @@ class UpdateCategoryRequest extends FormRequest
     /**
      * @OA\Property(property="_method", type="string", default="PUT", enum={"PUT"}),
      * @OA\Property(property="name", type="string"),
-     * @OA\Property(property="image", type="string"),
+     * @OA\Property(property="image", type="number"),
      * @OA\Property(property="parent_id", type="number"),
      */
     public function rules()

@@ -121,12 +121,7 @@ class StoreProductRequest extends FormRequest
                 'min:1',
                 'max:' . Product::MAX_IMAGES
             ],
-            'images.*.id' => [
-                'required',
-                Rule::exists('resources')->where(function ($query) {
-                    return $query->whereNull('obtainable_id');
-                })
-            ],
+            'images.*.id' => 'required|exists:resources,id,obtainable_id,NULL',
             'images.*.location' => [
                 'required',
                 'integer',
