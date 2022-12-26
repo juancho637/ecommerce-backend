@@ -4,10 +4,9 @@ namespace Tests\Feature\Api\Product\ProductStock;
 
 use App\Models\User;
 use App\Models\Product;
+use App\Models\Resource;
 use Laravel\Sanctum\Sanctum;
-use Illuminate\Http\UploadedFile;
 use Tests\Feature\Api\ApiTestCase;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -19,7 +18,6 @@ class StoreProductProductStockTest extends ApiTestCase
     {
         parent::setUp();
 
-        Storage::fake('public');
         $this->seed();
     }
 
@@ -28,6 +26,7 @@ class StoreProductProductStockTest extends ApiTestCase
         $user = User::factory()->roleAdmin()->create();
         Sanctum::actingAs($user, ['*']);
 
+        $image = Resource::factory()->isImage()->create();
         $product = Product::factory()
             ->isVariable()
             ->typeProduct()
@@ -55,7 +54,7 @@ class StoreProductProductStockTest extends ApiTestCase
             'price' => $price,
             'product_attribute_options' => [1],
             'images' => [
-                UploadedFile::fake()->image('image.jpg'),
+                $image->id,
             ],
             'stock' => $stock,
             'width' => $width,
@@ -74,7 +73,14 @@ class StoreProductProductStockTest extends ApiTestCase
                 'height',
                 'length',
                 'weight',
-                'images',
+                'images' => [
+                    [
+                        'id',
+                        'urls',
+                        'owner_id',
+                        'type_resource',
+                    ],
+                ],
             ]
         ])->assertJson([
             'data' => [
@@ -114,9 +120,6 @@ class StoreProductProductStockTest extends ApiTestCase
         ), [
             'price' => $price,
             'product_attribute_options' => [1],
-            'images' => [
-                UploadedFile::fake()->image('image.jpg'),
-            ],
         ]);
 
         $response->assertStatus(201)->assertJsonStructure([
@@ -136,6 +139,7 @@ class StoreProductProductStockTest extends ApiTestCase
         $user = User::factory()->roleAdmin()->create();
         Sanctum::actingAs($user, ['*']);
 
+        $image = Resource::factory()->isImage()->create();
         $product = Product::factory()
             ->isVariable()
             ->typeProduct()
@@ -179,7 +183,7 @@ class StoreProductProductStockTest extends ApiTestCase
             'price' => $price,
             'product_attribute_options' => [2, 4],
             'images' => [
-                UploadedFile::fake()->image('image.jpg'),
+                $image->id,
             ],
             'stock' => $stock,
             'width' => $width,
