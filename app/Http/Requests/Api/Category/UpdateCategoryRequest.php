@@ -23,10 +23,10 @@ class UpdateCategoryRequest extends FormRequest
     }
 
     /**
-     * @OA\Property(type="string", description="method", property="_method", default="PUT", enum={"PUT"}),
-     * @OA\Property(type="string", description="name", property="name"),
-     * @OA\Property(type="string", format="binary", description="image", property="image"),
-     * @OA\Property(type="number", description="category parent id assigned", property="parent_id"),
+     * @OA\Property(property="_method", type="string", default="PUT", enum={"PUT"}),
+     * @OA\Property(property="name", type="string"),
+     * @OA\Property(property="image", type="string"),
+     * @OA\Property(property="parent_id", type="number"),
      */
     public function rules()
     {
@@ -36,7 +36,7 @@ class UpdateCategoryRequest extends FormRequest
                 'string',
                 Rule::unique('categories', 'name')->ignore($this->category),
             ],
-            'image' => 'nullable|image',
+            'image' => 'nullable,exists:resources,id,obtainable_id,NULL',
             'parent_id' => 'nullable|exists:categories,id',
         ];
     }

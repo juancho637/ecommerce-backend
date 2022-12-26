@@ -5,9 +5,8 @@ namespace Tests\Feature\Api\Category;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Category;
+use App\Models\Resource;
 use Laravel\Sanctum\Sanctum;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -19,7 +18,6 @@ class StoreCategoryTest extends TestCase
     {
         parent::setUp();
 
-        Storage::fake('public');
         $this->seed();
     }
 
@@ -28,12 +26,13 @@ class StoreCategoryTest extends TestCase
         $user = User::factory()->roleAdmin()->create();
         Sanctum::actingAs($user, ['*']);
 
+        $image = Resource::factory()->isImage()->create();
         $name = $this->faker->unique()->sentence(1, false);
         $parent = $this->faker->boolean() ? Category::whereNull('parent_id')->get()->random()->id : null;
 
         $response = $this->json('POST', route('api.v1.categories.store'), [
             'name' => $name,
-            'image' => UploadedFile::fake()->image('avatar.jpg'),
+            'image' => $image->id,
             'parent_id' => $parent,
         ]);
 
@@ -44,7 +43,14 @@ class StoreCategoryTest extends TestCase
                 'slug',
                 'image' => [
                     'id',
-                    'url',
+                    'owner_id',
+                    'type_resource',
+                    'urls' => [
+                        'original',
+                        'thumb',
+                        'small',
+                        'medium',
+                    ],
                 ],
             ]
         ])->assertJson([
