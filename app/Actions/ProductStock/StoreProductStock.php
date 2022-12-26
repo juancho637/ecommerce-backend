@@ -29,7 +29,7 @@ class StoreProductStock
                 ->sync($fields['product_attribute_options']);
 
             if (array_key_exists('images', $fields) && count($fields['images'])) {
-                app(UpsertProductStockImages::class)($this->productStock, $fields['images']);
+                app(SyncProductStockImages::class)($this->productStock, $fields['images']);
             }
 
             return $this->productStock;

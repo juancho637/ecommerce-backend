@@ -33,7 +33,6 @@ class IndexProductProductStockTest extends ApiTestCase
 
         $response = $this->json('GET', route('api.v1.products.product_stocks.index', [
             $product,
-            'include' => 'images'
         ]));
 
         $response->assertStatus(200)->assertJsonStructure([

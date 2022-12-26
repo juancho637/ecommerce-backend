@@ -51,8 +51,8 @@ class StoreProductRequest extends FormRequest
      *     type="array",
      *     @OA\Items(
      *         type="object",
-     *         required={"file", "location"},
-     *         @OA\Property(property="file", type="string", format="binary"),
+     *         required={"id", "location"},
+     *         @OA\Property(property="id", type="file", format="binary"),
      *         @OA\Property(property="location", type="number"),
      *     ),
      * ),
@@ -115,9 +115,24 @@ class StoreProductRequest extends FormRequest
             'short_description' => 'nullable|string|max:600',
             'description' => 'nullable|string',
             'is_variable' => 'required|boolean',
-            'images' => ['required', 'array', 'min:1', 'max:' . Product::MAX_IMAGES],
-            'images.*.file' => 'required|image',
-            'images.*.location' => ['required', 'integer', 'min:1', 'max:' . Product::MAX_IMAGES],
+            'images' => [
+                'required',
+                'array',
+                'min:1',
+                'max:' . Product::MAX_IMAGES
+            ],
+            'images.*.id' => [
+                'required',
+                Rule::exists('resources')->where(function ($query) {
+                    return $query->whereNull('obtainable_id');
+                })
+            ],
+            'images.*.location' => [
+                'required',
+                'integer',
+                'min:1',
+                'max:' . Product::MAX_IMAGES
+            ],
             'tags' => 'required|array|min:1',
             'tags.*' => 'integer|exists:tags,id',
             'product_attribute_options' => [

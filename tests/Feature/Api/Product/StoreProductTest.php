@@ -5,12 +5,11 @@ namespace Tests\Feature\Api\Product;
 use App\Models\Tag;
 use Tests\TestCase;
 use App\Models\User;
-use App\Models\Category;
 use App\Models\Product;
+use App\Models\Category;
+use App\Models\Resource;
 use Laravel\Sanctum\Sanctum;
-use Illuminate\Http\UploadedFile;
 use App\Models\ProductAttributeOption;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -22,7 +21,6 @@ class StoreProductTest extends TestCase
     {
         parent::setUp();
 
-        Storage::fake('public');
         $this->seed();
     }
 
@@ -31,6 +29,7 @@ class StoreProductTest extends TestCase
         $user = User::factory()->roleAdmin()->create();
         Sanctum::actingAs($user, ['*']);
 
+        $image = Resource::factory()->isImage()->create();
         $type = Product::PRODUCT_TYPE;
         $name = $this->faker->unique()->sentence(1, false);
         $price = 100000.12;
@@ -55,7 +54,7 @@ class StoreProductTest extends TestCase
             'product_attribute_options' => $productAttributeOptions,
             'images' => [
                 [
-                    'file' => UploadedFile::fake()->image('image.jpg'),
+                    'id' => $image->id,
                     'location' => 1,
                 ]
             ],
@@ -91,6 +90,7 @@ class StoreProductTest extends TestCase
         $user = User::factory()->roleAdmin()->create();
         Sanctum::actingAs($user, ['*']);
 
+        $image = Resource::factory()->isImage()->create();
         $type = Product::PRODUCT_TYPE;
         $name = $this->faker->unique()->sentence(1, false);
         $price = 100000.12;
@@ -118,7 +118,7 @@ class StoreProductTest extends TestCase
             'tags' => $tags,
             'images' => [
                 [
-                    'file' => UploadedFile::fake()->image('image.jpg'),
+                    'id' => $image->id,
                     'location' => 1,
                 ]
             ],
