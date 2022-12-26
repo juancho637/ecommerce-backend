@@ -93,6 +93,7 @@ class Category extends Model
         $data['name'] = $attributes['name'];
         $data['slug'] = Str::slug($data['name'], '-');
         $data['parent_id'] = $attributes['parent_id'];
+        $data['image'] = $attributes['image'];
         $data['status_id'] = Status::enabled()->value('id');
 
         return $data;
@@ -100,11 +101,12 @@ class Category extends Model
 
     public function setUpdate($attributes)
     {
-        !$attributes['name'] ?: $this->name = $attributes['name'];
-        !$attributes['name'] ?: $this->slug = Str::slug($attributes['name'], '-');
-        !$attributes['parent_id'] ?: $this->parent_id = $attributes['parent_id'];
+        !$attributes['name'] ?: $data['name'] = $attributes['name'];
+        !$attributes['name'] ?: $data['slug'] = Str::slug($attributes['name'], '-');
+        !$attributes['parent_id'] ?: $data['parent_id'] = $attributes['parent_id'];
+        !$attributes['image'] ?: $data['image'] = $attributes['image'];
 
-        return $this;
+        return $data;
     }
 
     public function setDelete()
@@ -127,44 +129,5 @@ class Category extends Model
         }
 
         return $this;
-    }
-
-    public function saveImage($file)
-    {
-        if (!$file) return;
-
-        try {
-            $resource = new Resource();
-            $oldFile = $this->image()->first();
-            $moduleNamePath = strtolower(class_basename($this));
-
-            if ($oldFile) {
-                $resource->deleteFile($oldFile->path);
-
-                return $oldFile->update(
-                    $resource->saveResource(
-                        resource: $file,
-                        type: self::class,
-                        id: $this->id,
-                        typeResource: self::CATEGORY_IMAGE,
-                        path: $moduleNamePath,
-                        isImage: true
-                    )
-                );
-            } else {
-                return $resource->create(
-                    $resource->saveResource(
-                        resource: $file,
-                        type: self::class,
-                        id: $this->id,
-                        typeResource: self::CATEGORY_IMAGE,
-                        path: $moduleNamePath,
-                        isImage: true
-                    )
-                );
-            }
-        } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage(), 400);
-        }
     }
 }

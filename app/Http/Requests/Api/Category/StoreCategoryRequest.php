@@ -22,31 +22,19 @@ class StoreCategoryRequest extends FormRequest
     }
 
     /**
-     * @OA\Property(type="string", description="name", property="name"),
-     * @OA\Property(type="string", format="binary", description="image", property="image"),
-     * @OA\Property(type="number", description="category parent id assigned", property="parent_id"),
+     * @OA\Property(property="name", type="string"),
+     * @OA\Property(property="image", type="number"),
+     * @OA\Property(property="parent_id", type="number"),
      */
     public function rules()
     {
         return [
             'name' => 'required|string|max:255|unique:categories',
-            'image' => 'required|image',
-            'parent_id' => 'nullable|exists:categories,id',
-        ];
-    }
-
-    public function bodyParameters()
-    {
-        return [
-            'name' => [
-                'description' => 'Nombre de la categoria',
-            ],
             'image' => [
-                'description' => 'Imagen asociada a la categoría',
+                'required',
+                'exists:resources,id,obtainable_id,NULL'
             ],
-            'parent_id' => [
-                'description' => 'Id de la categoría padre asignada a la categoría en cuestión (opcional)',
-            ],
+            'parent_id' => 'nullable|exists:categories,id',
         ];
     }
 }

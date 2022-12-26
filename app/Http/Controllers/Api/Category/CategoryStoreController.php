@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Category;
 
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
+use App\Actions\Category\StoreCategory;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\Api\Category\StoreCategoryRequest;
 
@@ -92,10 +93,9 @@ class CategoryStoreController extends ApiController
 
         DB::beginTransaction();
         try {
-            $this->category = $this->category->create(
+            $this->category = app(StoreCategory::class)(
                 $this->category->setCreate($request)
             );
-            $this->category->saveImage($request->image);
             DB::commit();
 
             return $this->showOne(

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Category;
 
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
+use App\Actions\Category\UpdateCategory;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\Api\Category\UpdateCategoryRequest;
 
@@ -101,10 +102,10 @@ class CategoryUpdateController extends ApiController
 
         DB::beginTransaction();
         try {
-            $this->category = $category->setUpdate($request);
-            $this->category->save();
-
-            $this->category->saveImage($request->image);
+            $this->category = app(UpdateCategory::class)(
+                $category,
+                $this->category->setUpdate($request)
+            );
             DB::commit();
 
             return $this->showOne(

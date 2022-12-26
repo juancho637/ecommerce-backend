@@ -33,15 +33,15 @@ class ResourceFactory extends Factory
             return [
                 'url' => [
                     'original' => $url . '-original' . '.jpg',
+                    'thumb' => $url . '-thumb' . '.jpg',
                     'small' => $url . '-small' . '.jpg',
                     'medium' => $url . '-medium' . '.jpg',
-                    'large' => $url . '-large' . '.jpg',
                 ],
                 'path' => [
                     'original' => $name . '-original' . '.jpg',
+                    'thumb' => $name . '-thumb' . '.jpg',
                     'small' => $name . '-small' . '.jpg',
                     'medium' => $name . '-medium' . '.jpg',
-                    'large' => $name . '-large' . '.jpg',
                 ],
             ];
         });
