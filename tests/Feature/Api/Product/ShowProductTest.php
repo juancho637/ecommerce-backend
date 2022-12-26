@@ -4,13 +4,11 @@ namespace Tests\Feature\Api\Product;
 
 use Tests\TestCase;
 use App\Models\Product;
+use App\Models\Resource;
 use App\Models\ProductStock;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use App\Actions\Product\UpsertProductImages;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Actions\ProductStock\UpsertProductStockImages;
 
 class ShowProductTest extends TestCase
 {
@@ -44,12 +42,11 @@ class ShowProductTest extends TestCase
     public function testGetOneProductWithImages()
     {
         $product = Product::all()->random();
-        app(UpsertProductImages::class)($product, [
-            [
-                'file' => UploadedFile::fake()->image('image.jpg'),
-                'location' => 1
-            ]
-        ]);
+        Resource::factory()
+            ->isImage()
+            ->productOwner($product)
+            ->withOptions(['location' => 1])
+            ->create();
 
         $response = $this->json('GET', route('api.v1.products.show', [
             $product,
@@ -96,17 +93,18 @@ class ShowProductTest extends TestCase
             ->get()
             ->random(1)
             ->first();
-        app(UpsertProductImages::class)($product, [
-            [
-                'file' => UploadedFile::fake()->image('image.jpg'),
-                'location' => 1
-            ]
-        ]);
+
+        Resource::factory()
+            ->isImage()
+            ->productOwner($product)
+            ->withOptions(['location' => 1])
+            ->create();
 
         $product->productStocks()->each(function ($productStock) {
-            app(UpsertProductStockImages::class)($productStock, [
-                UploadedFile::fake()->image('image.jpg'),
-            ]);
+            Resource::factory()
+                ->isImage()
+                ->productStockOwner($productStock->id)
+                ->create();
         });
 
         $response = $this->json('GET', route('api.v1.products.show', [

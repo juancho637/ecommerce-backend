@@ -44,7 +44,7 @@ class StoreProductProductStockRequest extends FormRequest
      * @OA\Property(
      *     property="images",
      *     type="array",
-     *     @OA\Items(type="file", format="binary"),
+     *     @OA\Items(type="number"),
      * ),
      */
     public function rules()
@@ -59,7 +59,12 @@ class StoreProductProductStockRequest extends FormRequest
             ],
             'product_attribute_options.*' => 'required|exists:product_attribute_options,id',
             'images' => 'nullable|array|max:' . ProductStock::MAX_IMAGES,
-            'images.*' => 'required|image',
+            'images.*' => [
+                'required',
+                Rule::exists('resources')->where(function ($query) {
+                    return $query->whereNull('obtainable_id');
+                })
+            ],
             'stock' => [
                 Rule::requiredIf($this->product->type === Product::PRODUCT_TYPE),
                 'integer',

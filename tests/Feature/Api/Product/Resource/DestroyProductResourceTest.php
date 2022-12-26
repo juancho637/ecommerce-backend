@@ -5,11 +5,9 @@ namespace Tests\Feature\Api\Product\Resource;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Product;
+use App\Models\Resource;
 use Laravel\Sanctum\Sanctum;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
-use App\Actions\Product\UpsertProductImages;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class DestroyProductResourceTest extends TestCase
@@ -20,7 +18,6 @@ class DestroyProductResourceTest extends TestCase
     {
         parent::setUp();
 
-        Storage::fake('public');
         $this->seed();
     }
 
@@ -30,12 +27,11 @@ class DestroyProductResourceTest extends TestCase
         Sanctum::actingAs($user, ['*']);
 
         $product = Product::all()->random();
-        $image = app(UpsertProductImages::class)($product, [
-            [
-                'file' => UploadedFile::fake()->image('image.jpg'),
-                'location' => 1
-            ]
-        ])[0];
+        $image = Resource::factory()
+            ->isImage()
+            ->productOwner($product)
+            ->withOptions(['location' => 1])
+            ->create();
 
         $response = $this->json('DELETE', route('api.v1.products.images.destroy', [
             $product,
@@ -46,13 +42,13 @@ class DestroyProductResourceTest extends TestCase
             ->assertJsonStructure([
                 'data' => [
                     'id',
-                    'url',
+                    'urls',
                     'type_resource',
                 ]
             ])->assertJson([
                 'data' => [
                     'id' => $image->id,
-                    'url' => $image->url,
+                    'urls' => $image->url,
                     'type_resource' => $image->type_resource,
                 ]
             ]);

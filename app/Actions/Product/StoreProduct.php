@@ -21,14 +21,6 @@ class StoreProduct
         try {
             $this->product = $this->product->create($fields);
 
-            if (array_key_exists('images', $fields) && count($fields['images'])) {
-                app(UpsertProductImages::class)($this->product, $fields['images']);
-            }
-
-            if (array_key_exists('tags', $fields) && count($fields['tags'])) {
-                app(SyncProductTags::class)($this->product, $fields['tags']);
-            }
-
             if (
                 array_key_exists('product_attribute_options', $fields)
                 && count($fields['product_attribute_options'])
@@ -36,6 +28,8 @@ class StoreProduct
                 app(SyncProductAttributeOptions::class)($this->product, $fields['product_attribute_options']);
             }
 
+            app(SyncProductImages::class)($this->product, $fields['images']);
+            app(SyncProductTags::class)($this->product, $fields['tags']);
             app(SyncProductOptions::class)($this->product);
 
             return $this->product;

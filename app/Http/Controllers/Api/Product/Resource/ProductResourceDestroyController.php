@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Product\Resource;
 
+use App\Actions\Resource\DeleteResource;
 use App\Models\Product;
 use App\Models\Resource;
 use Illuminate\Http\Request;
@@ -91,8 +92,7 @@ class ProductResourceDestroyController extends ApiController
 
         DB::beginTransaction();
         try {
-            $resource->delete();
-            $resource->deleteFile($resource->path);
+            app(DeleteResource::class)($resource);
             DB::commit();
 
             return $this->showOne($resource);
