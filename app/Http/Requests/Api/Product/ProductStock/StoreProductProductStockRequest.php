@@ -59,12 +59,7 @@ class StoreProductProductStockRequest extends FormRequest
             ],
             'product_attribute_options.*' => 'required|exists:product_attribute_options,id',
             'images' => 'nullable|array|max:' . ProductStock::MAX_IMAGES,
-            'images.*' => [
-                'required',
-                Rule::exists('resources')->where(function ($query) {
-                    return $query->whereNull('obtainable_id');
-                })
-            ],
+            'images.*' => 'required|exists:resources,id,obtainable_id,NULL',
             'stock' => [
                 Rule::requiredIf($this->product->type === Product::PRODUCT_TYPE),
                 'integer',

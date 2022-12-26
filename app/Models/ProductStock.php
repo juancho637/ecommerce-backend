@@ -69,7 +69,7 @@ class ProductStock extends Model
         $attributes['sku']
             ? $data['sku'] = $attributes['sku']
             : $data['sku'] = Str::random(10);
-        $data['images'] = $attributes['images'];
+        !$attributes['images'] ?: $data['images'] = $attributes['images'];
 
         if ($productType === Product::PRODUCT_TYPE) {
             $data['stock'] = $attributes['stock'];
