@@ -30,10 +30,7 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255|unique:categories',
-            'image' => [
-                'required',
-                'exists:resources,id,obtainable_id,NULL'
-            ],
+            'image' => 'required|exists:resources,id,obtainable_id,NULL',
             'parent_id' => 'nullable|exists:categories,id',
         ];
     }
