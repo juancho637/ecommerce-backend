@@ -52,7 +52,7 @@ class StoreProductRequest extends FormRequest
      *     @OA\Items(
      *         type="object",
      *         required={"id", "location"},
-     *         @OA\Property(property="id", type="file", format="binary"),
+     *         @OA\Property(property="id", type="number"),
      *         @OA\Property(property="location", type="number"),
      *     ),
      * ),

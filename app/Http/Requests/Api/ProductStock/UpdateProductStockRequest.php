@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\ProductStock;
 
+use App\Models\ProductStock;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\ProductStock\ProductAttributeOpcionsOfStockRule;
 
@@ -29,7 +30,7 @@ class UpdateProductStockRequest extends FormRequest
      * @OA\Property(
      *     property="images",
      *     type="array",
-     *     @OA\Items(type="file", format="binary"),
+     *     @OA\Items(type="number"),
      * ),
      * @OA\Property(
      *     property="product_attribute_options",
@@ -50,6 +51,8 @@ class UpdateProductStockRequest extends FormRequest
                 new ProductAttributeOpcionsOfStockRule($this->product_id)
             ],
             'product_attribute_options.*' => 'required|exists:product_attribute_options,id',
+            'images' => 'nullable|array|max:' . ProductStock::MAX_IMAGES,
+            'images.*' => 'required|exists:resources,id,obtainable_id,NULL',
         ];
     }
 
