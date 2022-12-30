@@ -26,12 +26,12 @@ class ProductStock extends Model
     protected $casts = [
         'status_id' => 'integer',
         'product_id' => 'integer',
-        'price' => 'decimal:2',
+        'price' => 'float',
         'stock' => 'integer',
-        'width' => 'decimal:2',
-        'height' => 'decimal:2',
-        'length' => 'decimal:2',
-        'weight' => 'decimal:2',
+        'width' => 'float',
+        'height' => 'float',
+        'length' => 'float',
+        'weight' => 'float',
     ];
 
     public $transformer = ProductStockResource::class;

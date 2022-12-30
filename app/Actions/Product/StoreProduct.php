@@ -21,6 +21,10 @@ class StoreProduct
         try {
             $this->product = $this->product->create($fields);
 
+            if (!$this->product->is_variable) {
+                $this->product->productStocks()->create($fields['stock']);
+            }
+
             if (
                 array_key_exists('product_attribute_options', $fields)
                 && count($fields['product_attribute_options'])

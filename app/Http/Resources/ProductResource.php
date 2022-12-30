@@ -13,6 +13,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *         "type",
  *         "name",
  *         "slug",
+ *         "sku",
  *         "price",
  *         "tax",
  *         "short_description",
@@ -28,6 +29,7 @@ class ProductResource extends JsonResource
      * @OA\Property(property="type", type="string"),
      * @OA\Property(property="name", type="string"),
      * @OA\Property(property="slug", type="string"),
+     * @OA\Property(property="sku", type="string"),
      * @OA\Property(property="price", type="string"),
      * @OA\Property(property="tax", type="string"),
      * @OA\Property(property="short_description", type="string"),
@@ -79,18 +81,13 @@ class ProductResource extends JsonResource
             'type' => $this->type,
             'name' => $this->name,
             'slug' => $this->slug,
+            'sku' => $this->sku,
             'price' => $this->price,
             'tax' => $this->tax,
             'short_description' => $this->short_description,
             'description' => $this->description,
             'is_variable' => $this->is_variable,
         ];
-
-        !$this->stock ?: $resource['stock'] = $this->stock;
-        !$this->width ?: $resource['width'] = $this->width;
-        !$this->height ?: $resource['height'] = $this->height;
-        !$this->length ?: $resource['length'] = $this->length;
-        !$this->weight ?: $resource['weight'] = $this->weight;
 
         if (!$this->whenLoaded('status') instanceof MissingValue) {
             $resource['status'] = new StatusResource($this->status);

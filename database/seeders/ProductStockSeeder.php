@@ -15,24 +15,28 @@ class ProductStockSeeder extends Seeder
      */
     public function run()
     {
-        Product::all()->each(function ($product) {
-            if ($product->productAttributeOptions()->exists()) {
-                $productAttributeOptions = $product->load('productAttributeOptions')
-                    ->productAttributeOptions
-                    ->groupBy('product_attribute_id');
+        Product::whereHas('productAttributeOptions')->get()->each(function ($product) {
+            $productAttributeOptions = $product->load('productAttributeOptions')
+                ->productAttributeOptions
+                ->groupBy('product_attribute_id');
 
-                $productAttributeOptionIds = $productAttributeOptions->pluck('*.id');
+            $productAttributeOptionIds = $productAttributeOptions->pluck('*.id');
 
-                $combination = collect($productAttributeOptionIds
-                    ->shift())->crossJoin(...$productAttributeOptionIds);
+            $combination = collect($productAttributeOptionIds
+                ->shift())->crossJoin(...$productAttributeOptionIds);
 
-                $combination->each(function ($combination) use ($product) {
-                    ProductStock::factory()
-                        ->product($product)
-                        ->combination($combination)
-                        ->create();
-                });
-            }
+            $combination->each(function ($combination) use ($product) {
+                ProductStock::factory()
+                    ->product($product)
+                    ->combination($combination)
+                    ->create();
+            });
+        });
+
+        Product::where('is_variable', 0)->get()->each(function ($product) {
+            ProductStock::factory()
+                ->product($product)
+                ->create();
         });
     }
 }

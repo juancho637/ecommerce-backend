@@ -26,11 +26,6 @@ class CreateProductsTable extends Migration
             $table->boolean('is_variable')->default(false);
             $table->string('short_description', 600)->nullable();
             $table->text('description')->nullable();
-            $table->unsignedInteger('stock')->nullable();
-            $table->unsignedDecimal('width', 12, 2)->nullable();
-            $table->unsignedDecimal('height', 12, 2)->nullable();
-            $table->unsignedDecimal('length', 12, 2)->nullable();
-            $table->unsignedDecimal('weight', 12, 2)->nullable();
             $table->text('options')->nullable();
             $table->timestamps();
 

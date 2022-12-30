@@ -20,7 +20,6 @@ class ProductStockFactory extends Factory
         return [
             'status_id' => Status::enabled()->value('id'),
             'product_id' => Product::all()->random()->id,
-            'stock' => $this->faker->numberBetween(50, 100),
             'price' => $this->faker->numberBetween(10, 100),
             'sku' => Str::random(10),
         ];
@@ -38,9 +37,18 @@ class ProductStockFactory extends Factory
     public function product($product)
     {
         return $this->state(function (array $attributes) use ($product) {
-            return [
-                'product_id' => $product,
-            ];
+            if ($product->type === Product::PRODUCT_TYPE) {
+                $data['stock'] = $this->faker->numberBetween(50, 100);
+                $data['width'] = $this->faker->numberBetween(5, 10);
+                $data['height'] = $this->faker->numberBetween(5, 10);
+                $data['length'] = $this->faker->numberBetween(5, 10);
+                $data['weight'] = $this->faker->numberBetween(5, 10);
+            }
+
+            $data['product_id'] = $product;
+            $data['price'] = $product->price;
+
+            return $data;
         });
     }
 

@@ -62,7 +62,10 @@ class ProductStockResource extends JsonResource
             $resource['product'] = new ProductResource($this->product);
         }
 
-        if (!$this->whenLoaded('productAttributeOptions') instanceof MissingValue) {
+        if (
+            !$this->whenLoaded('productAttributeOptions') instanceof MissingValue
+            && count($this->productAttributeOptions)
+        ) {
             $resource['product_attribute_options'] = ProductAttributeOptionResource::collection(
                 $this->productAttributeOptions
             );

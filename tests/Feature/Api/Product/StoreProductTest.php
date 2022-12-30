@@ -101,12 +101,14 @@ class StoreProductTest extends TestCase
         $category = Category::all()->random();
         $tags = Tag::all()->random(mt_rand(2, 5))->pluck('id');
         $stock = 10;
-        $width = 10;
-        $height = 10;
-        $length = 10;
-        $weight = 10;
+        $width = 10.1;
+        $height = 10.1;
+        $length = 10.1;
+        $weight = 10.1;
 
-        $response = $this->json('POST', route('api.v1.products.store'), [
+        $response = $this->json('POST', route('api.v1.products.store', [
+            'include' => 'product_stocks'
+        ]), [
             'category_id' => $category->id,
             'type' => $type,
             'name' => $name,
@@ -141,11 +143,15 @@ class StoreProductTest extends TestCase
                 'description',
                 'price',
                 'tax',
-                'stock',
-                'width',
-                'height',
-                'length',
-                'weight',
+                'product_stocks' => [
+                    [
+                        'stock',
+                        'width',
+                        'height',
+                        'length',
+                        'weight',
+                    ]
+                ]
             ]
         ])->assertJson([
             'data' => [
@@ -156,11 +162,15 @@ class StoreProductTest extends TestCase
                 'short_description' => $shortDescription,
                 'description' => $description,
                 'price' => $price,
-                'stock' => $stock,
-                'width' => $width,
-                'height' => $height,
-                'length' => $length,
-                'weight' => $weight,
+                'product_stocks' => [
+                    [
+                        'stock' => $stock,
+                        'width' => $width,
+                        'height' => $height,
+                        'length' => $length,
+                        'weight' => $weight,
+                    ]
+                ]
             ]
         ]);
     }

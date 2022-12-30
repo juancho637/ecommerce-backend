@@ -32,21 +32,6 @@ class ProductFactory extends Factory
         ];
     }
 
-    public function configure()
-    {
-        return $this->afterCreating(function (Product $product) {
-            if (!$product->is_variable && $product->type === Product::PRODUCT_TYPE) {
-                $product->stock = 10;
-                $product->width = 10;
-                $product->height = 10;
-                $product->length = 10;
-                $product->weight = 10;
-            }
-
-            $product->save();
-        });
-    }
-
     public function statusDesabled()
     {
         return $this->state(function (array $attributes) {
