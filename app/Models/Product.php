@@ -24,27 +24,17 @@ class Product extends Model
         'tax',
         'sku',
         'is_variable',
-        'stock',
         'short_description',
         'description',
         'options',
-        'width',
-        'height',
-        'length',
-        'weight',
     ];
 
     protected $casts = [
         'status_id' => 'integer',
         'category_id' => 'integer',
         'is_variable' => 'boolean',
-        'price' => 'decimal:2',
-        'tax' => 'decimal:2',
-        'stock' => 'integer',
-        'width' => 'decimal:2',
-        'height' => 'decimal:2',
-        'length' => 'decimal:2',
-        'weight' => 'decimal:2',
+        'price' => 'float',
+        'tax' => 'float',
     ];
 
     public $transformer = ProductResource::class;
@@ -134,6 +124,77 @@ class Product extends Model
         $query->whereHas('status', function ($query) {
             return $query->where('name', Status::ENABLED);
         });
+    }
+
+    public function scopeWithEagerLoading(Builder $query, array $includes)
+    {
+        $user = auth('sanctum')->user();
+
+        if (in_array('status', $includes)) {
+            $query->with('status');
+        }
+
+        if (in_array('images', $includes)) {
+            $query->with('images');
+        }
+
+        if (in_array('stock_images', $includes)) {
+            $this->with(['stockImages']);
+        }
+
+        if (in_array('category', $includes)) {
+            if ($user && $user->hasRole(Role::ADMIN)) {
+                $query->with(['category']);
+            } else {
+                $query->with(['category' => function ($query) {
+                    $query->whereHas('status', function ($query) {
+                        $query->where('name', Status::ENABLED);
+                    });
+                }]);
+            }
+        }
+
+        if (in_array('tags', $includes)) {
+            if ($user && $user->hasRole(Role::ADMIN)) {
+                $query->with(['tags']);
+            } else {
+                $query->with(['tags' => function ($query) {
+                    $query->whereHas('status', function ($query) {
+                        $query->where('name', Status::ENABLED);
+                    });
+                }]);
+            }
+        }
+
+        if (in_array('product_attribute_options', $includes)) {
+            if ($user && $user->hasRole(Role::ADMIN)) {
+                $query->with(['productAttributeOptions.productAttribute']);
+            } else {
+                $query->with([
+                    'productAttributeOptions.productAttribute' => function ($query) {
+                        $query->whereHas('status', function ($query) {
+                            $query->where('name', Status::ENABLED);
+                        });
+                    }
+                ]);
+            }
+        }
+
+        if (in_array('product_stocks', $includes)) {
+            if ($user && $user->hasRole(Role::ADMIN)) {
+                $query->with(['productStocks']);
+            } else {
+                $query->with([
+                    'productStocks' => function ($query) {
+                        $query->whereHas('status', function ($query) {
+                            $query->where('name', Status::ENABLED);
+                        });
+                    }
+                ]);
+            }
+        }
+
+        return $query;
     }
 
     public function loadEagerLoadIncludes(array $includes)
@@ -244,12 +305,18 @@ class Product extends Model
         $data['images'] = $attributes['images'];
         $data['tags'] = $attributes['tags'];
 
-        if (!$attributes['is_variable'] && $attributes['type'] === self::PRODUCT_TYPE) {
-            $data['stock'] = $attributes['stock'];
-            $data['width'] = $attributes['width'];
-            $data['height'] = $attributes['height'];
-            $data['length'] = $attributes['length'];
-            $data['weight'] = $attributes['weight'];
+        if (!$attributes['is_variable']) {
+            $data['stock']['price'] = $attributes['price'];
+            $data['stock']['status_id'] = Status::enabled()->value('id');
+            $data['stock']['sku'] = $data['sku'];
+
+            if ($attributes['type'] === self::PRODUCT_TYPE) {
+                $data['stock']['stock'] = $attributes['stock'];
+                $data['stock']['width'] = $attributes['width'];
+                $data['stock']['height'] = $attributes['height'];
+                $data['stock']['length'] = $attributes['length'];
+                $data['stock']['weight'] = $attributes['weight'];
+            }
         }
 
         if ($attributes['is_variable']) {

@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Api\Product;
 
-use App\Models\Role;
-use App\Models\Status;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
@@ -92,92 +90,21 @@ class ProductIndexController extends ApiController
     public function __invoke(Request $request)
     {
         $includes = explode(',', $request->get('include', ''));
-        $products = $this->product;
 
         if ($request->search) {
-            $products = $products->search($request->search)
+            $this->product = $this->product->search($request->search)
                 ->query(function (Builder $query) use ($includes) {
-                    $query->byRole();
-
-                    $this->eagerLoadIncludes($query, $includes);
+                    $query->byRole()
+                        ->withEagerLoading($includes);
                 })
                 ->get();
         } else {
-            $products = $products->query()->byRole();
-            $products = $this->eagerLoadIncludes($products, $includes)->get();
+            $this->product = $this->product->query()
+                ->byRole()
+                ->withEagerLoading($includes)
+                ->get();
         }
 
-        return $this->showAll($products);
-    }
-
-    protected function eagerLoadIncludes(Builder $query, array $includes)
-    {
-        $user = auth('sanctum')->user();
-
-        if (in_array('status', $includes)) {
-            $query->with('status');
-        }
-
-        if (in_array('images', $includes)) {
-            $query->with('images');
-        }
-
-        if (in_array('stock_images', $includes)) {
-            $this->load(['stockImages']);
-        }
-
-        if (in_array('category', $includes)) {
-            if ($user && $user->hasRole(Role::ADMIN)) {
-                $query->with(['category']);
-            } else {
-                $query->with(['category' => function ($query) {
-                    $query->whereHas('status', function ($query) {
-                        $query->where('name', Status::ENABLED);
-                    });
-                }]);
-            }
-        }
-
-        if (in_array('tags', $includes)) {
-            if ($user && $user->hasRole(Role::ADMIN)) {
-                $query->with(['tags']);
-            } else {
-                $query->with(['tags' => function ($query) {
-                    $query->whereHas('status', function ($query) {
-                        $query->where('name', Status::ENABLED);
-                    });
-                }]);
-            }
-        }
-
-        if (in_array('product_attribute_options', $includes)) {
-            if ($user && $user->hasRole(Role::ADMIN)) {
-                $query->with(['productAttributeOptions.productAttribute']);
-            } else {
-                $query->with([
-                    'productAttributeOptions.productAttribute' => function ($query) {
-                        $query->whereHas('status', function ($query) {
-                            $query->where('name', Status::ENABLED);
-                        });
-                    }
-                ]);
-            }
-        }
-
-        if (in_array('product_stocks', $includes)) {
-            if ($user && $user->hasRole(Role::ADMIN)) {
-                $query->with(['productStocks']);
-            } else {
-                $query->with([
-                    'productStocks' => function ($query) {
-                        $query->whereHas('status', function ($query) {
-                            $query->where('name', Status::ENABLED);
-                        });
-                    }
-                ]);
-            }
-        }
-
-        return $query;
+        return $this->showAll($this->product);
     }
 }
