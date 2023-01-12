@@ -14,7 +14,7 @@ class UpdateCategory
         try {
             $category->update($fields);
 
-            if (array_key_exists('image', $fields) && count($fields['image'])) {
+            if (array_key_exists('image', $fields)) {
                 app(SyncCategoryImages::class)($category, $fields['image']);
             }
 

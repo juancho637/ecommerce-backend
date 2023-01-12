@@ -4,7 +4,7 @@ namespace App\Actions\Category;
 
 use App\Models\Category;
 use App\Models\Resource;
-use App\Actions\Resource\DeleteFile;
+use App\Actions\Resource\DeleteResource;
 
 class SyncCategoryImages
 {
@@ -19,7 +19,7 @@ class SyncCategoryImages
             $oldImage = $category->image;
 
             if ($oldImage) {
-                app(DeleteFile::class)($oldImage['path']);
+                app(DeleteResource::class)($oldImage);
             }
 
             $imageToSync->obtainable_type = Category::class;
