@@ -344,11 +344,36 @@ class Product extends Model
         !$attributes['short_description'] ?: $data['short_description'] = $attributes['short_description'];
         !$attributes['description'] ?: $data['description'] = $attributes['description'];
         !$attributes['is_variable'] ?: $data['is_variable'] = $attributes['is_variable'];
-        !$attributes['stock'] ?: $data['stock'] = $attributes['stock'];
 
         !$attributes['images'] ?: $data['images'] = $attributes['images'];
-        !$attributes['tags'] ?: $data['tags'] = $attributes['tags'];
-        !$attributes['product_attribute_options'] ?: $data['product_attribute_options'] = $attributes['product_attribute_options'];
+
+        if ($attributes['tags']) {
+            !$attributes['tags']['attach'] ?: $data['tags']['attach'] = $attributes['tags']['attach'];
+            !$attributes['tags']['detach'] ?: $data['tags']['detach'] = $attributes['tags']['detach'];
+        }
+
+        if ($attributes['is_variable'] || $this->is_variable) {
+            if ($attributes['product_attribute_options']) {
+                !$attributes['product_attribute_options']['attach'] ?:
+                    $data['product_attribute_options']['attach'] = $attributes['product_attribute_options']['attach'];
+
+                !$attributes['product_attribute_options']['detach'] ?:
+                    $data['product_attribute_options']['detach'] = $attributes['product_attribute_options']['detach'];
+            }
+        }
+
+        if (!$attributes['is_variable']) {
+            !$attributes['price'] ?: $data['stock']['price'] = $attributes['price'];
+            !$attributes['sku'] ?: $data['stock']['sku'] = $data['sku'];
+
+            if ($attributes['type'] === self::PRODUCT_TYPE) {
+                !$attributes['stock'] ?: $data['stock']['stock'] = $attributes['stock'];
+                !$attributes['width'] ?: $data['stock']['width'] = $attributes['width'];
+                !$attributes['height'] ?: $data['stock']['height'] = $attributes['height'];
+                !$attributes['length'] ?: $data['stock']['length'] = $attributes['length'];
+                !$attributes['weight'] ?: $data['stock']['weight'] = $attributes['weight'];
+            }
+        }
 
         return $data;
     }

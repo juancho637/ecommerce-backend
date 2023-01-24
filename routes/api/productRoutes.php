@@ -44,3 +44,9 @@ Route::get('products/{product}/product_stocks', ProductProductStockIndexControll
 
 Route::post('products/{product}/product_stocks', ProductProductStockStoreController::class)
     ->name('api.v1.products.product_stocks.store');
+
+Route::match(
+    ['put', 'patch'],
+    'products/{product}/product_stocks',
+    ProductProductStockStoreController::class
+)->name('api.v1.products.product_stocks.store');

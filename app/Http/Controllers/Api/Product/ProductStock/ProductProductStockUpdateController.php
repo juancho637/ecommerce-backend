@@ -1,32 +1,34 @@
 <?php
 
-namespace App\Http\Controllers\Api\Product;
+namespace App\Http\Controllers\Api\Product\ProductStock;
 
 use App\Models\Product;
-use App\Actions\Product\UpdateProduct;
+use App\Models\ProductStock;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Api\ApiController;
-use App\Http\Requests\Api\Product\UpdateProductRequest;
+use App\Actions\ProductStock\UpdateProductStock;
+use App\Http\Requests\Api\Product\ProductStock\UpdateProductProductStockRequest;
 
-class ProductUpdateController extends ApiController
+class ProductProductStockUpdateController extends ApiController
 {
-    private $product;
+    private $productStock;
 
-    public function __construct(Product $product)
+    public function __construct(ProductStock $productStock)
     {
-        $this->product = $product;
+        $this->productStock = $productStock;
 
         $this->middleware('auth:sanctum');
 
-        $this->middleware('can:update,product')->only('__invoke');
+        $this->middleware('can:create,' . ProductStock::class)->only('__invoke');
     }
 
     /**
-     * @OA\Put(
-     *     path="/api/v1/products/{product}",
-     *     summary="Update product",
-     *     description="<strong>Method:</strong> updateProduct<br/><strong>Includes:</strong> status, images, stock_images, category, tags, product_attribute_options, product_stocks",
-     *     operationId="updateProduct",
-     *     tags={"Products"},
+     * @OA\Post(
+     *     path="/api/v1/products/{product}/product_stocks",
+     *     summary="Update product stocks by product",
+     *     description="<strong>Method:</strong> updateProductStockByProduct<br/><strong>Includes:</strong> status, product, product_attribute_options, images",
+     *     operationId="updateProductStockByProduct",
+     *     tags={"Product stocks by product"},
      *     security={ {"sanctum": {}} },
      *     @OA\Parameter(
      *         name="product",
@@ -49,7 +51,10 @@ class ProductUpdateController extends ApiController
      *     @OA\RequestBody(
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
-     *             @OA\Schema(ref="#/components/schemas/UpdateProductDTO")
+     *             @OA\Schema(
+     *                 type="object",
+     *                 ref="#/components/schemas/StoreProductStockDTO",
+     *             )
      *         )
      *     ),
      *     @OA\Response(
@@ -59,7 +64,7 @@ class ProductUpdateController extends ApiController
      *             type="object",
      *             @OA\Property(
      *                 property="data",
-     *                 ref="#/components/schemas/Product",
+     *                 ref="#/components/schemas/ProductStock",
      *             ),
      *         ),
      *     ),
@@ -93,22 +98,27 @@ class ProductUpdateController extends ApiController
      *     ),
      * )
      */
-    public function __invoke(UpdateProductRequest $request, Product $product)
-    {
+    public function __invoke(
+        UpdateProductProductStockRequest $request,
+        Product $product,
+        ProductStock $productStock
+    ) {
         $includes = explode(',', $request->get('include', ''));
 
-        dd($request->all());
-
+        DB::beginTransaction();
         try {
-            $this->product = app(UpdateProduct::class)(
-                $this->product->setUpdate($request),
+            $this->productStock = app(UpdateProductStock::class)(
+                $this->productStock->setUpdate($request, $product->type),
                 $product,
+                $productStock,
             );
+            DB::commit();
 
             return $this->showOne(
-                $this->product->loadEagerLoadIncludes($includes)
+                $this->productStock->loadEagerLoadIncludes($includes)
             );
         } catch (\Exception $exception) {
+            DB::rollBack();
             return $this->errorResponse($exception->getMessage());
         }
     }

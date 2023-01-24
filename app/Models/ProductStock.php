@@ -82,13 +82,21 @@ class ProductStock extends Model
         return $data;
     }
 
-    public function setUpdate($attributes)
+    public function setUpdate($attributes, $productType)
     {
-        !$attributes['stock'] ?: $this->stock = $attributes['stock'];
-        !$attributes['price'] ?: $this->price = $attributes['price'];
-        !$attributes['sku'] ?: $this->sku = $attributes['sku'];
+        if ($productType === Product::PRODUCT_TYPE) {
+            !$attributes['stock'] ?: $data['stock'] = $attributes['stock'];
+            !$attributes['width'] ?: $data['width'] = $attributes['width'];
+            !$attributes['height'] ?: $data['height'] = $attributes['height'];
+            !$attributes['length'] ?: $data['length'] = $attributes['length'];
+            !$attributes['weight'] ?: $data['weight'] = $attributes['weight'];
+        }
 
-        return $this;
+        !$attributes['images'] ?: $data['images'] = $attributes['images'];
+        !$attributes['price'] ?: $data['price'] = $attributes['price'];
+        !$attributes['sku'] ?: $data['sku'] = $attributes['sku'];
+
+        return $data;
     }
 
     public function setDelete()

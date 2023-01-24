@@ -4,7 +4,7 @@ namespace App\Actions\Product;
 
 use App\Models\Product;
 use App\Models\Resource;
-use App\Actions\Resource\DeleteFile;
+use App\Actions\Resource\DeleteResource;
 
 class SyncProductImages
 {
@@ -25,7 +25,7 @@ class SyncProductImages
                 $options['location'] = $image['location'];
 
                 if ($oldImage) {
-                    app(DeleteFile::class)($oldImage['path']);
+                    app(DeleteResource::class)($oldImage['path']);
                 }
 
                 $imageUnsync->obtainable_type = Product::class;

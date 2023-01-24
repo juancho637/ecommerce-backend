@@ -1,30 +1,27 @@
 <?php
 
-namespace App\Actions\Product;
+namespace App\Actions\ProductStock;
 
-use App\Models\Status;
 use App\Models\Product;
-use Illuminate\Support\Facades\DB;
+use App\Models\ProductStock;
 
-class UpdateProduct
+class UpdateProductStock
 {
     /**
      * Handle the incoming action.
      */
-    public function __invoke(array $fields, Product $product)
+    public function __invoke(array $fields, Product $product, ProductStock $productStock)
     {
-        DB::beginTransaction();
         try {
-            $oldProduct = $product->getOriginal();
+            $oldProduct = $product;
             $product->update($fields);
 
-            if ($oldProduct['is_variable'] !== $product->is_variable) {
-                $product->productStocks()
-                    ->where('status_id', Status::enabled()->value('id'))
-                    ->get()
-                    ->update([
-                        'status_id' => Status::disabled()->value('id')
-                    ]);
+            if ($oldProduct->is_variable === false && $product->is_variable === true) {
+                // TODO: Desabled product stock
+            }
+
+            if ($oldProduct->is_variable === true && $product->is_variable === false) {
+                // TODO: Desabled product stocks
             }
 
             if (array_key_exists('images', $fields) && count($fields['images'])) {
@@ -43,11 +40,9 @@ class UpdateProduct
             }
 
             app(SyncProductOptions::class)($product);
-            DB::commit();
 
-            return $product;
+            return $productStock;
         } catch (\Exception $exception) {
-            DB::rollBack();
             throw new \Exception($exception->getMessage());
         }
     }
