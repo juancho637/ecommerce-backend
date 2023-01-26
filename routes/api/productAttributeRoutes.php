@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ProductAttribute\ProductAttributeIndexController;
 use App\Http\Controllers\Api\ProductAttribute\ProductAttributeStoreController;
 use App\Http\Controllers\Api\ProductAttribute\ProductAttributeUpdateController;
 use App\Http\Controllers\Api\ProductAttribute\ProductAttributeDestroyController;
+use App\Http\Controllers\Api\ProductAttribute\ProductAttributeOption\ProductAttributeProductAttributeOptionIndexController;
 
 Route::get('product_attributes', ProductAttributeIndexController::class)
     ->name('api.v1.product_attributes.index');
@@ -21,3 +22,8 @@ Route::match(['put', 'patch'], 'product_attributes/{productAttribute}', ProductA
 
 Route::delete('product_attributes/{productAttribute}', ProductAttributeDestroyController::class)
     ->name('api.v1.product_attributes.destroy');
+
+Route::get(
+    'product_attributes/{productAttribute}/product_attribute_options',
+    ProductAttributeProductAttributeOptionIndexController::class
+)->name('api.v1.product_attributes.product_attribute_options.index');

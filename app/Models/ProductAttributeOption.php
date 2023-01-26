@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Http\Resources\ProductAttributeOptionResource;
 
@@ -72,6 +73,19 @@ class ProductAttributeOption extends Model
         }
 
         return $this;
+    }
+
+    public function scopeWithEagerIncludes(Builder $query, array $includes)
+    {
+        if (in_array('status', $includes)) {
+            $query->with(['status']);
+        }
+
+        if (in_array('product_attribute', $includes)) {
+            $query->with(['productAttribute']);
+        }
+
+        return $query;
     }
 
     public function loadEagerLoadIncludes(array $includes)
