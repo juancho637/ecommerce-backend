@@ -30,6 +30,15 @@ class ProductFinishController extends ApiController
      *     tags={"Products"},
      *     security={ {"sanctum": {}} },
      *     @OA\Parameter(
+     *         name="product",
+     *         description="Id of product",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\Parameter(
      *         name="include",
      *         description="Relationships of resource",
      *         required=false,
