@@ -41,7 +41,7 @@ class StoreProductTest extends TestCase
         $tags = Tag::all()->random(mt_rand(2, 5))->pluck('id');
         $productAttributeOptions = ProductAttributeOption::all()->random(3)->pluck('id');
 
-        $response = $this->json('POST', route('api.v1.products.store'), [
+        $data = [
             'category_id' => $category->id,
             'type' => $type,
             'name' => $name,
@@ -50,15 +50,21 @@ class StoreProductTest extends TestCase
             'is_variable' => $isVariable,
             'short_description' => $shortDescription,
             'description' => $description,
-            'tags' => $tags,
-            'product_attribute_options' => $productAttributeOptions,
+            'tags' => ['attach' => $tags],
+            'product_attribute_options' => ['attach' => $productAttributeOptions],
             'images' => [
-                [
-                    'id' => $image->id,
-                    'location' => 1,
+                'attach' => [
+                    [
+                        'id' => $image->id,
+                        'location' => 1,
+                    ]
                 ]
-            ],
-        ]);
+            ]
+        ];
+
+        dd($data);
+
+        $response = $this->json('POST', route('api.v1.products_general.store'), $data);
 
         $response->assertStatus(201)->assertJsonStructure([
             'data' => [
@@ -106,7 +112,7 @@ class StoreProductTest extends TestCase
         $length = 10.1;
         $weight = 10.1;
 
-        $response = $this->json('POST', route('api.v1.products.store', [
+        $response = $this->json('POST', route('api.v1.products_general.store', [
             'include' => 'product_stocks'
         ]), [
             'category_id' => $category->id,
@@ -117,11 +123,13 @@ class StoreProductTest extends TestCase
             'is_variable' => $isVariable,
             'short_description' => $shortDescription,
             'description' => $description,
-            'tags' => $tags,
+            'tags' => ['attach' => $tags],
             'images' => [
-                [
-                    'id' => $image->id,
-                    'location' => 1,
+                'attach' => [
+                    [
+                        'id' => $image->id,
+                        'location' => 1,
+                    ]
                 ]
             ],
             'stock' => $stock,

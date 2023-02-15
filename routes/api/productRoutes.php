@@ -18,8 +18,8 @@ Route::get('products/types', ProductTypeIndexController::class)
 Route::get('products', ProductIndexController::class)
     ->name('api.v1.products.index');
 
-Route::post('products', ProductStoreController::class)
-    ->name('api.v1.products.store');
+Route::post('products/general', ProductStoreController::class)
+    ->name('api.v1.products_general.store');
 
 Route::post('products/{product}/finish', ProductFinishController::class)
     ->name('api.v1.products.finish');

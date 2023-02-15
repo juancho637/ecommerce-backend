@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * @OA\Schema(
- *     schema="StoreProductDTO",
+ *     schema="StoreProductGeneralDTO",
  *     required={
  *         "name",
  *         "category_id",
@@ -48,26 +48,41 @@ class StoreProductRequest extends FormRequest
      * @OA\Property(property="weight", type="number"),
      * @OA\Property(
      *     property="images",
-     *     type="array",
-     *     @OA\Items(
-     *         type="object",
-     *         required={"id", "location"},
-     *         @OA\Property(property="id", type="number"),
-     *         @OA\Property(property="location", type="number"),
+     *     type="object",
+     *     required={"attach"},
+     *     @OA\Property(
+     *         property="attach",
+     *         type="array",
+     *         @OA\Items(
+     *             type="object",
+     *             required={"id", "location"},
+     *             @OA\Property(property="id", type="number"),
+     *             @OA\Property(property="location", type="number"),
+     *         ),
      *     ),
      * ),
      * @OA\Property(
      *     property="tags",
-     *     type="array",
-     *     @OA\Items(
-     *         type="number",
+     *     type="object",
+     *     required={"attach"},
+     *     @OA\Property(
+     *         property="attach",
+     *         type="array",
+     *         @OA\Items(
+     *             type="number",
+     *         ),
      *     ),
      * ),
      * @OA\Property(
      *     property="product_attribute_options",
-     *     type="array",
-     *     @OA\Items(
-     *         type="number",
+     *     type="object",
+     *     required={"attach"},
+     *     @OA\Property(
+     *         property="attach",
+     *         type="array",
+     *         @OA\Items(
+     *             type="number",
+     *         ),
      *     ),
      * ),
      */
@@ -115,26 +130,27 @@ class StoreProductRequest extends FormRequest
             'short_description' => 'nullable|string|max:600',
             'description' => 'nullable|string',
             'is_variable' => 'required|boolean',
-            'images' => [
-                'required',
-                'array',
-                'min:1',
-                'max:' . Product::MAX_IMAGES
-            ],
-            'images.*.id' => 'required|exists:resources,id,obtainable_id,NULL',
-            'images.*.location' => [
+
+            'images' => ['required', 'array:attach'],
+            'images.attach' => ['required', 'array', 'min:1', 'max:' . Product::MAX_IMAGES],
+            'images.attach.*.id' => 'required|exists:resources,id,obtainable_id,NULL',
+            'images.attach.*.location' => [
                 'required',
                 'integer',
                 'min:1',
                 'max:' . Product::MAX_IMAGES
             ],
-            'tags' => 'required|array|min:1',
-            'tags.*' => 'integer|exists:tags,id',
+
+            'tags' => 'array:attach|nullable',
+            'tags.attach' => 'array|nullable',
+            'tags.attach.*' => 'exists:tags,id',
+
             'product_attribute_options' => [
                 Rule::requiredIf($isVariable),
-                'array',
+                'array:attach'
             ],
-            'product_attribute_options.*' => 'integer|exists:product_attribute_options,id',
+            'product_attribute_options.attach' => 'array|min:1',
+            'product_attribute_options.attach.*' => 'exists:product_attribute_options,id',
         ];
     }
 

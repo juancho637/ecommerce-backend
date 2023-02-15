@@ -304,10 +304,12 @@ class Product extends Model
         $data['short_description'] = $attributes['short_description'];
         $data['description'] = $attributes['description'];
         $data['is_variable'] = $isVariableFiltered;
-        $data['images']['attach'] = $attributes['images'];
-        $data['tags']['attach'] = $attributes['tags'];
+        $data['images']['attach'] = $attributes['images']['attach'];
+        $data['tags']['attach'] = $attributes['tags']['attach'];
 
-        if (!$isVariableFiltered) {
+        if ($isVariableFiltered) {
+            $data['product_attribute_options']['attach'] = $attributes['product_attribute_options']['attach'];
+        } else {
             $data['stock']['price'] = $attributes['price'];
             $data['stock']['status_id'] = Status::enabled()->value('id');
             $data['stock']['sku'] = $data['sku'];
@@ -319,10 +321,6 @@ class Product extends Model
                 $data['stock']['length'] = $attributes['length'];
                 $data['stock']['weight'] = $attributes['weight'];
             }
-        }
-
-        if ($isVariableFiltered) {
-            $data['product_attribute_options']['attach'] = $attributes['product_attribute_options'];
         }
 
         return $data;

@@ -23,10 +23,10 @@ class ProductStoreController extends ApiController
 
     /**
      * @OA\Post(
-     *     path="/api/v1/products",
-     *     summary="Save product",
-     *     description="<strong>Method:</strong> saveProduct<br/><strong>Includes:</strong> status, images, stock_images, category, tags, product_attribute_options, product_stocks",
-     *     operationId="saveProduct",
+     *     path="/api/v1/products/general",
+     *     summary="Save product general information",
+     *     description="<strong>Method:</strong> saveProductGeneral<br/><strong>Includes:</strong> status, images, stock_images, category, tags, product_attribute_options, product_stocks",
+     *     operationId="saveProductGeneral",
      *     tags={"Products"},
      *     security={ {"sanctum": {}} },
      *     @OA\Parameter(
@@ -43,7 +43,7 @@ class ProductStoreController extends ApiController
      *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
      *                 type="object",
-     *                 ref="#/components/schemas/StoreProductDTO",
+     *                 ref="#/components/schemas/StoreProductGeneralDTO",
      *             )
      *         )
      *     ),
