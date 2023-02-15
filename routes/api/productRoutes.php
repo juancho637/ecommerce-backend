@@ -30,8 +30,8 @@ Route::post('products/{product}/finish', ProductFinishController::class)
 Route::get('products/{product}', ProductShowController::class)
     ->name('api.v1.products.show');
 
-Route::match(['put', 'patch'], 'products/{product}', ProductUpdateController::class)
-    ->name('api.v1.products.update');
+Route::match(['put', 'patch'], 'products/{product}/general', ProductUpdateController::class)
+    ->name('api.v1.products_general.update');
 
 Route::delete('products/{product}', ProductDestroyController::class)
     ->name('api.v1.products.destroy');
