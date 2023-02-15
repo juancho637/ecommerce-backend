@@ -4,7 +4,7 @@ namespace App\Actions\Product;
 
 use App\Models\Product;
 use App\Models\Resource;
-use App\Actions\Resource\DeleteFile;
+use App\Actions\Resource\DeleteResource;
 
 class SyncProductImages
 {
@@ -14,30 +14,52 @@ class SyncProductImages
     public function __invoke(Product $product, array $images)
     {
         try {
-            $imagesSaved = [];
-            // $path = strtolower(class_basename($product));
+            if (array_key_exists('detach', $images) && count($images['detach'])) {
+                foreach ($images['detach'] as $image) {
+                    $resource = Resource::find($image['id']);
 
-            foreach ($images as $image) {
-                $imageUnsync = Resource::find($image['id']);
-                $oldImage = $product->images()
-                    ->where('options->location', $image['location'])
-                    ->first();
-                $options['location'] = $image['location'];
-
-                if ($oldImage) {
-                    app(DeleteFile::class)($oldImage['path']);
+                    app(DeleteResource::class)($resource);
                 }
-
-                $imageUnsync->obtainable_type = Product::class;
-                $imageUnsync->obtainable_id = $product->id;
-                $imageUnsync->type_resource = Product::PRODUCT_IMAGE;
-                $imageUnsync->options = $options;
-                $imageUnsync->save();
-
-                $imagesSaved[] = $imageUnsync;
             }
 
-            return $imagesSaved;
+            if (array_key_exists('attach', $images) && count($images['attach'])) {
+                foreach ($images['attach'] as $image) {
+                    $resource = Resource::find($image['id']);
+                    $options['location'] = $image['location'];
+
+                    $resource->obtainable_type = Product::class;
+                    $resource->obtainable_id = $product->id;
+                    $resource->type_resource = Product::PRODUCT_IMAGE;
+                    $resource->options = $options;
+
+                    $resource->save();
+                }
+            }
+
+            // $imagesSaved = [];
+            // // $path = strtolower(class_basename($product));
+
+            // foreach ($images as $image) {
+            //     $imageUnsync = Resource::find($image['id']);
+            //     $oldImage = $product->images()
+            //         ->where('options->location', $image['location'])
+            //         ->first();
+            //     $options['location'] = $image['location'];
+
+            //     if ($oldImage) {
+            //         app(DeleteResource::class)($oldImage['path']);
+            //     }
+
+            //     $imageUnsync->obtainable_type = Product::class;
+            //     $imageUnsync->obtainable_id = $product->id;
+            //     $imageUnsync->type_resource = Product::PRODUCT_IMAGE;
+            //     $imageUnsync->options = $options;
+            //     $imageUnsync->save();
+
+            //     $imagesSaved[] = $imageUnsync;
+            // }
+
+            // return $imagesSaved;
         } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage());
         }

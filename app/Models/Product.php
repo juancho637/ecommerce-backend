@@ -289,6 +289,8 @@ class Product extends Model
 
     public function setCreate($attributes)
     {
+        $isVariableFiltered = filter_var($attributes['is_variable'], FILTER_VALIDATE_BOOLEAN);
+
         $data['status_id'] = Status::productPending()->value('id');
         $data['category_id'] = $attributes['category_id'];
         $data['type'] = $attributes['type'];
@@ -301,11 +303,11 @@ class Product extends Model
             : $data['sku'] = Str::random(10);
         $data['short_description'] = $attributes['short_description'];
         $data['description'] = $attributes['description'];
-        $data['is_variable'] = $attributes['is_variable'];
-        $data['images'] = $attributes['images'];
-        $data['tags'] = $attributes['tags'];
+        $data['is_variable'] = $isVariableFiltered;
+        $data['images']['attach'] = $attributes['images'];
+        $data['tags']['attach'] = $attributes['tags'];
 
-        if (!$attributes['is_variable']) {
+        if (!$isVariableFiltered) {
             $data['stock']['price'] = $attributes['price'];
             $data['stock']['status_id'] = Status::enabled()->value('id');
             $data['stock']['sku'] = $data['sku'];
@@ -319,8 +321,8 @@ class Product extends Model
             }
         }
 
-        if ($attributes['is_variable']) {
-            $data['product_attribute_options'] = $attributes['product_attribute_options'];
+        if ($isVariableFiltered) {
+            $data['product_attribute_options']['attach'] = $attributes['product_attribute_options'];
         }
 
         return $data;
@@ -335,20 +337,49 @@ class Product extends Model
 
     public function setUpdate($attributes)
     {
-        !$attributes['name'] ?: $data['name'] = $attributes['name'];
-        !$attributes['name'] ?: $data['slug'] = Str::slug($attributes['name'], '-');
-        !$attributes['price'] ?: $data['price'] = $attributes['price'];
-        !$attributes['tax'] ?: $data['tax'] = $attributes['tax'];
-        !$attributes['sku'] ?: $data['sku'] = $attributes['sku'];
-        !$attributes['category_id'] ?: $data['category_id'] = $attributes['category_id'];
-        !$attributes['short_description'] ?: $data['short_description'] = $attributes['short_description'];
-        !$attributes['description'] ?: $data['description'] = $attributes['description'];
-        !$attributes['is_variable'] ?: $data['is_variable'] = $attributes['is_variable'];
-        !$attributes['stock'] ?: $data['stock'] = $attributes['stock'];
+        $isVariableFiltered = filter_var($attributes['is_variable'], FILTER_VALIDATE_BOOLEAN);
 
-        !$attributes['images'] ?: $data['images'] = $attributes['images'];
-        !$attributes['tags'] ?: $data['tags'] = $attributes['tags'];
-        !$attributes['product_attribute_options'] ?: $data['product_attribute_options'] = $attributes['product_attribute_options'];
+        $productIsVariable = isset($attributes['is_variable'])
+            ? ($isVariableFiltered || ($isVariableFiltered && $this->is_variable))
+            : $this->is_variable;
+
+        !isset($attributes['name']) ?: $data['name'] = $attributes['name'];
+        !isset($attributes['name']) ?: $data['slug'] = Str::slug($attributes['name'], '-');
+        !isset($attributes['price']) ?: $data['price'] = $attributes['price'];
+        !isset($attributes['tax']) ?: $data['tax'] = $attributes['tax'];
+        !isset($attributes['sku']) ?: $data['sku'] = $attributes['sku'];
+        !isset($attributes['category_id']) ?: $data['category_id'] = $attributes['category_id'];
+        !isset($attributes['short_description']) ?: $data['short_description'] = $attributes['short_description'];
+        !isset($attributes['description']) ?: $data['description'] = $attributes['description'];
+        !isset($attributes['is_variable']) ?: $data['is_variable'] = $attributes['is_variable'];
+
+        !isset($attributes['images']) ?: $data['images'] = $attributes['images'];
+
+        if ($attributes['tags']) {
+            !isset($attributes['tags']['attach']) ?: $data['tags']['attach'] = $attributes['tags']['attach'];
+            !isset($attributes['tags']['detach']) ?: $data['tags']['detach'] = $attributes['tags']['detach'];
+        }
+
+        if ($productIsVariable) {
+            if ($attributes['product_attribute_options']) {
+                !isset($attributes['product_attribute_options']['attach']) ?:
+                    $data['product_attribute_options']['attach'] = $attributes['product_attribute_options']['attach'];
+
+                !isset($attributes['product_attribute_options']['detach']) ?:
+                    $data['product_attribute_options']['detach'] = $attributes['product_attribute_options']['detach'];
+            }
+        } else {
+            !isset($attributes['price']) ?: $data['stock']['price'] = $attributes['price'];
+            !isset($attributes['sku']) ?: $data['stock']['sku'] = $data['sku'];
+
+            if ($attributes['type'] === self::PRODUCT_TYPE || $this->type === self::PRODUCT_TYPE) {
+                !isset($attributes['stock']) ?: $data['stock']['stock'] = $attributes['stock'];
+                !isset($attributes['width']) ?: $data['stock']['width'] = $attributes['width'];
+                !isset($attributes['height']) ?: $data['stock']['height'] = $attributes['height'];
+                !isset($attributes['length']) ?: $data['stock']['length'] = $attributes['length'];
+                !isset($attributes['weight']) ?: $data['stock']['weight'] = $attributes['weight'];
+            }
+        }
 
         return $data;
     }

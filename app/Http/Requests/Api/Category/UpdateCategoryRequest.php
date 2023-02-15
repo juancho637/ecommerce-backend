@@ -32,12 +32,12 @@ class UpdateCategoryRequest extends FormRequest
     {
         return [
             'name' => [
-                'sometimes',
                 'string',
                 Rule::unique('categories', 'name')->ignore($this->category),
+                'nullable',
             ],
-            'image' => 'nullable,exists:resources,id,obtainable_id,NULL',
-            'parent_id' => 'nullable|exists:categories,id',
+            'image' => 'exists:resources,id,obtainable_id,NULL|nullable',
+            'parent_id' => 'exists:categories,id|nullable',
         ];
     }
 }

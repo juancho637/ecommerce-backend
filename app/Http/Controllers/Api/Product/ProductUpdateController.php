@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\Product;
 
 use App\Models\Product;
-use Illuminate\Support\Facades\DB;
 use App\Actions\Product\UpdateProduct;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\Api\Product\UpdateProductRequest;
@@ -22,11 +21,11 @@ class ProductUpdateController extends ApiController
     }
 
     /**
-     * @OA\Put(
-     *     path="/api/v1/products/{product}",
-     *     summary="Update product",
-     *     description="<strong>Method:</strong> updateProduct<br/><strong>Includes:</strong> status, images, stock_images, category, tags, product_attribute_options, product_stocks",
-     *     operationId="updateProduct",
+     * @OA\Post(
+     *     path="/api/v1/products/{product}/general",
+     *     summary="Update product general information", 
+     *     description="<strong>Method:</strong> updateProductGeneral<br/><strong>Includes:</strong> status, images, stock_images, category, tags, product_attribute_options, product_stocks",
+     *     operationId="updateProductGeneral",
      *     tags={"Products"},
      *     security={ {"sanctum": {}} },
      *     @OA\Parameter(
@@ -50,7 +49,7 @@ class ProductUpdateController extends ApiController
      *     @OA\RequestBody(
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
-     *             @OA\Schema(ref="#/components/schemas/UpdateProductDTO")
+     *             @OA\Schema(ref="#/components/schemas/UpdateProductGeneralDTO")
      *         )
      *     ),
      *     @OA\Response(
@@ -98,19 +97,16 @@ class ProductUpdateController extends ApiController
     {
         $includes = explode(',', $request->get('include', ''));
 
-        DB::beginTransaction();
         try {
             $this->product = app(UpdateProduct::class)(
+                $product->setUpdate($request),
                 $product,
-                $this->product->setUpdate($request)
             );
-            DB::commit();
 
             return $this->showOne(
                 $this->product->loadEagerLoadIncludes($includes)
             );
         } catch (\Exception $exception) {
-            DB::rollBack();
             return $this->errorResponse($exception->getMessage());
         }
     }

@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Feature\Api\ProductStock;
+namespace Tests\Feature\Api\Product\ProductStock;
 
 use Tests\Feature\Api\ApiTestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class UpdateProductStockTest extends ApiTestCase
+class DestroyProductProductStockTest extends ApiTestCase
 {
     use RefreshDatabase, WithFaker;
 
@@ -17,7 +17,7 @@ class UpdateProductStockTest extends ApiTestCase
         $this->seed();
     }
 
-    public function testUpdateProductStock()
+    public function DeleteProductStocks()
     {
     }
 }

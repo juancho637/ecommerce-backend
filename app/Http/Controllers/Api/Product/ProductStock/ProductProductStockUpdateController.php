@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Api\ProductStock;
+namespace App\Http\Controllers\Api\Product\ProductStock;
 
+use App\Models\Product;
 use App\Models\ProductStock;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Api\ApiController;
+use App\Actions\ProductStock\UpdateProductStock;
+use App\Http\Requests\Api\Product\ProductStock\UpdateProductProductStockRequest;
 
-class ProductStockDestroyController extends ApiController
+class ProductProductStockUpdateController extends ApiController
 {
     private $productStock;
 
@@ -17,23 +19,23 @@ class ProductStockDestroyController extends ApiController
 
         $this->middleware('auth:sanctum');
 
-        $this->middleware('can:delete,productStock')->only('__invoke');
+        $this->middleware('can:create,' . ProductStock::class)->only('__invoke');
     }
 
-    /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function __invoke(Request $request, ProductStock $productStock)
-    {
+    public function __invoke(
+        UpdateProductProductStockRequest $request,
+        Product $product,
+        ProductStock $productStock
+    ) {
         $includes = explode(',', $request->get('include', ''));
 
         DB::beginTransaction();
         try {
-            $this->productStock = $productStock->setDelete();
-            $this->productStock->save();
+            $this->productStock = app(UpdateProductStock::class)(
+                $this->productStock->setUpdate($request, $product->type),
+                $product,
+                $productStock,
+            );
             DB::commit();
 
             return $this->showOne(

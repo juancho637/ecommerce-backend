@@ -12,7 +12,15 @@ class SyncProductTags
     public function __invoke(Product $product, array $tags)
     {
         try {
-            return $product->tags()->sync($tags);
+            // return $product->tags()->sync($tags);
+
+            if (array_key_exists('detach', $tags) && count($tags['detach'])) {
+                $product->tags()->detach($tags['detach']);
+            }
+
+            if (array_key_exists('attach', $tags) && count($tags['attach'])) {
+                $product->tags()->attach($tags['attach']);
+            }
         } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage());
         }

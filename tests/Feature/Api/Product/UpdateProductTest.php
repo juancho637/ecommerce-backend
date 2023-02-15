@@ -31,18 +31,27 @@ class UpdateProductTest extends TestCase
         $name = $this->faker->unique()->sentence(1, false);
         $shortDescription = $this->faker->sentence(30);
         $description = $this->faker->paragraphs(3, true);
-        $productTags = $product->tags()->pluck('id');
-        $tags = Tag::whereNotIn('id', $productTags)->get()->random(1)->pluck('id');
-        $productAttributeOptions = ProductAttributeOption::all()->random(3)->pluck('id');
-        $productTags[] = $tags[0];
 
-        $response = $this->json('PUT', route('api.v1.products.update', [$product]), [
+        $productAttributeOptionsToAdd = ProductAttributeOption::all()->random(3)->pluck('id');
+        $productAttributeOptions['attach'] = $productAttributeOptionsToAdd;
+
+        $productTags = $product->tags();
+        $tagsToAdd = Tag::whereNotIn('id', $productTags->pluck('id'))
+            ->get()
+            ->random(1)
+            ->pluck('id');
+        $tags['detach'] = $productTags->get()->random(1)->pluck('id');
+        $tags['attach'] = $tagsToAdd;
+
+        $response = $this->json('PUT', route('api.v1.products_general.update', [$product]), [
             'name' => $name,
             'short_description' => $shortDescription,
             'description' => $description,
-            'tags' => $productTags,
+            'tags' => $tags,
             'product_attribute_options' => $productAttributeOptions,
         ]);
+
+        // dd($response->decodeResponseJson());
 
         $response->assertStatus(200)->assertJsonStructure([
             'data' => [
@@ -71,16 +80,22 @@ class UpdateProductTest extends TestCase
         $name = $this->faker->unique()->sentence(1, false);
         $shortDescription = $this->faker->sentence(30);
         $description = $this->faker->paragraphs(3, true);
-        $productTags = $product->tags()->pluck('id');
-        $tags = Tag::whereNotIn('id', $productTags)->get()->random(1)->pluck('id');
-        $productTags[] = $tags[0];
 
-        $response = $this->json('PUT', route('api.v1.products.update', [$product]), [
+        $productTags = $product->tags();
+        $tagsToAdd = Tag::whereNotIn('id', $productTags->pluck('id'))
+            ->get()
+            ->random(1)
+            ->pluck('id');
+        $tags['attach'] = $tagsToAdd;
+
+        $response = $this->json('PUT', route('api.v1.products_general.update', [$product]), [
             'name' => $name,
             'short_description' => $shortDescription,
             'description' => $description,
-            'tags' => $productTags,
+            'tags' => $tags,
         ]);
+
+        // dd($response->decodeResponseJson());
 
         $response->assertStatus(200)->assertJsonStructure([
             'data' => [
