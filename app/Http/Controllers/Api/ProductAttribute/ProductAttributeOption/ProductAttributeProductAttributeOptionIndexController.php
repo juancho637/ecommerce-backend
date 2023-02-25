@@ -26,7 +26,7 @@ class ProductAttributeProductAttributeOptionIndexController extends ApiControlle
      *     summary="List of product attribute options by product attribute",
      *     description="<strong>Method:</strong> getAllProductAttributeOptionsByProductAttribute<br/><strong>Includes:</strong> status, product_attribute",
      *     operationId="getAllProductAttributeOptionsByProductAttribute",
-     *     tags={"Product attribute options by product attribute"},
+     *     tags={"Product attribute options"},
      *     security={ {"sanctum": {}} },
      *     @OA\Parameter(
      *         name="productAttribute",
@@ -128,8 +128,7 @@ class ProductAttributeProductAttributeOptionIndexController extends ApiControlle
     {
         $includes = explode(',', $request->get('include', ''));
 
-        $this->productAttributeOptions = $productAttribute->productAttributeOptions
-            ->toQuery()
+        $this->productAttributeOptions = $productAttribute->productAttributeOptions()
             ->withEagerIncludes($includes)
             ->get();
 
