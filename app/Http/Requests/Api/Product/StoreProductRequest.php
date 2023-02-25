@@ -8,8 +8,9 @@ use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * @OA\Schema(
- *     schema="StoreProductGeneralDTO",
+ *     schema="StoreProductGeneralRequest",
  *     required={
+ *         "type",
  *         "name",
  *         "category_id",
  *         "price",
@@ -34,6 +35,7 @@ class StoreProductRequest extends FormRequest
     }
 
     /**
+     * @OA\Property(property="type", type="string", enum={"product", "service"}),
      * @OA\Property(property="name", type="string"),
      * @OA\Property(property="category_id", type="number"),
      * @OA\Property(property="price", type="number"),

@@ -52,7 +52,7 @@ class ProductFinishController extends ApiController
      *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
      *                 type="object",
-     *                 ref="#/components/schemas/FinishProductDTO",
+     *                 ref="#/components/schemas/FinishProductRequest",
      *             )
      *         )
      *     ),

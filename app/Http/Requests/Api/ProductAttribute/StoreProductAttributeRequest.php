@@ -24,8 +24,12 @@ class StoreProductAttributeRequest extends FormRequest
     }
 
     /**
-     * @OA\Property(type="string", description="name", property="name"),
-     * @OA\Property(type="string", description="type", property="type"),
+     * @OA\Property(type="string", property="name"),
+     * @OA\Property(
+     *     type="string",
+     *     property="type",
+     *     enum={"selector", "button", "color"}
+     * ),
      */
     public function rules()
     {

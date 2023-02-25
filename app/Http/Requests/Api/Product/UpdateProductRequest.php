@@ -8,8 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * @OA\Schema(
- *     schema="UpdateProductGeneralDTO",
- *     required={"_method"},
+ *     schema="UpdateProductGeneralRequest",
  * )
  */
 class UpdateProductRequest extends FormRequest
@@ -25,7 +24,7 @@ class UpdateProductRequest extends FormRequest
     }
 
     /**
-     * @OA\Property(property="_method", type="string", default="PUT", enum={"PUT"}),
+     * @OA\Property(property="type", type="string", enum={"product", "service"}),
      * @OA\Property(property="name", type="string"),
      * @OA\Property(property="category_id", type="number"),
      * @OA\Property(property="short_description", type="string"),

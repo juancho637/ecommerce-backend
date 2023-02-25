@@ -22,7 +22,7 @@ class CategoryUpdateController extends ApiController
     }
 
     /**
-     * @OA\Post(
+     * @OA\Put(
      *     path="/api/v1/categories/{category}",
      *     summary="Update category",
      *     operationId="updateCategory",
