@@ -22,8 +22,12 @@ class UpdateProductAttributeRequest extends FormRequest
     }
 
     /**
-     * @OA\Property(type="string", description="name", property="name", nullable=true),
-     * @OA\Property(type="string", description="type", property="type", nullable=true),
+     * @OA\Property(property="name", type="string"),
+     * @OA\Property(
+     *     property="type",
+     *     type="string",
+     *     enum={"selector", "button", "color"}
+     * ),
      */
     public function rules()
     {

@@ -25,7 +25,7 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::group([], __DIR__ . '/api/productSpecificationRoutes.php');
 
-    Route::group([], __DIR__ . '/api/productStockRoutes.php');
+    Route::group([], __DIR__ . '/api/productStocksRoutes.php');
 
     Route::group([], __DIR__ . '/api/resourceRoutes.php');
 });

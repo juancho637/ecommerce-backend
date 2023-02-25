@@ -49,4 +49,4 @@ Route::match(
     ['put', 'patch'],
     'products/{product}/product_stocks',
     ProductProductStockStoreController::class
-)->name('api.v1.products.product_stocks.store');
+)->name('api.v1.products.product_stocks.update');

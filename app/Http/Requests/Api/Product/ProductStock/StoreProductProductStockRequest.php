@@ -10,7 +10,7 @@ use App\Rules\ProductStock\ProductAttributeOpcionsOfStockRule;
 
 /**
  * @OA\Schema(
- *     schema="StoreProductStockDTO",
+ *     schema="StoreProductStockRequest",
  *     required={
  *         "price",
  *         "product_attribute_options",

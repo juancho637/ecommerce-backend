@@ -21,7 +21,7 @@ class ProductUpdateController extends ApiController
     }
 
     /**
-     * @OA\Post(
+     * @OA\Put(
      *     path="/api/v1/products/{product}/general",
      *     summary="Update product general information", 
      *     description="<strong>Method:</strong> updateProductGeneral<br/><strong>Includes:</strong> status, images, stock_images, category, tags, product_attribute_options, product_stocks",
@@ -49,7 +49,7 @@ class ProductUpdateController extends ApiController
      *     @OA\RequestBody(
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
-     *             @OA\Schema(ref="#/components/schemas/UpdateProductGeneralDTO")
+     *             @OA\Schema(ref="#/components/schemas/UpdateProductGeneralRequest")
      *         )
      *     ),
      *     @OA\Response(

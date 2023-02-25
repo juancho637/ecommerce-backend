@@ -34,7 +34,7 @@ class ResourceStoreController extends ApiController
      *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
      *                 type="object",
-     *                 ref="#/components/schemas/StoreResourceDTO",
+     *                 ref="#/components/schemas/StoreResourceRequest",
      *             )
      *         )
      *     ),
