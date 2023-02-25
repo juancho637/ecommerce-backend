@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Api\Product\ProductStock;
+namespace App\Http\Controllers\Api\Product;
 
 use App\Models\Product;
 use App\Models\ProductStock;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Api\ApiController;
-use App\Actions\ProductStock\StoreProductStock;
-use App\Http\Requests\Api\Product\ProductStock\StoreProductProductStockRequest;
+use App\Actions\Product\StoreProductStockStep;
+use App\Http\Requests\Api\Product\StoreProductStockRequest;
+use Illuminate\Http\Response;
 
-class ProductProductStockStoreController extends ApiController
+class ProductStockStoreController extends ApiController
 {
     private $productStock;
 
@@ -24,11 +24,11 @@ class ProductProductStockStoreController extends ApiController
 
     /**
      * @OA\Post(
-     *     path="/api/v1/products/{product}/product_stocks",
-     *     summary="Save product stocks by product",
-     *     description="<strong>Method:</strong> saveProductStockByProduct<br/><strong>Includes:</strong> status, product, product_attribute_options, images",
-     *     operationId="saveProductStockByProduct",
-     *     tags={"Product stocks by product"},
+     *     path="/api/v1/products/{product}/stocks",
+     *     summary="Save product stock step by product",
+     *     description="<strong>Method:</strong> saveProductStockStepByProduct<br/><strong>Includes:</strong> status, product, product_attribute_options, images",
+     *     operationId="saveProductStockStepByProduct",
+     *     tags={"Products"},
      *     security={ {"sanctum": {}} },
      *     @OA\Parameter(
      *         name="product",
@@ -63,8 +63,9 @@ class ProductProductStockStoreController extends ApiController
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
+     *                 type="array",
      *                 property="data",
-     *                 ref="#/components/schemas/ProductStock",
+     *                 @OA\Items(ref="#/components/schemas/ProductStock")
      *             ),
      *         ),
      *     ),
@@ -98,23 +99,20 @@ class ProductProductStockStoreController extends ApiController
      *     ),
      * )
      */
-    public function __invoke(StoreProductProductStockRequest $request, Product $product)
+    public function __invoke(StoreProductStockRequest $request, Product $product)
     {
         $includes = explode(',', $request->get('include', ''));
 
-        DB::beginTransaction();
         try {
-            $this->productStock = app(StoreProductStock::class)(
+            $this->productStock = app(StoreProductStockStep::class)(
+                $product->setCreateProductStockStep($request),
                 $product,
-                $this->productStock->setCreate($request, $product->type)
-            );
-            DB::commit();
+            )->withEagerLoading($includes)->get();
 
-            return $this->showOne(
-                $this->productStock->loadEagerLoadIncludes($includes)
-            );
+            return ($this->showAll($this->productStock))
+                ->response()
+                ->setStatusCode(Response::HTTP_CREATED);
         } catch (\Exception $exception) {
-            DB::rollBack();
             return $this->errorResponse($exception->getMessage());
         }
     }

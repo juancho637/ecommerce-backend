@@ -7,10 +7,10 @@ use App\Http\Controllers\Api\Product\ProductStoreController;
 use App\Http\Controllers\Api\Product\ProductFinishController;
 use App\Http\Controllers\Api\Product\ProductUpdateController;
 use App\Http\Controllers\Api\Product\ProductDestroyController;
+use App\Http\Controllers\Api\Product\ProductStockStoreController;
 use App\Http\Controllers\Api\Product\Type\ProductTypeIndexController;
 use App\Http\Controllers\Api\Product\Resource\ProductResourceDestroyController;
 use App\Http\Controllers\Api\Product\ProductStock\ProductProductStockIndexController;
-use App\Http\Controllers\Api\Product\ProductStock\ProductProductStockStoreController;
 
 Route::get('products/types', ProductTypeIndexController::class)
     ->name('api.v1.product_types.index');
@@ -20,6 +20,9 @@ Route::get('products', ProductIndexController::class)
 
 Route::post('products/general', ProductStoreController::class)
     ->name('api.v1.products_general.store');
+
+Route::post('products/{product}/stocks', ProductStockStoreController::class)
+    ->name('api.v1.products.stocks.store');
 
 Route::post('products/{product}/finish', ProductFinishController::class)
     ->name('api.v1.products.finish');
@@ -41,12 +44,3 @@ Route::delete('products/{product}/images/{resource}', ProductResourceDestroyCont
 
 Route::get('products/{product}/product_stocks', ProductProductStockIndexController::class)
     ->name('api.v1.products.product_stocks.index');
-
-Route::post('products/{product}/product_stocks', ProductProductStockStoreController::class)
-    ->name('api.v1.products.product_stocks.store');
-
-Route::match(
-    ['put', 'patch'],
-    'products/{product}/product_stocks',
-    ProductProductStockStoreController::class
-)->name('api.v1.products.product_stocks.store');

@@ -1,16 +1,16 @@
 <?php
 
-namespace Tests\Feature\Api\Product\ProductStock;
+namespace Tests\Feature\Api\Product;
 
+use Tests\TestCase;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Resource;
 use Laravel\Sanctum\Sanctum;
-use Tests\Feature\Api\ApiTestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class StoreProductProductStockTest extends ApiTestCase
+class StoreProductStockTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
@@ -32,13 +32,6 @@ class StoreProductProductStockTest extends ApiTestCase
             ->typeProduct()
             ->create();
         $product->productAttributeOptions()->sync([1, 2]);
-        $combination1 = $product->productStocks()->create([
-            'status_id' => 1,
-            'stock' => 10,
-            'price' => 100000.12,
-            'sku' => 'prod1',
-        ]);
-        $combination1->productAttributeOptions()->sync([2]);
 
         $price = 100000.12;
         $stock = 10;
@@ -48,48 +41,58 @@ class StoreProductProductStockTest extends ApiTestCase
         $weight = 10;
 
         $response = $this->json('POST', route(
-            'api.v1.products.product_stocks.store',
+            'api.v1.products.stocks.store',
             [$product, 'include' => 'images']
         ), [
-            'price' => $price,
-            'product_attribute_options' => [1],
-            'images' => [
-                $image->id,
-            ],
-            'stock' => $stock,
-            'width' => $width,
-            'height' => $height,
-            'length' => $length,
-            'weight' => $weight,
+            'stocks' => [
+                [
+                    'price' => $price,
+                    'product_attribute_options' => [1],
+                    'images' => [
+                        $image->id,
+                    ],
+                    'stock' => $stock,
+                    'width' => $width,
+                    'height' => $height,
+                    'length' => $length,
+                    'weight' => $weight,
+                ]
+            ]
         ]);
+
+        // dd($response->decodeResponseJson());
 
         $response->assertStatus(201)->assertJsonStructure([
             'data' => [
-                'id',
-                'price',
-                'sku',
-                'stock',
-                'width',
-                'height',
-                'length',
-                'weight',
-                'images' => [
-                    [
-                        'id',
-                        'urls',
-                        'owner_id',
-                        'type_resource',
+                [
+                    'id',
+                    'price',
+                    'sku',
+                    'stock',
+                    'width',
+                    'height',
+                    'length',
+                    'weight',
+                    'images' => [
+                        [
+                            'id',
+                            'urls',
+                            'owner_id',
+                            'type_resource',
+                        ],
                     ],
-                ],
+                ]
             ]
         ])->assertJson([
             'data' => [
-                'price' => $price,
-                'stock' => $stock,
-                'width' => $width,
-                'height' => $height,
-                'length' => $length,
-                'weight' => $weight,
+                [
+                    'price' => $price,
+                    'stock' => $stock,
+                    'width' => $width,
+                    'height' => $height,
+                    'length' => $length,
+                    'weight' => $weight,
+                ]
             ]
         ]);
     }
@@ -104,32 +107,33 @@ class StoreProductProductStockTest extends ApiTestCase
             ->typeService()
             ->create();
         $product->productAttributeOptions()->sync([1, 2]);
-        $combination1 = $product->productStocks()->create([
-            'status_id' => 1,
-            'stock' => 10,
-            'price' => 100000.12,
-            'sku' => 'prod1',
-        ]);
-        $combination1->productAttributeOptions()->sync([2]);
 
         $price = 100000.12;
 
         $response = $this->json('POST', route(
-            'api.v1.products.product_stocks.store',
+            'api.v1.products.stocks.store',
             [$product]
         ), [
-            'price' => $price,
-            'product_attribute_options' => [1],
+            'stocks' => [
+                [
+                    'price' => $price,
+                    'product_attribute_options' => [1],
+                ]
+            ]
         ]);
 
         $response->assertStatus(201)->assertJsonStructure([
             'data' => [
-                'id',
-                'price',
+                [
+                    'id',
+                    'price',
+                ]
             ]
         ])->assertJson([
             'data' => [
-                'price' => $price,
+                [
+                    'price' => $price,
+                ]
             ]
         ]);
     }

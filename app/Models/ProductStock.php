@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use App\Http\Resources\ProductStockResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -61,15 +62,58 @@ class ProductStock extends Model
             ->where('type_resource', self::PRODUCT_STOCK_IMAGE);
     }
 
-    public function setCreate($attributes, $productType)
+    public function scopeWithEagerLoading(Builder $query, array $includes)
+    {
+        if (in_array('status', $includes)) {
+            $query->with(['status']);
+        }
+
+        if (in_array('product', $includes)) {
+            $query->with(['product']);
+        }
+
+        if (in_array('images', $includes)) {
+            $query->with(['images']);
+        }
+
+        if (in_array('product_attribute_options', $includes)) {
+            $query->with(['productAttributeOptions.productAttribute']);
+        }
+
+        return $query;
+    }
+
+    public function loadEagerLoadIncludes(array $includes)
+    {
+        if (in_array('status', $includes)) {
+            $this->load(['status']);
+        }
+
+        if (in_array('product', $includes)) {
+            $this->load(['product']);
+        }
+
+        if (in_array('images', $includes)) {
+            $this->load(['images']);
+        }
+
+        if (in_array('product_attribute_options', $includes)) {
+            $this->load(['productAttributeOptions.productAttribute']);
+        }
+
+        return $this;
+    }
+
+    public function setCreate($attributes, $productId, $productType)
     {
         $data['status_id'] = Status::enabled()->value('id');
+        $data['product_id'] = $productId;
         $data['price'] = $attributes['price'];
         $data['product_attribute_options'] = $attributes['product_attribute_options'];
-        $attributes['sku']
+        isset($attributes['sku'])
             ? $data['sku'] = $attributes['sku']
             : $data['sku'] = Str::random(10);
-        !$attributes['images'] ?: $data['images'] = $attributes['images'];
+        !isset($attributes['images']) ?: $data['images'] = $attributes['images'];
 
         if ($productType === Product::PRODUCT_TYPE) {
             $data['stock'] = $attributes['stock'];
@@ -105,27 +149,6 @@ class ProductStock extends Model
             $this->status_id = Status::enabled()->value('id');
         } else if ($this->status_id === Status::enabled()->value('id')) {
             $this->status_id = Status::disabled()->value('id');
-        }
-
-        return $this;
-    }
-
-    public function loadEagerLoadIncludes(array $includes)
-    {
-        if (in_array('status', $includes)) {
-            $this->load(['status']);
-        }
-
-        if (in_array('product', $includes)) {
-            $this->load(['product']);
-        }
-
-        if (in_array('images', $includes)) {
-            $this->load(['images']);
-        }
-
-        if (in_array('product_attribute_options', $includes)) {
-            $this->load(['productAttributeOptions.productAttribute']);
         }
 
         return $this;

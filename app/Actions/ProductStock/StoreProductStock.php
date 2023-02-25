@@ -2,7 +2,6 @@
 
 namespace App\Actions\ProductStock;
 
-use App\Models\Product;
 use App\Models\ProductStock;
 
 class StoreProductStock
@@ -17,19 +16,26 @@ class StoreProductStock
     /**
      * Handle the incoming action.
      */
-    public function __invoke(Product $product, array $fields)
+    public function __invoke(array $fields, int $productId, string $productType)
     {
         try {
-            $this->productStock = $product
-                ->productStocks()
-                ->create($fields);
+            $productStockFields = $this->productStock->setCreate(
+                $fields,
+                $productId,
+                $productType
+            );
+
+            $this->productStock = $this->productStock->create($productStockFields);
 
             $this->productStock
                 ->productAttributeOptions()
-                ->sync($fields['product_attribute_options']);
+                ->sync($productStockFields['product_attribute_options']);
 
             if (array_key_exists('images', $fields) && count($fields['images'])) {
-                app(SyncProductStockImages::class)($this->productStock, $fields['images']);
+                app(SyncProductStockImages::class)(
+                    $this->productStock,
+                    $productStockFields['images']
+                );
             }
 
             return $this->productStock;

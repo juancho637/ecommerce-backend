@@ -326,6 +326,14 @@ class Product extends Model
         return $data;
     }
 
+
+    public function setCreateProductStockStep($attributes)
+    {
+        return [
+            'stocks' => $attributes['stocks']
+        ];
+    }
+
     public function setFinish($attributes)
     {
         $data['specifications'] = $attributes['specifications'];
