@@ -128,8 +128,7 @@ class ProductAttributeProductAttributeOptionIndexController extends ApiControlle
     {
         $includes = explode(',', $request->get('include', ''));
 
-        $this->productAttributeOptions = $productAttribute->productAttributeOptions
-            ->toQuery()
+        $this->productAttributeOptions = $productAttribute->productAttributeOptions()
             ->withEagerIncludes($includes)
             ->get();
 
