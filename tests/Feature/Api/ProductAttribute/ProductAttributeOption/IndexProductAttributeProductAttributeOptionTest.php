@@ -45,4 +45,22 @@ class IndexProductAttributeProductAttributeOptionTest extends TestCase
             ]
         ]);
     }
+
+    public function testGetEmptyProductAttributeOptionsByProductAttribute()
+    {
+        $user = User::factory()->roleAdmin()->create();
+        Sanctum::actingAs($user, ['*']);
+
+        $productAttribute = ProductAttribute::factory()->create();
+
+        $response = $this->json('GET', route(
+            'api.v1.product_attributes.product_attribute_options.index',
+            [
+                $productAttribute,
+                'include' => 'status,product_attribute',
+            ]
+        ));
+
+        $response->assertStatus(200)->assertJsonStructure([]);
+    }
 }
