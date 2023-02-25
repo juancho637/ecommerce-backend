@@ -7,9 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\ProductStock\ProductAttributeOpcionsOfStockRule;
 
 /**
- * @OA\Schema(
- *     schema="UpdateProductStockDTO",
- * )
+ * @OA\Schema()
  */
 class UpdateProductStockRequest extends FormRequest
 {

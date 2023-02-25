@@ -101,10 +101,10 @@ class Category extends Model
 
     public function setUpdate($attributes)
     {
-        !$attributes['name'] ?: $data['name'] = $attributes['name'];
-        !$attributes['name'] ?: $data['slug'] = Str::slug($attributes['name'], '-');
-        !$attributes['parent_id'] ?: $data['parent_id'] = $attributes['parent_id'];
-        !$attributes['image'] ?: $data['image'] = $attributes['image'];
+        !isset($attributes['name']) ?: $data['name'] = $attributes['name'];
+        !isset($attributes['name']) ?: $data['slug'] = Str::slug($attributes['name'], '-');
+        !isset($attributes['parent_id']) ?: $data['parent_id'] = $attributes['parent_id'];
+        !isset($attributes['image']) ?: $data['image'] = $attributes['image'];
 
         return $data;
     }

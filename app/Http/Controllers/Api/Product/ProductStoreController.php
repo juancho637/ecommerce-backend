@@ -43,7 +43,7 @@ class ProductStoreController extends ApiController
      *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
      *                 type="object",
-     *                 ref="#/components/schemas/StoreProductGeneralDTO",
+     *                 ref="#/components/schemas/StoreProductGeneralRequest",
      *             )
      *         )
      *     ),

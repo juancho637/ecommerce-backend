@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * @OA\Schema(
- *     schema="FinishProductDTO",
  *     required={
  *         "specifications",
  *     },

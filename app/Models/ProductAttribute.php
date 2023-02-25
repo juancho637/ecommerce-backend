@@ -24,7 +24,7 @@ class ProductAttribute extends Model
     public $transformer = ProductAttributeResource::class;
 
     const BUTTON_TYPE = 'button';
-    const SELECT_TYPE = 'select';
+    const SELECT_TYPE = 'selector';
     const COLOR_TYPE = 'color';
 
     const TYPES = [

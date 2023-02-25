@@ -22,9 +22,9 @@ class UpdateProductAttributeOptionRequest extends FormRequest
     }
 
     /**
-     * @OA\Property(type="string", description="name", property="name", nullable=true),
-     * @OA\Property(type="number", description="product attribute id assigned", property="product_attribute_id", nullable=true),
-     * @OA\Property(type="string", description="option (required if attribute type is color)", property="option", nullable=true),
+     * @OA\Property(property="name", type="string"),
+     * @OA\Property(property="product_attribute_id", type="number"),
+     * @OA\Property(property="option", type="string"),
      */
     public function rules()
     {
