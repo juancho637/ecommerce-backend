@@ -49,9 +49,9 @@ class ProductResource extends JsonResource
      *     @OA\Items(ref="#/components/schemas/Resource")
      * ),
      * @OA\Property(
-     *     property="productSpecifications",
+     *     property="stock_images",
      *     type="array", 
-     *     @OA\Items(ref="#/components/schemas/ProductSpecification")
+     *     @OA\Items(ref="#/components/schemas/Resource")
      * ),
      * @OA\Property(
      *     property="tags",
@@ -59,12 +59,12 @@ class ProductResource extends JsonResource
      *     @OA\Items(ref="#/components/schemas/Tag")
      * ),
      * @OA\Property(
-     *     property="productAttributeOptions",
+     *     property="product_attribute_options",
      *     type="array", 
      *     @OA\Items(ref="#/components/schemas/ProductAttributeOption")
      * ),
      * @OA\Property(
-     *     property="productStocks",
+     *     property="product_stocks",
      *     type="array", 
      *     @OA\Items(ref="#/components/schemas/ProductStock")
      * ),

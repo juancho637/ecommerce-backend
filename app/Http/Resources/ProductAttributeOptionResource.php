@@ -19,7 +19,7 @@ class ProductAttributeOptionResource extends JsonResource
      * @OA\Property(type="string", title="option", default="option", description="option", property="option"),
      * 
      * @OA\Property(property="status", ref="#/components/schemas/Status"),
-     * @OA\Property(property="productAttribute", ref="#/components/schemas/ProductAttribute"),
+     * @OA\Property(property="product_attribute", ref="#/components/schemas/ProductAttribute"),
      */
     public function toArray($request)
     {
