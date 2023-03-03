@@ -39,6 +39,39 @@ class ShowProductTest extends TestCase
         ]);
     }
 
+    public function testGetOneProductWithRelationships()
+    {
+        $product = Product::factory()
+            ->isVariable()
+            ->typeProduct()
+            ->create();
+        $product->productAttributeOptions()->sync([1, 2, 3, 4]);
+        $combination1 = $product->productStocks()->create([
+            'status_id' => 1,
+            'stock' => 10,
+            'price' => 100000.12,
+            'sku' => 'prod1',
+        ]);
+        $combination1->productAttributeOptions()->sync([1, 3]);
+
+        $response = $this->json('GET', route('api.v1.products.show', [
+            $product,
+            'include' => 'product_stocks,product_attribute_options,stock_images'
+        ]));
+
+        dd($response->decodeResponseJson());
+
+        $response->assertStatus(200)->assertJson([
+            'data' => [
+                'id' => $product->id,
+                'name' => $product->name,
+                'slug' => $product->slug,
+                'short_description' => $product->short_description,
+                'description' => $product->description,
+            ]
+        ]);
+    }
+
     public function testGetOneProductWithImages()
     {
         $product = Product::all()->random();

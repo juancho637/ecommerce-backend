@@ -22,7 +22,7 @@ class UserResource extends JsonResource
      * @OA\Property(property="status", ref="#/components/schemas/Status"),
      * 
      * @OA\Property(property="roles", type="array", @OA\Items(ref="#/components/schemas/Role")),
-     * @OA\Property(property="socialNetworks", type="array", @OA\Items(ref="#/components/schemas/SocialNetwork")),
+     * @OA\Property(property="social_networks", type="array", @OA\Items(ref="#/components/schemas/SocialNetwork")),
      */
     public function toArray($request)
     {
@@ -42,7 +42,7 @@ class UserResource extends JsonResource
         }
 
         if (!$this->whenLoaded('socialNetworks') instanceof MissingValue) {
-            $resource['socialNetworks'] = SocialNetworkResource::collection($this->socialNetworks);
+            $resource['social_networks'] = SocialNetworkResource::collection($this->socialNetworks);
         }
 
         return $resource;
