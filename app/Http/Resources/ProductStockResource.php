@@ -30,7 +30,7 @@ class ProductStockResource extends JsonResource
      * @OA\Property(property="status", ref="#/components/schemas/Status"),
      * @OA\Property(property="product", ref="#/components/schemas/Product"),
      * @OA\Property(
-     *     property="productAttributeOptions",
+     *     property="product_attribute_options",
      *     type="array",
      *     @OA\Items(ref="#/components/schemas/ProductAttributeOption")
      * ),
