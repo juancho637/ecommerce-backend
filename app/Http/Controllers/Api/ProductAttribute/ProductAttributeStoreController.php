@@ -36,6 +36,15 @@ class ProductAttributeStoreController extends ApiController
      *             type="string"
      *         )
      *     ),
+     *     @OA\Parameter(
+     *         name="lang",
+     *         description="Code of language",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
      *     @OA\RequestBody(
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",

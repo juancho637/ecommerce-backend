@@ -28,6 +28,24 @@ class UserUpdateController extends ApiController
      *     tags={"Users"},
      *     security={ {"sanctum": {}} },
      *     @OA\Parameter(
+     *         name="include",
+     *         description="Relationships of resource",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="lang",
+     *         description="Code of language",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
      *         name="user",
      *         description="Id of user",
      *         required=true,

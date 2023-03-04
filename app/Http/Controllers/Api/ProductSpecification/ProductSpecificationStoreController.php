@@ -27,6 +27,15 @@ class ProductSpecificationStoreController extends ApiController
      *     operationId="saveProductSpecification",
      *     tags={"Product specifications"},
      *     security={ {"sanctum": {}} },
+     *     @OA\Parameter(
+     *         name="lang",
+     *         description="Code of language",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
      *     @OA\RequestBody(
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
