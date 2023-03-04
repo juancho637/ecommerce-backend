@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Api\Product;
 
 use App\Models\Product;
 use App\Models\ProductStock;
+use Illuminate\Http\Response;
 use App\Http\Controllers\Api\ApiController;
 use App\Actions\Product\StoreProductStockStep;
 use App\Http\Requests\Api\Product\StoreProductStockRequest;
-use Illuminate\Http\Response;
 
 class ProductStockStoreController extends ApiController
 {

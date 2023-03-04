@@ -10,7 +10,6 @@ use App\Rules\ProductStock\ProductAttributeOpcionsOfStockRule;
 
 /**
  * @OA\Schema(
- *     schema="StoreProductStockDTO",
  *     required={
  *         "stocks",
  *     },
@@ -37,7 +36,7 @@ class StoreProductStockRequest extends FormRequest
      *         required={
      *             "price",
      *             "product_attribute_options",
-     *         }
+     *         },
      *         @OA\Property(property="price", type="number"),
      *         @OA\Property(
      *             property="product_attribute_options",
