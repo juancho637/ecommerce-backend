@@ -17,7 +17,7 @@ class IndexStateTest extends TestCase
         $this->seed();
     }
 
-    public function testGetAllCities()
+    public function testGetAllStates()
     {
         $response = $this->json('GET', route('api.v1.states.index'));
 

@@ -96,7 +96,7 @@ class Handler extends ExceptionHandler
      */
     protected function authorizationException()
     {
-        return $this->errorResponse(__("Unauthorized"), Response::HTTP_FORBIDDEN);
+        return $this->errorResponse(__("http-statuses.403"), Response::HTTP_FORBIDDEN);
     }
 
     /**
@@ -108,7 +108,7 @@ class Handler extends ExceptionHandler
      */
     protected function authenticationException($exception)
     {
-        return $this->errorResponse($exception->getMessage(), Response::HTTP_UNAUTHORIZED);
+        return $this->errorResponse(__("http-statuses.401"), Response::HTTP_UNAUTHORIZED);
     }
 
     /**
@@ -120,7 +120,7 @@ class Handler extends ExceptionHandler
      */
     protected function modelNotFoundException()
     {
-        return $this->errorResponse(__("Model not found"), Response::HTTP_NOT_FOUND);
+        return $this->errorResponse(__("http-statuses.404"), Response::HTTP_NOT_FOUND);
     }
 
     /**
@@ -132,7 +132,7 @@ class Handler extends ExceptionHandler
      */
     protected function notFoundHttpException()
     {
-        return $this->errorResponse(__("Not found"), Response::HTTP_NOT_FOUND);
+        return $this->errorResponse(__("http-statuses.404"), Response::HTTP_NOT_FOUND);
     }
 
     /**
@@ -144,7 +144,7 @@ class Handler extends ExceptionHandler
      */
     protected function methodNotAllowedHttpException()
     {
-        return $this->errorResponse(__("Method not allowed"), Response::HTTP_METHOD_NOT_ALLOWED);
+        return $this->errorResponse(__("http-statuses.405"), Response::HTTP_METHOD_NOT_ALLOWED);
     }
 
     /**

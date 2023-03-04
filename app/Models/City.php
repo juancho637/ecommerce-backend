@@ -55,6 +55,20 @@ class City extends Model
             return $query->where('name', Status::ENABLED);
         });
     }
+    public function scopeWithEagerLoading(Builder $query, array $includes)
+    {
+        if (in_array('status', $includes)) {
+            $query->with('status');
+        }
+
+        if (in_array('state', $includes)) {
+            $query->with('state');
+        }
+
+        if (in_array('state.country', $includes)) {
+            $query->with('state.country');
+        }
+    }
 
     public function loadEagerLoadIncludes(array $includes)
     {
@@ -66,6 +80,10 @@ class City extends Model
 
         if (in_array('state', $includes)) {
             $this->load(['state']);
+        }
+
+        if (in_array('state.country', $includes)) {
+            $this->load(['state.country']);
         }
 
         return $this;
