@@ -103,34 +103,20 @@ class CityIndexController extends ApiController
     {
         $includes = explode(',', $request->get('include', ''));
 
-        $cities = $this->city;
-
         if ($request->search) {
-            $cities = $cities->search($request->search)
+            $this->city = $this->city->search($request->search)
                 ->query(function (Builder $query) use ($includes) {
-                    $query->byRole();
-
-                    $this->eagerLoadIncludes($query, $includes);
+                    $query->byRole()
+                        ->withEagerLoading($includes);
                 })
                 ->get();
         } else {
-            $cities = $cities->query()->byRole();
-            $cities = $this->eagerLoadIncludes($cities, $includes)->get();
+            $this->city = $this->city->query()
+                ->byRole()
+                ->withEagerLoading($includes)
+                ->get();
         }
 
-        return $this->showAll($cities);
-    }
-
-    protected function eagerLoadIncludes(Builder $query, array $includes)
-    {
-        if (in_array('status', $includes)) {
-            $query->with('status');
-        }
-
-        if (in_array('state', $includes)) {
-            $query->with('state');
-        }
-
-        return $query;
+        return $this->showAll($this->city);
     }
 }

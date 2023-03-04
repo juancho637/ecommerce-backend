@@ -43,7 +43,7 @@ trait ApiResponse
 
         $transformer = $collection->first()->transformer;
 
-        // $collection = $this->filterData($collection, $transformer);
+        $collection = $this->filterData($collection, $transformer);
         $collection = $this->sortData($collection, $transformer);
         $collection = $this->paginateData($collection);
         $collection = $this->cacheResponse($collection);
@@ -96,20 +96,22 @@ trait ApiResponse
                     $collection = $collection->where($attribute, $value);
                 } elseif ($countValues === 2) {
                     switch ($values[0]) {
-                        case '>':
+                        case 'morethan':
                             $collection = $collection->where($attribute, '>', $values[1]);
                             break;
-                        case '<':
+                        case 'lessthan':
                             $collection = $collection->where($attribute, '<', $values[1]);
                             break;
-                        case '>=':
+                        case 'moreorequalthan':
                             $collection = $collection->where($attribute, '>=', $values[1]);
                             break;
-                        case '<=':
+                        case 'lessorequalthan':
                             $collection = $collection->where($attribute, '<=', $values[1]);
                             break;
-                        case '!=':
+                        case 'different':
                             $collection = $collection->where($attribute, '<>', $values[1]);
+                        case 'between':
+                            $collection = $collection->whereBetween($attribute, explode(',', $values[1]));
                             break;
                         case 'in':
                             $collection = $collection->whereIn($query, explode(',', $values[1]));
