@@ -24,6 +24,7 @@ class UserUpdateController extends ApiController
      * @OA\Put(
      *     path="/api/v1/users/{user}",
      *     summary="Update user",
+     *     description="<strong>Method:</strong> updateUser<br/><strong>Includes:</strong> status, roles, social_networks",
      *     operationId="updateUser",
      *     tags={"Users"},
      *     security={ {"sanctum": {}} },
@@ -115,8 +116,11 @@ class UserUpdateController extends ApiController
             DB::commit();
 
             return $this->showOne(
-                $this->user
-                    ->loadEagerLoadIncludes($includes)
+                $this->user->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         } catch (\Exception $exception) {
             DB::rollBack();

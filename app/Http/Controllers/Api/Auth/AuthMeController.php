@@ -16,9 +16,19 @@ class AuthMeController extends ApiController
      * @OA\Get(
      *     path="/api/v1/auth/me",
      *     summary="Show authenticated user info",
+     *     description="<strong>Method:</strong> getAuthUser<br/><strong>Includes:</strong> status, roles, social_networks",
      *     operationId="getAuthUser",
      *     tags={"Auth"},
      *     security={ {"sanctum": {}} },
+     *     @OA\Parameter(
+     *         name="include",
+     *         description="Relationships of resource",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
      *     @OA\Parameter(
      *         name="lang",
      *         description="Code of language",
@@ -47,7 +57,11 @@ class AuthMeController extends ApiController
         $user = auth('sanctum')->user();
 
         return $this->showOne(
-            $user->loadEagerLoadIncludes($includes)
+            $user->scopeWithEagerLoading(
+                query: null,
+                includes: $includes,
+                type: 'load'
+            )
         );
     }
 }

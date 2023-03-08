@@ -107,7 +107,11 @@ class ProductDestroyController extends ApiController
             DB::commit();
 
             return $this->showOne(
-                $this->product->loadEagerLoadIncludes($includes)
+                $this->product->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         } catch (\Exception $exception) {
             DB::rollBack();

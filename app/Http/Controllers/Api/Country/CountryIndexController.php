@@ -24,6 +24,7 @@ class CountryIndexController extends ApiController
      * @OA\Get(
      *     path="/api/v1/countries",
      *     summary="List of countries",
+     *     description="<strong>Method:</strong> getAllCountries<br/><strong>Includes:</strong> status",
      *     operationId="getAllCountries",
      *     tags={"Countries"},
      *     @OA\Parameter(
@@ -102,30 +103,21 @@ class CountryIndexController extends ApiController
     public function __invoke(Request $request)
     {
         $includes = explode(',', $request->get('include', ''));
-        $countries = $this->country;
 
         if ($request->search) {
-            $countries = $countries->search($request->search)
+            $this->country = $this->country->search($request->search)
                 ->query(function (Builder $query) use ($includes) {
-                    $query->byRole();
-
-                    $this->eagerLoadIncludes($query, $includes);
+                    $query->byRole()
+                        ->withEagerLoading($includes);
                 })
                 ->get();
         } else {
-            $countries = $countries->query()->byRole();
-            $countries = $this->eagerLoadIncludes($countries, $includes)->get();
+            $this->country = $this->country->query()
+                ->byRole()
+                ->withEagerLoading($includes)
+                ->get();
         }
 
-        return $this->showAll($countries);
-    }
-
-    protected function eagerLoadIncludes(Builder $query, array $includes)
-    {
-        if (in_array('status', $includes)) {
-            $query->with('status');
-        }
-
-        return $query;
+        return $this->showAll($this->country);
     }
 }

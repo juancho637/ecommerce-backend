@@ -73,6 +73,33 @@ class Category extends Model
         });
     }
 
+    public function scopeIncludeHasChildren(Builder $query, bool $includeHasChildren)
+    {
+        if ($includeHasChildren) {
+            $query->whereNull('parent_id');
+        }
+    }
+
+    public function scopeWithEagerLoading(?Builder $query, array $includes, string $type = 'with')
+    {
+        // $user = auth('sanctum')->user();
+        $typeBuilder = $type === 'with' ? $query : $this;
+
+        if (in_array('status', $includes)) {
+            $typeBuilder->$type(['status']);
+        }
+
+        if (in_array('image', $includes)) {
+            $typeBuilder->$type('image');
+        }
+
+        if (in_array('children', $includes)) {
+            $typeBuilder->$type('children');
+        }
+
+        return $typeBuilder;
+    }
+
     public function validByRole()
     {
         $user = auth('sanctum')->user();
@@ -115,17 +142,6 @@ class Category extends Model
             $this->status_id = Status::enabled()->value('id');
         } else if ($this->status_id === Status::enabled()->value('id')) {
             $this->status_id = Status::disabled()->value('id');
-        }
-
-        return $this;
-    }
-
-    public function loadEagerLoadIncludes(array $includes)
-    {
-        $this->load(['image']);
-
-        if (in_array('status', $includes)) {
-            $this->load(['status']);
         }
 
         return $this;

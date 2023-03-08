@@ -45,6 +45,22 @@ class ProductAttributeOption extends Model
         return $this->belongsToMany(ProductStock::class, 'prod_attr_opt_prod_stk');
     }
 
+    public function scopeWithEagerLoading(?Builder $query, array $includes, string $type = 'with')
+    {
+        // $user = auth('sanctum')->user();
+        $typeBuilder = $type === 'with' ? $query : $this;
+
+        if (in_array('status', $includes)) {
+            $typeBuilder->$type(['status']);
+        }
+
+        if (in_array('product_attribute', $includes)) {
+            $typeBuilder->$type(['productAttribute']);
+        }
+
+        return $typeBuilder;
+    }
+
     public function setCreate($attributes)
     {
         $data['name'] = $attributes['name'];
@@ -70,32 +86,6 @@ class ProductAttributeOption extends Model
             $this->status_id = Status::enabled()->value('id');
         } else if ($this->status_id === Status::enabled()->value('id')) {
             $this->status_id = Status::disabled()->value('id');
-        }
-
-        return $this;
-    }
-
-    public function scopeWithEagerIncludes(Builder $query, array $includes)
-    {
-        if (in_array('status', $includes)) {
-            $query->with(['status']);
-        }
-
-        if (in_array('product_attribute', $includes)) {
-            $query->with(['productAttribute']);
-        }
-
-        return $query;
-    }
-
-    public function loadEagerLoadIncludes(array $includes)
-    {
-        if (in_array('status', $includes)) {
-            $this->load(['status']);
-        }
-
-        if (in_array('product_attribute', $includes)) {
-            $this->load(['productAttribute']);
         }
 
         return $this;

@@ -62,6 +62,7 @@ class Product extends Model
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
+            'sku' => $this->sku,
             'short_description' => $this->short_description,
             'description' => $this->description,
             'options' => $this->options,
@@ -126,27 +127,28 @@ class Product extends Model
         });
     }
 
-    public function scopeWithEagerLoading(Builder $query, array $includes)
+    public function scopeWithEagerLoading(?Builder $query, array $includes, string $type = 'with')
     {
         $user = auth('sanctum')->user();
+        $typeBuilder = $type === 'with' ? $query : $this;
 
         if (in_array('status', $includes)) {
-            $query->with('status');
+            $typeBuilder->$type('status');
         }
 
         if (in_array('images', $includes)) {
-            $query->with('images');
+            $typeBuilder->$type('images');
         }
 
         if (in_array('stock_images', $includes)) {
-            $this->with(['stockImages']);
+            $typeBuilder->$type(['stockImages']);
         }
 
         if (in_array('category', $includes)) {
             if ($user && $user->hasRole(Role::ADMIN)) {
-                $query->with(['category']);
+                $typeBuilder->$type(['category']);
             } else {
-                $query->with(['category' => function ($query) {
+                $typeBuilder->$type(['category' => function ($query) {
                     $query->whereHas('status', function ($query) {
                         $query->where('name', Status::ENABLED);
                     });
@@ -156,9 +158,9 @@ class Product extends Model
 
         if (in_array('tags', $includes)) {
             if ($user && $user->hasRole(Role::ADMIN)) {
-                $query->with(['tags']);
+                $typeBuilder->$type(['tags']);
             } else {
-                $query->with(['tags' => function ($query) {
+                $typeBuilder->$type(['tags' => function ($query) {
                     $query->whereHas('status', function ($query) {
                         $query->where('name', Status::ENABLED);
                     });
@@ -168,9 +170,9 @@ class Product extends Model
 
         if (in_array('product_attribute_options', $includes)) {
             if ($user && $user->hasRole(Role::ADMIN)) {
-                $query->with(['productAttributeOptions.productAttribute']);
+                $typeBuilder->$type(['productAttributeOptions.productAttribute']);
             } else {
-                $query->with([
+                $typeBuilder->$type([
                     'productAttributeOptions.productAttribute' => function ($query) {
                         $query->whereHas('status', function ($query) {
                             $query->where('name', Status::ENABLED);
@@ -182,9 +184,9 @@ class Product extends Model
 
         if (in_array('product_stocks', $includes)) {
             if ($user && $user->hasRole(Role::ADMIN)) {
-                $query->with(['productStocks']);
+                $typeBuilder->$type(['productStocks']);
             } else {
-                $query->with([
+                $typeBuilder->$type([
                     'productStocks' => function ($query) {
                         $query->whereHas('status', function ($query) {
                             $query->where('name', Status::ENABLED);
@@ -194,82 +196,7 @@ class Product extends Model
             }
         }
 
-        return $query;
-    }
-
-    public function loadEagerLoadIncludes(array $includes)
-    {
-        $user = auth('sanctum')->user();
-
-        if (in_array('status', $includes)) {
-            $this->load(['status']);
-        }
-
-        if (in_array('images', $includes)) {
-            $this->load(['images']);
-        }
-
-        if (in_array('stock_images', $includes)) {
-            $this->load(['stockImages']);
-        }
-
-        if (in_array('specifications', $includes)) {
-            $this->load(['productSpecifications']);
-        }
-
-        if (in_array('category', $includes)) {
-            if ($user && $user->hasRole(Role::ADMIN)) {
-                $this->load(['category']);
-            } else {
-                $this->load(['category' => function ($query) {
-                    $query->whereHas('status', function ($query) {
-                        $query->where('name', Status::ENABLED);
-                    });
-                }]);
-            }
-        }
-
-        if (in_array('tags', $includes)) {
-            if ($user && $user->hasRole(Role::ADMIN)) {
-                $this->load(['tags']);
-            } else {
-                $this->load(['tags' => function ($query) {
-                    $query->whereHas('status', function ($query) {
-                        $query->where('name', Status::ENABLED);
-                    });
-                }]);
-            }
-        }
-
-        if (in_array('product_attribute_options', $includes)) {
-            if ($user && $user->hasRole(Role::ADMIN)) {
-                $this->load(['productAttributeOptions.productAttribute']);
-            } else {
-                $this->load([
-                    'productAttributeOptions.productAttribute' => function ($query) {
-                        $query->whereHas('status', function ($query) {
-                            $query->where('name', Status::ENABLED);
-                        });
-                    }
-                ]);
-            }
-        }
-
-        if (in_array('product_stocks', $includes)) {
-            if ($user && $user->hasRole(Role::ADMIN)) {
-                $this->load(['productStocks.productAttributeOptions']);
-            } else {
-                $this->load([
-                    'productStocks.productAttributeOptions' => function ($query) {
-                        $query->whereHas('status', function ($query) {
-                            $query->where('name', Status::ENABLED);
-                        });
-                    }
-                ]);
-            }
-        }
-
-        return $this;
+        return $typeBuilder;
     }
 
     public function validByRole()

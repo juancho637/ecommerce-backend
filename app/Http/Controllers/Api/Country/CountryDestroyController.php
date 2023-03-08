@@ -24,6 +24,7 @@ class CountryDestroyController extends ApiController
      * @OA\Delete(
      *     path="/api/v1/countries/{country}",
      *     summary="Delete country",
+     *     description="<strong>Method:</strong> deleteCountry<br/><strong>Includes:</strong> status",
      *     operationId="deleteCountry",
      *     tags={"Countries"},
      *     security={ {"sanctum": {}} },
@@ -106,7 +107,11 @@ class CountryDestroyController extends ApiController
             DB::commit();
 
             return $this->showOne(
-                $this->country->loadEagerLoadIncludes($includes)
+                $this->country->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         } catch (\Exception $exception) {
             DB::rollBack();

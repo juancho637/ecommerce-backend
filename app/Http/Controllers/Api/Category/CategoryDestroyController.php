@@ -24,6 +24,7 @@ class CategoryDestroyController extends ApiController
      * @OA\Delete(
      *     path="/api/v1/categories/{category}",
      *     summary="Delete category",
+     *     description="<strong>Method:</strong> deleteCategory<br/><strong>Includes:</strong> status, image, children",
      *     operationId="deleteCategory",
      *     tags={"Categories"},
      *     security={ {"sanctum": {}} },
@@ -106,7 +107,11 @@ class CategoryDestroyController extends ApiController
             DB::commit();
 
             return $this->showOne(
-                $this->category->loadEagerLoadIncludes($includes)
+                $this->category->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         } catch (\Exception $exception) {
             DB::rollBack();

@@ -24,6 +24,7 @@ class ProductAttributeUpdateController extends ApiController
      * @OA\Put(
      *     path="/api/v1/product_attributes/{productAttribute}",
      *     summary="Update product attribute",
+     *     description="<strong>Method:</strong> updateProductAttribute<br/><strong>Includes:</strong> status",
      *     operationId="updateProductAttribute",
      *     tags={"Product attributes"},
      *     security={ {"sanctum": {}} },
@@ -117,8 +118,11 @@ class ProductAttributeUpdateController extends ApiController
             DB::commit();
 
             return $this->showOne(
-                $this->productAttribute
-                    ->loadEagerLoadIncludes($includes)
+                $this->productAttribute->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         } catch (\Exception $exception) {
             DB::rollBack();

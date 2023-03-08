@@ -22,11 +22,13 @@ class ShowProductTest extends TestCase
         $this->seed();
     }
 
-    public function testGetOneProduct()
+    public function testGetOneProductOnly()
     {
         $product = Product::all()->random();
 
         $response = $this->json('GET', route('api.v1.products.show', [$product]));
+
+        // dd($response->decodeResponseJson());
 
         $response->assertStatus(200)->assertJson([
             'data' => [
@@ -59,7 +61,7 @@ class ShowProductTest extends TestCase
             'include' => 'product_stocks,product_attribute_options,stock_images'
         ]));
 
-        dd($response->decodeResponseJson());
+        // dd($response->decodeResponseJson());
 
         $response->assertStatus(200)->assertJson([
             'data' => [

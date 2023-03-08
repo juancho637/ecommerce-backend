@@ -24,6 +24,7 @@ class ProductAttributeOptionDestroyController extends ApiController
      * @OA\Delete(
      *     path="/api/v1/product_attribute_options/{productAttributeOption}",
      *     summary="Delete product attribute option",
+     *     description="<strong>Method:</strong> deleteProductAttributeOption<br/><strong>Includes:</strong> status, product_attribute",
      *     operationId="deleteProductAttributeOption",
      *     tags={"Product attribute options"},
      *     security={ {"sanctum": {}} },
@@ -97,7 +98,11 @@ class ProductAttributeOptionDestroyController extends ApiController
             DB::commit();
 
             return $this->showOne(
-                $this->productAttributeOption->loadEagerLoadIncludes($includes)
+                $this->productAttributeOption->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         } catch (\Exception $exception) {
             DB::rollBack();

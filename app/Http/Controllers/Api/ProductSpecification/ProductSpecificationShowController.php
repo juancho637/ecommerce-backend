@@ -19,6 +19,7 @@ class ProductSpecificationShowController extends ApiController
      * @OA\Get(
      *     path="/api/v1/product_specifications/{productSpecification}",
      *     summary="Show product specification by id",
+     *     description="<strong>Method:</strong> getProductSpecificationById<br/><strong>Includes:</strong> status, product",
      *     operationId="getProductSpecificationById",
      *     tags={"Product specifications"},
      *     security={ {"sanctum": {}} },
@@ -79,7 +80,11 @@ class ProductSpecificationShowController extends ApiController
         $includes = explode(',', $request->get('include', ''));
 
         return $this->showOne(
-            $productSpecification->loadEagerLoadIncludes($includes)
+            $productSpecification->scopeWithEagerLoading(
+                query: null,
+                includes: $includes,
+                type: 'load'
+            )
         );
     }
 }

@@ -20,6 +20,7 @@ class TagShowController extends ApiController
      * @OA\Get(
      *     path="/api/v1/tags/{tag}",
      *     summary="Show tag by id",
+     *     description="<strong>Method:</strong> getTagById<br/><strong>Includes:</strong> status",
      *     operationId="getTagById",
      *     tags={"Tags"},
      *     @OA\Parameter(
@@ -75,7 +76,11 @@ class TagShowController extends ApiController
 
         if ($tag->validByRole()) {
             return $this->showOne(
-                $tag->loadEagerLoadIncludes($includes)
+                $tag->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         }
 

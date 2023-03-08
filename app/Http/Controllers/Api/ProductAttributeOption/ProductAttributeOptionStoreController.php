@@ -24,6 +24,7 @@ class ProductAttributeOptionStoreController extends ApiController
      * @OA\Post(
      *     path="/api/v1/product_attribute_options",
      *     summary="Save product attribute option",
+     *     description="<strong>Method:</strong> saveProductAttributeOption<br/><strong>Includes:</strong> status, product_attribute",
      *     operationId="saveProductAttributeOption",
      *     tags={"Product attribute options"},
      *     security={ {"sanctum": {}} },
@@ -98,8 +99,11 @@ class ProductAttributeOptionStoreController extends ApiController
             DB::commit();
 
             return $this->showOne(
-                $this->productAttributeOption
-                    ->loadEagerLoadIncludes($includes)
+                $this->productAttributeOption->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         } catch (\Exception $exception) {
             DB::rollBack();

@@ -25,6 +25,7 @@ class CategoryUpdateController extends ApiController
      * @OA\Put(
      *     path="/api/v1/categories/{category}",
      *     summary="Update category",
+     *     description="<strong>Method:</strong> updateCategory<br/><strong>Includes:</strong> status, image, children",
      *     operationId="updateCategory",
      *     tags={"Categories"},
      *     security={ {"sanctum": {}} },
@@ -118,7 +119,11 @@ class CategoryUpdateController extends ApiController
             DB::commit();
 
             return $this->showOne(
-                $this->category->loadEagerLoadIncludes($includes)
+                $this->category->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         } catch (\Exception $exception) {
             DB::rollBack();

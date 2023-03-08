@@ -24,6 +24,7 @@ class ProductSpecificationDestroyController extends ApiController
      * @OA\Delete(
      *     path="/api/v1/product_specifications/{productSpecification}",
      *     summary="Delete product specification",
+     *     description="<strong>Method:</strong> deleteProductSpecification<br/><strong>Includes:</strong> status, product",
      *     operationId="deleteProductSpecification",
      *     tags={"Product specifications"},
      *     security={ {"sanctum": {}} },
@@ -97,7 +98,11 @@ class ProductSpecificationDestroyController extends ApiController
             DB::commit();
 
             return $this->showOne(
-                $this->productSpecification->loadEagerLoadIncludes($includes)
+                $this->productSpecification->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         } catch (\Exception $exception) {
             DB::rollBack();

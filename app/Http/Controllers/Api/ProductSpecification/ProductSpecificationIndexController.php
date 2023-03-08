@@ -24,6 +24,7 @@ class ProductSpecificationIndexController extends ApiController
      * @OA\Get(
      *     path="/api/v1/product_specifications",
      *     summary="List of product specifications",
+     *     description="<strong>Method:</strong> getAllProductSpecification<br/><strong>Includes:</strong> status, product",
      *     operationId="getAllProductSpecification",
      *     tags={"Product specifications"},
      *     security={ {"sanctum": {}} },
@@ -68,22 +69,11 @@ class ProductSpecificationIndexController extends ApiController
     {
         $includes = explode(',', $request->get('include', ''));
 
-        $productSpecifications = $this->productSpecification->query();
-        $productSpecifications = $this->eagerLoadIncludes($productSpecifications, $includes)->get();
+        $this->productSpecification = $this->productSpecification
+            ->query()
+            ->withEagerLoading($includes)
+            ->get();
 
-        return $this->showAll($productSpecifications);
-    }
-
-    protected function eagerLoadIncludes(Builder $query, array $includes)
-    {
-        if (in_array('status', $includes)) {
-            $query->with('status');
-        }
-
-        if (in_array('product', $includes)) {
-            $query->with('product');
-        }
-
-        return $query;
+        return $this->showAll($this->productSpecification);
     }
 }

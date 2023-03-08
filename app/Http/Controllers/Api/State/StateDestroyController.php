@@ -24,6 +24,7 @@ class StateDestroyController extends ApiController
      * @OA\Delete(
      *     path="/api/v1/states/{state}",
      *     summary="Delete state",
+     *     description="<strong>Method:</strong> deleteState<br/><strong>Includes:</strong> status, country",
      *     operationId="deleteState",
      *     tags={"States"},
      *     security={ {"sanctum": {}} },
@@ -106,7 +107,11 @@ class StateDestroyController extends ApiController
             DB::commit();
 
             return $this->showOne(
-                $this->state->loadEagerLoadIncludes($includes)
+                $this->state->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         } catch (\Exception $exception) {
             DB::rollBack();

@@ -18,6 +18,7 @@ class AuthProviderController extends ApiController
      * @OA\Post(
      *     path="/api/v1/auth/{provider}",
      *     summary="Sign in or sign up a user with social network",
+     *     description="<strong>Method:</strong> signInOrSignUpWithSocialNetwork",
      *     operationId="signInOrSignUpWithSocialNetwork",
      *     tags={"Auth"},
      *     @OA\Parameter(

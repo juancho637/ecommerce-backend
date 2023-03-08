@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use App\Http\Resources\ProductSpecificationResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -34,17 +35,20 @@ class ProductSpecification extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function loadEagerLoadIncludes(array $includes)
+    public function scopeWithEagerLoading(?Builder $query, array $includes, string $type = 'with')
     {
+        // $user = auth('sanctum')->user();
+        $typeBuilder = $type === 'with' ? $query : $this;
+
         if (in_array('status', $includes)) {
-            $this->load(['status']);
+            $typeBuilder->$type(['status']);
         }
 
         if (in_array('product', $includes)) {
-            $this->load(['product']);
+            $typeBuilder->$type(['product']);
         }
 
-        return $this;
+        return $typeBuilder;
     }
 
     public function setCreate($attributes)

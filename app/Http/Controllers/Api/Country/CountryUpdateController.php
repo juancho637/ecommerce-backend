@@ -24,6 +24,7 @@ class CountryUpdateController extends ApiController
      * @OA\Put(
      *     path="/api/v1/countries/{country}",
      *     summary="Update country",
+     *     description="<strong>Method:</strong> updateCountry<br/><strong>Includes:</strong> status",
      *     operationId="updateCountry",
      *     tags={"Countries"},
      *     security={ {"sanctum": {}} },
@@ -106,13 +107,21 @@ class CountryUpdateController extends ApiController
      */
     public function __invoke(UpdateCountryRequest $request, Country $country)
     {
+        $includes = explode(',', $request->get('include', ''));
+
         DB::beginTransaction();
         try {
             $this->country = $country->setUpdate($request);
             $this->country->save();
             DB::commit();
 
-            return $this->showOne($this->country);
+            return $this->showOne(
+                $this->country->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
+            );
         } catch (\Exception $exception) {
             DB::rollBack();
             throw new \Exception($exception->getMessage(), $exception->getCode());
