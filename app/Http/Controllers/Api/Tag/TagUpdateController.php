@@ -24,6 +24,7 @@ class TagUpdateController extends ApiController
      * @OA\Put(
      *     path="/api/v1/tags/{tag}",
      *     summary="Update tag",
+     *     description="<strong>Method:</strong> updateTag<br/><strong>Includes:</strong> status",
      *     operationId="updateTag",
      *     tags={"Tags"},
      *     security={ {"sanctum": {}} },
@@ -115,7 +116,11 @@ class TagUpdateController extends ApiController
             DB::commit();
 
             return $this->showOne(
-                $this->tag->loadEagerLoadIncludes($includes)
+                $this->tag->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         } catch (\Exception $exception) {
             DB::rollBack();

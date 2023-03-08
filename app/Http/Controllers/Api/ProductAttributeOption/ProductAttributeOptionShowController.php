@@ -19,6 +19,7 @@ class ProductAttributeOptionShowController extends ApiController
      * @OA\Get(
      *     path="/api/v1/product_attribute_options/{productAttributeOption}",
      *     summary="Show product attribute option by id",
+     *     description="<strong>Method:</strong> getProductAttributeOptionById<br/><strong>Includes:</strong> status, product_attribute",
      *     operationId="getProductAttributeOptionById",
      *     tags={"Product attribute options"},
      *     security={ {"sanctum": {}} },
@@ -79,7 +80,11 @@ class ProductAttributeOptionShowController extends ApiController
         $includes = explode(',', $request->get('include', ''));
 
         return $this->showOne(
-            $productAttributeOption->loadEagerLoadIncludes($includes)
+            $productAttributeOption->scopeWithEagerLoading(
+                query: null,
+                includes: $includes,
+                type: 'load'
+            )
         );
     }
 }

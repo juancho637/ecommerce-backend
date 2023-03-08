@@ -20,6 +20,7 @@ class CategoryIndexController extends ApiController
      * @OA\Get(
      *     path="/api/v1/categories",
      *     summary="List of categories",
+     *     description="<strong>Method:</strong> getAllCategories<br/><strong>Includes:</strong> status, image, children",
      *     operationId="getAllCategories",
      *     tags={"Categories"},
      *     @OA\Parameter(
@@ -98,44 +99,22 @@ class CategoryIndexController extends ApiController
     public function __invoke(Request $request)
     {
         $includes = explode(',', $request->get('include', ''));
-        $categories = $this->category;
 
         if ($request->search) {
-            $categories = $categories->search($request->search)
+            $this->category = $this->category->search($request->search)
                 ->query(function (Builder $query) use ($includes) {
-                    $query->byRole();
-
-                    $this->eagerLoadIncludes($query, $includes);
+                    $query->byRole()
+                        ->withEagerLoading($includes);
                 })
                 ->get();
         } else {
-            $categories = $categories->query()->byRole();
-
-            if (in_array('children', $includes)) {
-                $categories = $categories->whereNull('parent_id');
-            }
-
-            $categories = $this->eagerLoadIncludes($categories, $includes)
+            $this->category = $this->category->query()
+                ->byRole()
+                ->includeHasChildren(in_array('children', $includes))
+                ->withEagerLoading($includes)
                 ->get();
         }
 
-        return $this->showAll($categories);
-    }
-
-    protected function eagerLoadIncludes(Builder $query, array $includes)
-    {
-        if (in_array('status', $includes)) {
-            $query->with('status');
-        }
-
-        if (in_array('image', $includes)) {
-            $query->with('image');
-        }
-
-        if (in_array('children', $includes)) {
-            $query->with('children');
-        }
-
-        return $query;
+        return $this->showAll($this->category);
     }
 }

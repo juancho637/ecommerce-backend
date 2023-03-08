@@ -15,6 +15,7 @@ class AuthRegisterController extends ApiController
      * @OA\Post(
      *     path="/api/v1/auth/register",
      *     summary="Sign up a user",
+     *     description="<strong>Method:</strong> signUp",
      *     operationId="signUp",
      *     tags={"Auth"},
      *     @OA\Parameter(

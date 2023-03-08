@@ -24,6 +24,7 @@ class StateUpdateController extends ApiController
      * @OA\Put(
      *     path="/api/v1/states/{state}",
      *     summary="Update state",
+     *     description="<strong>Method:</strong> updateState<br/><strong>Includes:</strong> status, country",
      *     operationId="updateState",
      *     tags={"States"},
      *     security={ {"sanctum": {}} },
@@ -115,7 +116,11 @@ class StateUpdateController extends ApiController
             DB::commit();
 
             return $this->showOne(
-                $this->state->loadEagerLoadIncludes($includes)
+                $this->state->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         } catch (\Exception $exception) {
             DB::rollBack();

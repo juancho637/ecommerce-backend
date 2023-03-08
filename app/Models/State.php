@@ -61,19 +61,20 @@ class State extends Model
         });
     }
 
-    public function loadEagerLoadIncludes(array $includes)
+    public function scopeWithEagerLoading(?Builder $query, array $includes, string $type = 'with')
     {
-        $user = auth('sanctum')->user();
+        // $user = auth('sanctum')->user();
+        $typeBuilder = $type === 'with' ? $query : $this;
 
         if (in_array('status', $includes)) {
-            $this->load(['status']);
+            $typeBuilder->$type(['status']);
         }
 
         if (in_array('country', $includes)) {
-            $this->load(['country']);
+            $typeBuilder->$type(['country']);
         }
 
-        return $this;
+        return $typeBuilder;
     }
 
     public function validByRole()

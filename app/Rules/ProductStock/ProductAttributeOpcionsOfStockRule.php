@@ -43,7 +43,11 @@ class ProductAttributeOpcionsOfStockRule implements InvokableRule
             $countOfProductAttributes = count($productAttribute);
 
             if ($countOfProductAttributes !== count($value)) {
-                return $fail('The number of ' . $attribute . ' must be equal to the product attributes associated with the product');
+                return $fail(
+                    __('The number of :attribute must be equal to the product attributes associated with the product', [
+                        'attribute' => $attribute
+                    ])
+                );
             }
 
             $productAttributeIds = ProductAttributeOption::whereIn('id', $value)
@@ -55,13 +59,21 @@ class ProductAttributeOpcionsOfStockRule implements InvokableRule
                 count($productAttributeIds) !== count($value)
                 || count($productAttributeIds) !== count(array_flip($productAttributeIds))
             ) {
-                return $fail('The product attribute of ' . $attribute . ' must be different');
+                return $fail(
+                    __('The product attribute of :attribute must be different', [
+                        'attribute' => $attribute
+                    ])
+                );
             }
 
             $productAttributeOptionIds = $productAttributeOptions->pluck('id');
 
             if (count(array_intersect($value, $productAttributeOptionIds->toArray())) !== count($value)) {
-                return $fail('The ' . $attribute . ' must not be different to the product attribute options associated with the product');
+                return $fail(
+                    __('The :attribute must not be different to the product attribute options associated with the product', [
+                        'attribute' => $attribute
+                    ])
+                );
             }
 
             $isCombinationCreated = false;
@@ -77,7 +89,11 @@ class ProductAttributeOpcionsOfStockRule implements InvokableRule
             );
 
             if ($isCombinationCreated) {
-                return $fail('This combination of ' . $attribute . ' has already been created');
+                return $fail(
+                    __('This combination of :attribute has already been created', [
+                        'attribute' => $attribute
+                    ])
+                );
             }
         }
     }

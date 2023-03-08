@@ -24,6 +24,7 @@ class UserIndexController extends ApiController
      * @OA\Get(
      *     path="/api/v1/users",
      *     summary="List of users",
+     *     description="<strong>Method:</strong> getAllUser<br/><strong>Includes:</strong> status, roles, social_networks",
      *     operationId="getAllUser",
      *     tags={"Users"},
      *     security={ {"sanctum": {}} },
@@ -113,26 +114,11 @@ class UserIndexController extends ApiController
     {
         $includes = explode(',', $request->get('include', ''));
 
-        $users = $this->user->query();
-        $users = $this->eagerLoadIncludes($users, $includes)->get();
+        $this->user = $this->user
+            ->query()
+            ->withEagerLoading($includes)
+            ->get();
 
-        return $this->showAll($users);
-    }
-
-    protected function eagerLoadIncludes(Builder $query, array $includes)
-    {
-        if (in_array('status', $includes)) {
-            $query->with('status');
-        }
-
-        if (in_array('roles', $includes)) {
-            $query->with('roles');
-        }
-
-        if (in_array('socialNetworks', $includes)) {
-            $query->with('socialNetworks');
-        }
-
-        return $query;
+        return $this->showAll($this->user);
     }
 }

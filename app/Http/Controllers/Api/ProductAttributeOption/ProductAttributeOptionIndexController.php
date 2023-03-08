@@ -24,6 +24,7 @@ class ProductAttributeOptionIndexController extends ApiController
      * @OA\Get(
      *     path="/api/v1/product_attribute_options",
      *     summary="List of product attribute options",
+     *     description="<strong>Method:</strong> getAllProductAttributeOptions<br/><strong>Includes:</strong> status, product_attribute",
      *     operationId="getAllProductAttributeOptions",
      *     tags={"Product attribute options"},
      *     security={ {"sanctum": {}} },
@@ -68,22 +69,11 @@ class ProductAttributeOptionIndexController extends ApiController
     {
         $includes = explode(',', $request->get('include', ''));
 
-        $productAttributeOptions = $this->productAttributeOption->query();
-        $productAttributeOptions = $this->eagerLoadIncludes($productAttributeOptions, $includes)->get();
+        $this->productAttributeOption = $this->productAttributeOption
+            ->query()
+            ->withEagerLoading($includes)
+            ->get();
 
-        return $this->showAll($productAttributeOptions);
-    }
-
-    protected function eagerLoadIncludes(Builder $query, array $includes)
-    {
-        if (in_array('status', $includes)) {
-            $query->with('status');
-        }
-
-        if (in_array('product_attribute', $includes)) {
-            $query->with('productAttribute');
-        }
-
-        return $query;
+        return $this->showAll($this->productAttributeOption);
     }
 }

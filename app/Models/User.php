@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\UserResource;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -46,23 +47,24 @@ class User extends Authenticatable
         return $this->hasMany(SocialNetwork::class);
     }
 
-    public function loadEagerLoadIncludes(array $includes)
+    public function scopeWithEagerLoading(?Builder $query, array $includes, string $type = 'with')
     {
-        $user = auth('sanctum')->user();
+        // $user = auth('sanctum')->user();
+        $typeBuilder = $type === 'with' ? $query : $this;
 
         if (in_array('status', $includes)) {
-            $this->load(['status']);
+            $typeBuilder->$type(['status']);
         }
 
         if (in_array('roles', $includes)) {
-            $this->load(['roles']);
+            $typeBuilder->$type(['roles']);
         }
 
-        if (in_array('socialNetworks', $includes)) {
-            $this->load(['socialNetworks']);
+        if (in_array('social_networks', $includes)) {
+            $typeBuilder->$type(['socialNetworks']);
         }
 
-        return $this;
+        return $typeBuilder;
     }
 
     public function isAdmin()

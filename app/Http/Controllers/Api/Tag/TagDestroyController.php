@@ -24,6 +24,7 @@ class TagDestroyController extends ApiController
      * @OA\Delete(
      *     path="/api/v1/tags/{tag}",
      *     summary="Delete tag",
+     *     description="<strong>Method:</strong> deleteTag<br/><strong>Includes:</strong> status",
      *     operationId="deleteTag",
      *     tags={"Tags"},
      *     security={ {"sanctum": {}} },
@@ -106,7 +107,11 @@ class TagDestroyController extends ApiController
             DB::commit();
 
             return $this->showOne(
-                $this->tag->loadEagerLoadIncludes($includes)
+                $this->tag->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         } catch (\Exception $exception) {
             DB::rollBack();

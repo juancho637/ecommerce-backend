@@ -19,6 +19,7 @@ class UserShowController extends ApiController
      * @OA\Get(
      *     path="/api/v1/users/{user}",
      *     summary="Show user by id",
+     *     description="<strong>Method:</strong> getUserById<br/><strong>Includes:</strong> status, roles, social_networks",
      *     operationId="getUserById",
      *     tags={"Users"},
      *     security={ {"sanctum": {}} },
@@ -88,7 +89,11 @@ class UserShowController extends ApiController
         $includes = explode(',', $request->get('include', ''));
 
         return $this->showOne(
-            $user->loadEagerLoadIncludes($includes)
+            $user->scopeWithEagerLoading(
+                query: null,
+                includes: $includes,
+                type: 'load'
+            )
         );
     }
 }

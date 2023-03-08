@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use App\Http\Resources\ProductAttributeResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -52,6 +53,18 @@ class ProductAttribute extends Model
         return $this->hasMany(ProductAttributeOption::class);
     }
 
+    public function scopeWithEagerLoading(?Builder $query, array $includes, string $type = 'with')
+    {
+        // $user = auth('sanctum')->user();
+        $typeBuilder = $type === 'with' ? $query : $this;
+
+        if (in_array('status', $includes)) {
+            $typeBuilder->$type(['status']);
+        }
+
+        return $typeBuilder;
+    }
+
     public function setCreate($attributes)
     {
         $data['name'] = $attributes['name'];
@@ -75,15 +88,6 @@ class ProductAttribute extends Model
             $this->status_id = Status::enabled()->value('id');
         } else if ($this->status_id === Status::enabled()->value('id')) {
             $this->status_id = Status::disabled()->value('id');
-        }
-
-        return $this;
-    }
-
-    public function loadEagerLoadIncludes(array $includes)
-    {
-        if (in_array('status', $includes)) {
-            $this->load(['status']);
         }
 
         return $this;

@@ -24,6 +24,7 @@ class TagStoreController extends ApiController
      * @OA\Post(
      *     path="/api/v1/tags",
      *     summary="Save tag",
+     *     description="<strong>Method:</strong> saveTag<br/><strong>Includes:</strong> status",
      *     operationId="saveTag",
      *     tags={"Tags"},
      *     security={ {"sanctum": {}} },
@@ -107,7 +108,11 @@ class TagStoreController extends ApiController
             DB::commit();
 
             return $this->showOne(
-                $this->tag->loadEagerLoadIncludes($includes)
+                $this->tag->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         } catch (\Exception $exception) {
             DB::rollBack();

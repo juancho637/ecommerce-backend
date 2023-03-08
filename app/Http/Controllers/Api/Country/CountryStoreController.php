@@ -24,6 +24,7 @@ class CountryStoreController extends ApiController
      * @OA\Post(
      *     path="/api/v1/countries",
      *     summary="Save country",
+     *     description="<strong>Method:</strong> saveCountry<br/><strong>Includes:</strong> status",
      *     operationId="saveCountry",
      *     tags={"Countries"},
      *     security={ {"sanctum": {}} },
@@ -107,7 +108,11 @@ class CountryStoreController extends ApiController
             DB::commit();
 
             return $this->showOne(
-                $this->country->loadEagerLoadIncludes($includes)
+                $this->country->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         } catch (\Exception $exception) {
             DB::rollBack();
