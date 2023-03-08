@@ -24,6 +24,7 @@ class CityStoreController extends ApiController
      * @OA\Post(
      *     path="/api/v1/cities",
      *     summary="Save city",
+     *     description="<strong>Method:</strong> saveCity<br/><strong>Includes:</strong> status, state, state.country",
      *     operationId="saveCity",
      *     tags={"Cities"},
      *     security={ {"sanctum": {}} },
@@ -107,7 +108,11 @@ class CityStoreController extends ApiController
             DB::commit();
 
             return $this->showOne(
-                $this->city->loadEagerLoadIncludes($includes)
+                $this->city->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         } catch (\Exception $exception) {
             DB::rollBack();

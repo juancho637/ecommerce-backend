@@ -24,6 +24,7 @@ class CityIndexController extends ApiController
      * @OA\Get(
      *     path="/api/v1/cities",
      *     summary="List of cities",
+     *     description="<strong>Method:</strong> getAllCities<br/><strong>Includes:</strong> status, state, state.country",
      *     operationId="getAllCities",
      *     tags={"Cities"},
      *     @OA\Parameter(

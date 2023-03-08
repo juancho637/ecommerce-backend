@@ -55,38 +55,25 @@ class City extends Model
             return $query->where('name', Status::ENABLED);
         });
     }
-    public function scopeWithEagerLoading(Builder $query, array $includes)
+
+    public function scopeWithEagerLoading(?Builder $query, array $includes, string $type = 'with')
     {
+        // $user = auth('sanctum')->user();
+        $typeBuilder = $type === 'with' ? $query : $this;
+
         if (in_array('status', $includes)) {
-            $query->with('status');
+            $typeBuilder->$type('status');
         }
 
         if (in_array('state', $includes)) {
-            $query->with('state');
+            $typeBuilder->$type('state');
         }
 
         if (in_array('state.country', $includes)) {
-            $query->with('state.country');
-        }
-    }
-
-    public function loadEagerLoadIncludes(array $includes)
-    {
-        $user = auth('sanctum')->user();
-
-        if (in_array('status', $includes)) {
-            $this->load(['status']);
+            $typeBuilder->$type('state.country');
         }
 
-        if (in_array('state', $includes)) {
-            $this->load(['state']);
-        }
-
-        if (in_array('state.country', $includes)) {
-            $this->load(['state.country']);
-        }
-
-        return $this;
+        return $typeBuilder;
     }
 
     public function validByRole()

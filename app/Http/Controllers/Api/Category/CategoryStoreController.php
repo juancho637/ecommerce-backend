@@ -25,6 +25,7 @@ class CategoryStoreController extends ApiController
      * @OA\Post(
      *     path="/api/v1/categories",
      *     summary="Save category",
+     *     description="<strong>Method:</strong> saveCategory<br/><strong>Includes:</strong> status, image, children",
      *     operationId="saveCategory",
      *     tags={"Categories"},
      *     security={ {"sanctum": {}} },
@@ -108,7 +109,11 @@ class CategoryStoreController extends ApiController
             DB::commit();
 
             return $this->showOne(
-                $this->category->loadEagerLoadIncludes($includes)
+                $this->category->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         } catch (\Exception $exception) {
             DB::rollBack();

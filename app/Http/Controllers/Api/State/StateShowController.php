@@ -20,6 +20,7 @@ class StateShowController extends ApiController
      * @OA\Get(
      *     path="/api/v1/states/{state}",
      *     summary="Show state by id",
+     *     description="<strong>Method:</strong> getStateById<br/><strong>Includes:</strong> status, country",
      *     operationId="getStateById",
      *     tags={"States"},
      *     @OA\Parameter(
@@ -75,7 +76,11 @@ class StateShowController extends ApiController
 
         if ($state->validByRole()) {
             return $this->showOne(
-                $state->loadEagerLoadIncludes($includes)
+                $state->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         }
 

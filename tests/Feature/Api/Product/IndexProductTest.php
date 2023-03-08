@@ -21,6 +21,8 @@ class IndexProductTest extends TestCase
     {
         $response = $this->json('GET', route('api.v1.products.index'));
 
+        // dd($response->decodeResponseJson());
+
         $response->assertStatus(200)->assertJsonStructure([
             'data' => [
                 [

@@ -17,6 +17,7 @@ class CategoryShowController extends ApiController
      * @OA\Get(
      *     path="/api/v1/categories/{category}",
      *     summary="Show category by id",
+     *     description="<strong>Method:</strong> getCategoryById<br/><strong>Includes:</strong> status, image, children",
      *     operationId="getCategoryById",
      *     tags={"Categories"},
      *     @OA\Parameter(
@@ -72,7 +73,11 @@ class CategoryShowController extends ApiController
 
         if ($category->validByRole()) {
             return $this->showOne(
-                $category->loadEagerLoadIncludes($includes)
+                $category->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         }
 

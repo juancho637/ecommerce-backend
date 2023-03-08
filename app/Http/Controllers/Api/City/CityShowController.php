@@ -21,6 +21,7 @@ class CityShowController extends ApiController
      * @OA\Get(
      *     path="/api/v1/cities/{city}",
      *     summary="Show city by id",
+     *     description="<strong>Method:</strong> getCityById<br/><strong>Includes:</strong> status, state, state.country",
      *     operationId="getCityById",
      *     tags={"Cities"},
      *     @OA\Parameter(
@@ -76,7 +77,11 @@ class CityShowController extends ApiController
 
         if ($city->validByRole()) {
             return $this->showOne(
-                $city->loadEagerLoadIncludes($includes)
+                $city->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         }
 

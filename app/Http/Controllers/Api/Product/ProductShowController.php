@@ -73,7 +73,11 @@ class ProductShowController extends ApiController
 
         if ($product->validByRole()) {
             return $this->showOne(
-                $product->loadEagerLoadIncludes($includes)
+                $product->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         }
 

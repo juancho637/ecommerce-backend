@@ -24,6 +24,7 @@ class UserDestroyController extends ApiController
      * @OA\Delete(
      *     path="/api/v1/users/{user}",
      *     summary="Delete user",
+     *     description="<strong>Method:</strong> deleteUser<br/><strong>Includes:</strong> status, roles, social_networks",
      *     operationId="deleteUser",
      *     tags={"Users"},
      *     security={ {"sanctum": {}} },
@@ -106,7 +107,11 @@ class UserDestroyController extends ApiController
             DB::commit();
 
             return $this->showOne(
-                $this->user->loadEagerLoadIncludes($includes)
+                $this->user->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         } catch (\Exception $exception) {
             DB::rollBack();

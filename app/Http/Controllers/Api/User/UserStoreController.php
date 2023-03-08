@@ -24,6 +24,7 @@ class UserStoreController extends ApiController
      * @OA\Post(
      *     path="/api/v1/users",
      *     summary="Save user",
+     *     description="<strong>Method:</strong> saveUser<br/><strong>Includes:</strong> status, roles, social_networks",
      *     operationId="saveUser",
      *     tags={"Users"},
      *     security={ {"sanctum": {}} },
@@ -109,8 +110,11 @@ class UserStoreController extends ApiController
             DB::commit();
 
             return $this->showOne(
-                $this->user
-                    ->loadEagerLoadIncludes($includes)
+                $this->user->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         } catch (\Exception $exception) {
             DB::rollBack();

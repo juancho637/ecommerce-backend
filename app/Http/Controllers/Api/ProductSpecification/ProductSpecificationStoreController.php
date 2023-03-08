@@ -24,6 +24,7 @@ class ProductSpecificationStoreController extends ApiController
      * @OA\Post(
      *     path="/api/v1/product_specifications",
      *     summary="Save product specification",
+     *     description="<strong>Method:</strong> saveProductSpecification<br/><strong>Includes:</strong> status, product",
      *     operationId="saveProductSpecification",
      *     tags={"Product specifications"},
      *     security={ {"sanctum": {}} },
@@ -98,8 +99,11 @@ class ProductSpecificationStoreController extends ApiController
             DB::commit();
 
             return $this->showOne(
-                $this->productSpecification
-                    ->loadEagerLoadIncludes($includes)
+                $this->productSpecification->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         } catch (\Exception $exception) {
             DB::rollBack();

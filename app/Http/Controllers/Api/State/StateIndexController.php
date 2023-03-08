@@ -24,6 +24,7 @@ class StateIndexController extends ApiController
      * @OA\Get(
      *     path="/api/v1/states",
      *     summary="List of states",
+     *     description="<strong>Method:</strong> getAllStates<br/><strong>Includes:</strong> status, country",
      *     operationId="getAllStates",
      *     tags={"States"},
      *     @OA\Parameter(
@@ -102,34 +103,21 @@ class StateIndexController extends ApiController
     public function __invoke(Request $request)
     {
         $includes = explode(',', $request->get('include', ''));
-        $states = $this->state;
 
         if ($request->search) {
-            $states = $states->search($request->search)
+            $this->state = $this->state->search($request->search)
                 ->query(function (Builder $query) use ($includes) {
-                    $query->byRole();
-
-                    $this->eagerLoadIncludes($query, $includes);
+                    $query->byRole()
+                        ->withEagerLoading($includes);
                 })
                 ->get();
         } else {
-            $states = $states->query()->byRole();
-            $states = $this->eagerLoadIncludes($states, $includes)->get();
+            $this->state = $this->state->query()
+                ->byRole()
+                ->withEagerLoading($includes)
+                ->get();
         }
 
-        return $this->showAll($states);
-    }
-
-    protected function eagerLoadIncludes(Builder $query, array $includes)
-    {
-        if (in_array('status', $includes)) {
-            $query->with('status');
-        }
-
-        if (in_array('country', $includes)) {
-            $query->with('country');
-        }
-
-        return $query;
+        return $this->showAll($this->state);
     }
 }

@@ -113,7 +113,11 @@ class ProductUpdateController extends ApiController
             );
 
             return $this->showOne(
-                $this->product->loadEagerLoadIncludes($includes)
+                $this->product->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         } catch (\Exception $exception) {
             return $this->errorResponse($exception->getMessage());

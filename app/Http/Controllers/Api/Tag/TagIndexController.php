@@ -24,6 +24,7 @@ class TagIndexController extends ApiController
      * @OA\Get(
      *     path="/api/v1/tags",
      *     summary="List of tags",
+     *     description="<strong>Method:</strong> getAllTags<br/><strong>Includes:</strong> status",
      *     operationId="getAllTags",
      *     tags={"Tags"},
      *     @OA\Parameter(
@@ -102,22 +103,22 @@ class TagIndexController extends ApiController
     public function __invoke(Request $request)
     {
         $includes = explode(',', $request->get('include', ''));
-        $tags = $this->tag;
 
         if ($request->search) {
-            $tags = $tags->search($request->search)
+            $this->tag = $this->tag->search($request->search)
                 ->query(function (Builder $query) use ($includes) {
-                    $query->byRole();
-
-                    $this->eagerLoadIncludes($query, $includes);
+                    $query->byRole()
+                        ->withEagerLoading($includes);
                 })
                 ->get();
         } else {
-            $tags = $tags->query()->byRole();
-            $tags = $this->eagerLoadIncludes($tags, $includes)->get();
+            $this->tag = $this->tag->query()
+                ->byRole()
+                ->withEagerLoading($includes)
+                ->get();
         }
 
-        return $this->showAll($tags);
+        return $this->showAll($this->tag);
     }
 
     protected function eagerLoadIncludes(Builder $query, array $includes)

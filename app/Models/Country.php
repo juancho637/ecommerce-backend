@@ -57,15 +57,16 @@ class Country extends Model
         });
     }
 
-    public function loadEagerLoadIncludes(array $includes)
+    public function scopeWithEagerLoading(?Builder $query, array $includes, string $type = 'with')
     {
-        $user = auth('sanctum')->user();
+        // $user = auth('sanctum')->user();
+        $typeBuilder = $type === 'with' ? $query : $this;
 
         if (in_array('status', $includes)) {
-            $this->load(['status']);
+            $typeBuilder->$type(['status']);
         }
 
-        return $this;
+        return $typeBuilder;
     }
 
     public function validByRole()

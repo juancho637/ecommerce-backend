@@ -164,12 +164,36 @@ class StoreProductRequest extends FormRequest
     public function messages()
     {
         return [
-            'price.regex' => 'The price format must be between 0.00 and 9999999999.99',
-            'tax.regex' => 'The tax format must be between 0.00 and 99.99',
-            'width.regex' => 'The width format must be between 0.00 and 9999999999.99',
-            'height.regex' => 'The height format must be between 0.00 and 9999999999.99',
-            'length.regex' => 'The length format must be between 0.00 and 9999999999.99',
-            'weight.regex' => 'The weight format must be between 0.00 and 9999999999.99',
+            'price.regex' => __('The :attribute format must be between :first and :second', [
+                'attribute' => 'price',
+                'first' => '0.00',
+                'second' => '9999999999.99',
+            ]),
+            'tax.regex' => __('The :attribute format must be between :first and :second', [
+                'attribute' => 'tax',
+                'first' => '0.00',
+                'second' => '99.99',
+            ]),
+            'width.regex' => __('The :attribute format must be between :first and :second', [
+                'attribute' => 'width',
+                'first' => '0.00',
+                'second' => '9999999999.99',
+            ]),
+            'height.regex' => __('The :attribute format must be between :first and :second', [
+                'attribute' => 'height',
+                'first' => '0.00',
+                'second' => '9999999999.99',
+            ]),
+            'length.regex' => __('The :attribute format must be between :first and :second', [
+                'attribute' => 'length',
+                'first' => '0.00',
+                'second' => '9999999999.99',
+            ]),
+            'weight.regex' => __('The :attribute format must be between :first and :second', [
+                'attribute' => 'weight',
+                'first' => '0.00',
+                'second' => '9999999999.99',
+            ]),
         ];
     }
 }

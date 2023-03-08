@@ -24,6 +24,7 @@ class CityDestroyController extends ApiController
      * @OA\Delete(
      *     path="/api/v1/cities/{city}",
      *     summary="Delete city",
+     *     description="<strong>Method:</strong> deleteCity<br/><strong>Includes:</strong> status, state, state.country",
      *     operationId="deleteCity",
      *     tags={"Cities"},
      *     security={ {"sanctum": {}} },
@@ -106,7 +107,11 @@ class CityDestroyController extends ApiController
             DB::commit();
 
             return $this->showOne(
-                $this->city->loadEagerLoadIncludes($includes)
+                $this->city->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
             );
         } catch (\Exception $exception) {
             DB::rollBack();

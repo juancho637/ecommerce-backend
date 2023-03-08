@@ -14,6 +14,7 @@ class AuthLoginController extends ApiController
      * @OA\Post(
      *     path="/api/v1/auth/login",
      *     summary="Sign in a user",
+     *     description="<strong>Method:</strong> signIn",
      *     operationId="signIn",
      *     tags={"Auth"},
      *     @OA\Parameter(

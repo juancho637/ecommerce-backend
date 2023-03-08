@@ -32,5 +32,11 @@
     "Unauthorized": "Unauthorized",
     "Verify Email Address": "Verify Email Address",
     "Whoops!": "Whoops!",
-    "You are receiving this email because we received a password reset request for your account.": "You are receiving this email because we received a password reset request for your account."
+    "You are receiving this email because we received a password reset request for your account.": "You are receiving this email because we received a password reset request for your account.",
+    "Invalid login": "Invalid login",
+    "The number of :attribute must be equal to the product attributes associated with the product": "The number of :attribute must be equal to the product attributes associated with the product",
+    "The product attribute of :attribute must be different": "The product attribute of :attribute must be different",
+    "The :attribute must not be different to the product attribute options associated with the product": "The :attribute must not be different to the product attribute options associated with the product",
+    "This combination of :attribute has already been created": "This combination of :attribute has already been created",
+    "The :attribute format must be between :first and :second": "The :attribute format must be between :first and :second"
 }
