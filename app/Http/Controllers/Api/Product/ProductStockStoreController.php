@@ -26,7 +26,7 @@ class ProductStockStoreController extends ApiController
      * @OA\Post(
      *     path="/api/v1/products/{product}/stocks",
      *     summary="Save product stock step by product",
-     *     description="<strong>Method:</strong> saveProductStockStepByProduct<br/><strong>Includes:</strong> status, product, product_attribute_options, images",
+     *     description="<strong>Method:</strong> saveProductStockStepByProduct<br/><strong>Includes:</strong> status, product, images, product_attribute_options, product_attribute_options.product_attribute",
      *     operationId="saveProductStockStepByProduct",
      *     tags={"Products"},
      *     security={ {"sanctum": {}} },
@@ -42,6 +42,15 @@ class ProductStockStoreController extends ApiController
      *     @OA\Parameter(
      *         name="include",
      *         description="Relationships of resource",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="lang",
+     *         description="Code of language",
      *         required=false,
      *         in="query",
      *         @OA\Schema(

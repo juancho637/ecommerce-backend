@@ -62,46 +62,32 @@ class ProductStock extends Model
             ->where('type_resource', self::PRODUCT_STOCK_IMAGE);
     }
 
-    public function scopeWithEagerLoading(Builder $query, array $includes)
+    public function scopeWithEagerLoading(?Builder $query, array $includes, string $type = 'with')
     {
+        // $user = auth('sanctum')->user();
+        $typeBuilder = $type === 'with' ? $query : $this;
+
         if (in_array('status', $includes)) {
-            $query->with(['status']);
+            $typeBuilder->$type(['status']);
         }
 
         if (in_array('product', $includes)) {
-            $query->with(['product']);
+            $typeBuilder->$type(['product']);
         }
 
         if (in_array('images', $includes)) {
-            $query->with(['images']);
+            $typeBuilder->$type(['images']);
         }
 
         if (in_array('product_attribute_options', $includes)) {
-            $query->with(['productAttributeOptions.productAttribute']);
+            $typeBuilder->$type(['productAttributeOptions']);
         }
 
-        return $query;
-    }
-
-    public function loadEagerLoadIncludes(array $includes)
-    {
-        if (in_array('status', $includes)) {
-            $this->load(['status']);
+        if (in_array('product_attribute_options.product_attribute', $includes)) {
+            $typeBuilder->$type(['productAttributeOptions.productAttribute']);
         }
 
-        if (in_array('product', $includes)) {
-            $this->load(['product']);
-        }
-
-        if (in_array('images', $includes)) {
-            $this->load(['images']);
-        }
-
-        if (in_array('product_attribute_options', $includes)) {
-            $this->load(['productAttributeOptions.productAttribute']);
-        }
-
-        return $this;
+        return $typeBuilder;
     }
 
     public function setCreate($attributes, $productId, $productType)
