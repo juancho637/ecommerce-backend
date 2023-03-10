@@ -77,6 +77,15 @@ class CategoryIndexController extends ApiController
      *             type="string"
      *         )
      *     ),
+     *     @OA\Parameter(
+     *         name="exclude_id",
+     *         description="Category id to exclude",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
      *     @OA\Response(
      *         response="200",
      *         description="success",
@@ -115,6 +124,33 @@ class CategoryIndexController extends ApiController
                 ->get();
         }
 
+        if ($excludeId = $request->get('exclude_id', false)) {
+            $contains = $this->category->where('id', $excludeId);
+
+            if ($contains->count() > 0) {
+                $this->category->forget($contains->keys()->first());
+            } else {
+                $this->category = $this->filterChildrenId($this->category, $excludeId);
+            }
+        }
+
         return $this->showAll($this->category);
+    }
+
+    public function filterChildrenId($children, $id)
+    {
+        $children->each(function ($child) use ($id) {
+            if (isset($child->children) && $child->children->count() > 0) {
+                $contains = $child->children->where('id', $id);
+
+                if ($contains->count() > 0) {
+                    $child->children->forget($contains->keys()->first());
+                }
+
+                $this->filterChildrenId($child->children, $id);
+            }
+        });
+
+        return $children;
     }
 }
