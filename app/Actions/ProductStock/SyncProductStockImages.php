@@ -13,28 +13,26 @@ class SyncProductStockImages
      */
     public function __invoke(ProductStock $productStock, array $images)
     {
-
         try {
-            $imagesSaved = [];
-            // $path = strtolower(class_basename($product));
+            if (array_key_exists('detach', $images) && count($images['detach'])) {
+                foreach ($images['detach'] as $image) {
+                    $resource = Resource::find($image);
 
-            foreach ($images as $image) {
-                $imageToSync = Resource::find($image);
-                $oldImage = $productStock->images->first();
-
-                if ($oldImage) {
-                    app(DeleteFile::class)($oldImage['path']);
+                    app(DeleteResource::class)($resource);
                 }
-
-                $imageToSync->obtainable_type = ProductStock::class;
-                $imageToSync->obtainable_id = $productStock->id;
-                $imageToSync->type_resource = ProductStock::PRODUCT_STOCK_IMAGE;
-                $imageToSync->save();
-
-                $imagesSaved[] = $imageToSync;
             }
 
-            return $imagesSaved;
+            if (array_key_exists('attach', $images) && count($images['attach'])) {
+                foreach ($images['attach'] as $image) {
+                    $resource = Resource::find($image);
+
+                    $resource->obtainable_type = ProductStock::class;
+                    $resource->obtainable_id = $productStock->id;
+                    $resource->type_resource = ProductStock::PRODUCT_STOCK_IMAGE;
+
+                    $resource->save();
+                }
+            }
         } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage());
         }

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\Product\ProductStock;
 use App\Models\Product;
 use App\Models\ProductStock;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Builder;
 use App\Http\Controllers\Api\ApiController;
 
 class ProductProductStockIndexController extends ApiController
@@ -23,11 +22,11 @@ class ProductProductStockIndexController extends ApiController
 
     /**
      * @OA\Get(
-     *     path="/api/v1/products/{product}/product_stocks",
+     *     path="/api/v1/products/{product}/stocks",
      *     summary="List of product stocks by product",
-     *     description="<strong>Method:</strong> getAllProductStocksByProduct<br/><strong>Includes:</strong> status, product, product_attribute_options, images",
+     *     description="<strong>Method:</strong> getAllProductStocksByProduct<br/><strong>Includes:</strong> status, product, images, product_attribute_options, product_attribute_options.product_attribute",
      *     operationId="getAllProductStocksByProduct",
-     *     tags={"Product stocks by product"},
+     *     tags={"Product stocks"},
      *     security={ {"sanctum": {}} },
      *     @OA\Parameter(
      *         name="product",
@@ -83,6 +82,15 @@ class ProductProductStockIndexController extends ApiController
      *             type="string"
      *         )
      *     ),
+     *     @OA\Parameter(
+     *         name="lang",
+     *         description="Code of language",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
      *     @OA\Response(
      *         response="200",
      *         description="success",
@@ -106,30 +114,10 @@ class ProductProductStockIndexController extends ApiController
     {
         $includes = explode(',', $request->get('include', ''));
 
-        $this->productStocks = $product->productStocks->toQuery();
-        $this->productStocks = $this->eagerLoadIncludes($this->productStocks, $includes)->get();
+        $this->productStocks = $product->productStocks->toQuery()
+            ->withEagerLoading($includes)
+            ->get();
 
         return $this->showAll($this->productStocks);
-    }
-
-    protected function eagerLoadIncludes(Builder $query, array $includes)
-    {
-        if (in_array('status', $includes)) {
-            $query->with(['status']);
-        }
-
-        if (in_array('product', $includes)) {
-            $query->with(['product']);
-        }
-
-        if (in_array('images', $includes)) {
-            $query->with(['images']);
-        }
-
-        if (in_array('product_attribute_options', $includes)) {
-            $query->with(['productAttributeOptions.productAttribute']);
-        }
-
-        return $query;
     }
 }

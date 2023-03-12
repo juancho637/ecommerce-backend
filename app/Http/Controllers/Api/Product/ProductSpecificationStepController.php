@@ -3,30 +3,32 @@
 namespace App\Http\Controllers\Api\Product;
 
 use App\Models\Product;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use App\Actions\Product\FinishProduct;
+use App\Models\ProductSpecification;
 use App\Http\Controllers\Api\ApiController;
-use App\Http\Requests\Api\Product\FinishProductRequest;
+use App\Actions\Product\StoreProductSpecificationStep;
+use App\Http\Requests\Api\Product\StoreProductSpecificationStepRequest;
 
-class ProductFinishController extends ApiController
+class ProductSpecificationStepController extends ApiController
 {
-    private $product;
+    private $productSpecification;
 
-    public function __construct(Product $product)
+    public function __construct(ProductSpecification $productSpecification)
     {
-        $this->product = $product;
+        $this->productSpecification = $productSpecification;
 
         $this->middleware('auth:sanctum');
 
-        $this->middleware('can:create,' . Product::class)->only('__invoke');
+        $this->middleware('can:create,' . ProductSpecification::class)->only('__invoke');
     }
 
     /**
      * @OA\Post(
-     *     path="/api/v1/products/{product}/finish",
-     *     summary="Finish product step",
-     *     description="<strong>Method:</strong> finishProduct<br/><strong>Includes:</strong> status, images, stock_images, category, tags, product_attribute_options, product_stocks, specifications",
-     *     operationId="finishProduct",
+     *     path="/api/v1/products/{product}/specifications_step",
+     *     summary="Save specifications step by product",
+     *     description="<strong>Method:</strong> saveProductSpecificationsStepByProduct<br/><strong>Includes:</strong> status, images, stock_images, category, tags, product_attribute_options, product_stocks, specifications",
+     *     operationId="saveProductSpecificationsStepByProduct",
      *     tags={"Products"},
      *     security={ {"sanctum": {}} },
      *     @OA\Parameter(
@@ -61,7 +63,7 @@ class ProductFinishController extends ApiController
      *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
      *                 type="object",
-     *                 ref="#/components/schemas/FinishProductRequest",
+     *                 ref="#/components/schemas/StoreProductSpecificationStepRequest",
      *             )
      *         )
      *     ),
@@ -106,25 +108,20 @@ class ProductFinishController extends ApiController
      *     ),
      * )
      */
-    public function __invoke(FinishProductRequest $request, Product $product)
+    public function __invoke(StoreProductSpecificationStepRequest $request, Product $product)
     {
         $includes = explode(',', $request->get('include', ''));
 
-        DB::beginTransaction();
         try {
-            $this->product = app(FinishProduct::class)(
+            $this->productSpecification = app(StoreProductSpecificationStep::class)(
+                $product->setCreateProductSpecificationStep($request),
                 $product,
-                $this->product->setFinish($request)
-            );
+            )->withEagerLoading($includes)->get();
             DB::commit();
 
-            return $this->showOne(
-                $this->product->scopeWithEagerLoading(
-                    query: null,
-                    includes: $includes,
-                    type: 'load'
-                )
-            );
+            return ($this->showAll($this->productSpecification))
+                ->response()
+                ->setStatusCode(Response::HTTP_CREATED);
         } catch (\Exception $exception) {
             DB::rollBack();
             throw new \Exception($exception->getMessage(), $exception->getCode());

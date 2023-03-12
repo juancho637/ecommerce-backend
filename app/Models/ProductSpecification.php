@@ -51,12 +51,12 @@ class ProductSpecification extends Model
         return $typeBuilder;
     }
 
-    public function setCreate($attributes)
+    public function setCreate($attributes, $productId)
     {
+        $data['status_id'] = Status::enabled()->value('id');
+        $data['product_id'] = $productId;
         $data['name'] = $attributes['name'];
         $data['value'] = $attributes['value'];
-        $data['product_id'] = $attributes['product_id'];
-        $data['status_id'] = Status::enabled()->value('id');
 
         return $data;
     }

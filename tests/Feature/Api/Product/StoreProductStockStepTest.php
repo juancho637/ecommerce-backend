@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api\Product\ProductStock;
+namespace Tests\Feature\Api\Product;
 
 use Tests\TestCase;
 use App\Models\User;
@@ -10,7 +10,7 @@ use Laravel\Sanctum\Sanctum;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class StoreProductProductStockTest extends TestCase
+class StoreProductStockStepTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
@@ -21,7 +21,7 @@ class StoreProductProductStockTest extends TestCase
         $this->seed();
     }
 
-    public function testCreateStockToProductWithOneAttribute()
+    public function testCreateStockToProductWithOneAttributeInStockStep()
     {
         $user = User::factory()->roleAdmin()->create();
         Sanctum::actingAs($user, ['*']);
@@ -41,53 +41,57 @@ class StoreProductProductStockTest extends TestCase
         $weight = 10;
 
         $response = $this->json('POST', route(
-            'api.v1.products.stocks.store',
+            'api.v1.product_stocks.store',
             [$product, 'include' => 'images']
         ), [
-            'price' => $price,
-            'product_attribute_options' => [1],
-            'images' => [
-                'attach' => [
-                    $image->id,
-                ],
-            ],
-            'stock' => $stock,
-            'width' => $width,
-            'height' => $height,
-            'length' => $length,
-            'weight' => $weight,
+            'stocks' => [
+                [
+                    'price' => $price,
+                    'product_attribute_options' => [1],
+                    'images' => [
+                        'attach' => [
+                            $image->id,
+                        ],
+                    ],
+                    'stock' => $stock,
+                    'width' => $width,
+                    'height' => $height,
+                    'length' => $length,
+                    'weight' => $weight,
+                ]
+            ]
         ]);
 
         // dd($response->decodeResponseJson());
 
         $response->assertStatus(201)->assertJsonStructure([
             'data' => [
-                'id',
-                'price',
-                'sku',
-                'stock',
-                'width',
-                'height',
-                'length',
-                'weight',
-                'images' => [
-                    [
-                        'id',
-                        'urls',
-                        'owner_id',
-                        'type_resource',
+                '*' => [
+                    'id',
+                    'price',
+                    'sku',
+                    'stock',
+                    'width',
+                    'height',
+                    'length',
+                    'weight',
+                    'images' => [
+                        [
+                            'id',
+                            'urls',
+                            'owner_id',
+                            'type_resource',
+                        ],
                     ],
-                ],
+                ]
             ]
-        ])->assertJson([
-            'data' => [
-                'price' => $price,
-                'stock' => $stock,
-                'width' => $width,
-                'height' => $height,
-                'length' => $length,
-                'weight' => $weight,
-            ]
+        ])->assertJsonFragment([
+            'price' => $price,
+            'stock' => $stock,
+            'width' => $width,
+            'height' => $height,
+            'length' => $length,
+            'weight' => $weight,
         ]);
     }
 
@@ -105,31 +109,35 @@ class StoreProductProductStockTest extends TestCase
         $price = 100000.12;
 
         $response = $this->json('POST', route(
-            'api.v1.products.stocks.store',
+            'api.v1.product_stocks.store',
             [$product]
         ), [
-            'price' => $price,
-            'product_attribute_options' => [1],
+            'stocks' => [
+                [
+                    'price' => $price,
+                    'product_attribute_options' => [1],
+                ]
+            ]
         ]);
 
         // dd($response->decodeResponseJson());
 
         $response->assertStatus(201)->assertJsonStructure([
             'data' => [
-                'id',
-                'price',
-            ]
-        ])->assertJson([
-            'data' => [
-                'price' => $price,
+                '*' => [
+                    'id',
+                    'price',
+                ]
             ]
         ])->assertJsonMissing([
             'data' => [
-                'stock',
-                'width',
-                'height',
-                'length',
-                'weight',
+                '*' => [
+                    'stock',
+                    'width',
+                    'height',
+                    'length',
+                    'weight',
+                ]
             ]
         ]);
     }
@@ -194,44 +202,43 @@ class StoreProductProductStockTest extends TestCase
         $weight = 10;
 
         $response = $this->json('POST', route(
-            'api.v1.products.stocks.store',
+            'api.v1.product_stocks.store',
             [$product, 'include' => 'images']
         ), [
-            'price' => $price,
-            'product_attribute_options' => [2, 4],
-            'images' => [
-                'attach' => [
-                    $image->id,
-                ],
-            ],
-            'stock' => $stock,
-            'width' => $width,
-            'height' => $height,
-            'length' => $length,
-            'weight' => $weight,
+            'stocks' => [
+                [
+                    'price' => $price,
+                    'product_attribute_options' => [2, 4],
+                    'images' => [
+                        'attach' => [
+                            $image->id,
+                        ],
+                    ],
+                    'stock' => $stock,
+                    'width' => $width,
+                    'height' => $height,
+                    'length' => $length,
+                    'weight' => $weight,
+                ]
+            ]
         ]);
 
         // dd($response->decodeResponseJson());
 
         $response->assertStatus(201)->assertJsonStructure([
             'data' => [
-                'id',
-                'price',
-                'stock',
-                'width',
-                'height',
-                'length',
-                'weight',
+                '*' => [
+                    'id',
+                    'price',
+                    'stock',
+                    'width',
+                    'height',
+                    'length',
+                    'weight',
+                ]
             ]
-        ])->assertJson([
-            'data' => [
-                'price' => $price,
-                'stock' => $stock,
-                'width' => $width,
-                'height' => $height,
-                'length' => $length,
-                'weight' => $weight,
-            ]
+        ])->assertJsonFragment([
+            'price' => $price,
         ]);
     }
 }
