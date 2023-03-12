@@ -24,7 +24,7 @@ class ProductProductSpecificationIndexController extends ApiController
      * @OA\Get(
      *     path="/api/v1/products/{product}/specifications",
      *     summary="List of product specifications by product",
-     *     description="<strong>Method:</strong> getAllProductSpecificationsByProduct<br/><strong>Includes:</strong> status, product, images, product_attribute_options, product_attribute_options.product_attribute",
+     *     description="<strong>Method:</strong> getAllProductSpecificationsByProduct<br/><strong>Includes:</strong> status, product",
      *     operationId="getAllProductSpecificationsByProduct",
      *     tags={"Product specifications"},
      *     security={ {"sanctum": {}} },
