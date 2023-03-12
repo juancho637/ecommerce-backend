@@ -27,7 +27,7 @@ class ProductSpecificationStepController extends ApiController
      * @OA\Post(
      *     path="/api/v1/products/{product}/specifications_step",
      *     summary="Save specifications step by product",
-     *     description="<strong>Method:</strong> saveProductSpecificationsStepByProduct<br/><strong>Includes:</strong> status, images, stock_images, category, tags, product_attribute_options, product_stocks, specifications",
+     *     description="<strong>Method:</strong> saveProductSpecificationsStepByProduct<br/><strong>Includes:</strong> status, product",
      *     operationId="saveProductSpecificationsStepByProduct",
      *     tags={"Products"},
      *     security={ {"sanctum": {}} },
