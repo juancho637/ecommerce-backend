@@ -1,13 +1,18 @@
 <?php
 
-namespace App\Http\Requests\Api\ProductSpecification;
+namespace App\Http\Requests\Api\Product\ProductSpecification;
 
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * @OA\Schema()
+ * @OA\Schema(
+ *     required={
+ *         "name",
+ *         "value",
+ *     },
+ * )
  */
-class UpdateProductSpecificationRequest extends FormRequest
+class StoreProductProductSpecificationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,8 +31,8 @@ class UpdateProductSpecificationRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'string|max:255|nullable',
-            'value' => 'string|max:255|nullable',
+            'name' => 'required|string',
+            'value' => 'required|string',
         ];
     }
 }

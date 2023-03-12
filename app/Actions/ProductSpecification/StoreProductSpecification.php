@@ -19,14 +19,14 @@ class StoreProductSpecification
     public function __invoke(array $fields, int $productId)
     {
         try {
-            $productSpecificationFields = $this->productSpecification
-                ->setCreate(
-                    $fields,
-                    $productId,
-                );
-
             $this->productSpecification = $this->productSpecification
-                ->create($productSpecificationFields);
+                ->create(
+                    $this->productSpecification
+                        ->setCreate(
+                            $fields,
+                            $productId,
+                        )
+                );
 
             return $this->productSpecification;
         } catch (\Exception $exception) {

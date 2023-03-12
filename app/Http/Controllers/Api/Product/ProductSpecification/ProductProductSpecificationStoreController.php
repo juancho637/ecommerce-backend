@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Api\ProductSpecification;
+namespace App\Http\Controllers\Api\Product\ProductSpecification;
 
+use App\Actions\ProductSpecification\StoreProductSpecification;
+use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use App\Models\ProductSpecification;
 use App\Http\Controllers\Api\ApiController;
-use App\Http\Requests\Api\ProductSpecification\StoreProductSpecificationRequest;
+use App\Http\Requests\Api\Product\ProductSpecification\StoreProductProductSpecificationRequest;
 
-class ProductSpecificationStoreController extends ApiController
+class ProductProductSpecificationStoreController extends ApiController
 {
     private $productSpecification;
 
@@ -22,12 +24,66 @@ class ProductSpecificationStoreController extends ApiController
 
     /**
      * @OA\Post(
-     *     path="/api/v1/product_specifications",
-     *     summary="Save product specification",
-     *     description="<strong>Method:</strong> saveProductSpecification<br/><strong>Includes:</strong> status, product",
-     *     operationId="saveProductSpecification",
+     *     path="/api/v1/products/{product}/specifications",
+     *     summary="Save product specification by product",
+     *     description="<strong>Method:</strong> saveProductSpecificationByProduct<br/><strong>Includes:</strong> status, product",
+     *     operationId="saveProductSpecificationByProduct",
      *     tags={"Product specifications"},
      *     security={ {"sanctum": {}} },
+     *     @OA\Parameter(
+     *         name="product",
+     *         description="Id of product",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="include",
+     *         description="Relationships of resource",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="search",
+     *         description="String to search",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         description="Number of resources per page",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="page",
+     *         description="Number of current page",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="number"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_by",
+     *         description="Name of field to sort",
+     *         required=false,
+     *         in="query",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
      *     @OA\Parameter(
      *         name="lang",
      *         description="Code of language",
@@ -42,7 +98,7 @@ class ProductSpecificationStoreController extends ApiController
      *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
      *                 type="object",
-     *                 ref="#/components/schemas/StoreProductSpecificationRequest",
+     *                 ref="#/components/schemas/StoreProductProductSpecificationRequest",
      *             )
      *         )
      *     ),
@@ -87,14 +143,15 @@ class ProductSpecificationStoreController extends ApiController
      *     ),
      * )
      */
-    public function __invoke(StoreProductSpecificationRequest $request)
+    public function __invoke(StoreProductProductSpecificationRequest $request, Product $product)
     {
         $includes = explode(',', $request->get('include', ''));
 
         DB::beginTransaction();
         try {
-            $this->productSpecification = $this->productSpecification->create(
-                $this->productSpecification->setCreate($request)
+            $this->productSpecification = app(StoreProductSpecification::class)(
+                $request,
+                $product->id
             );
             DB::commit();
 
