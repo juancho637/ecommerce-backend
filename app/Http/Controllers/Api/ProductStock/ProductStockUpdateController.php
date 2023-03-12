@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Api\Product;
+namespace App\Http\Controllers\Api\ProductStock;
 
-use App\Models\Product;
 use App\Models\ProductStock;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Api\ApiController;
-use App\Actions\Product\StoreProductStockStep;
-use App\Http\Requests\Api\Product\StoreProductStockRequest;
+use App\Actions\ProductStock\UpdateProductStock;
+use App\Http\Requests\Api\ProductStock\UpdateProductStockRequest;
 
-class ProductStockStoreController extends ApiController
+class ProductStockUpdateController extends ApiController
 {
     private $productStock;
 
@@ -19,20 +18,20 @@ class ProductStockStoreController extends ApiController
 
         $this->middleware('auth:sanctum');
 
-        $this->middleware('can:create,' . ProductStock::class)->only('__invoke');
+        $this->middleware('can:update,productStock')->only('__invoke');
     }
 
     /**
-     * @OA\Post(
-     *     path="/api/v1/products/{product}/stocks",
-     *     summary="Save product stock step by product",
-     *     description="<strong>Method:</strong> saveProductStockStepByProduct<br/><strong>Includes:</strong> status, product, images, product_attribute_options, product_attribute_options.product_attribute",
-     *     operationId="saveProductStockStepByProduct",
-     *     tags={"Products"},
+     * @OA\Put(
+     *     path="/api/v1/product_stocks/{productStock}",
+     *     summary="Update product stock",
+     *     description="<strong>Method:</strong> updateProductStock<br/><strong>Includes:</strong> status, product, images, product_attribute_options, product_attribute_options.product_attribute",
+     *     operationId="updateProductStock",
+     *     tags={"Product stocks"},
      *     security={ {"sanctum": {}} },
      *     @OA\Parameter(
-     *         name="product",
-     *         description="Id of product",
+     *         name="productStock",
+     *         description="Id of product stock",
      *         required=true,
      *         in="path",
      *         @OA\Schema(
@@ -62,7 +61,7 @@ class ProductStockStoreController extends ApiController
      *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
      *                 type="object",
-     *                 ref="#/components/schemas/StoreProductStockRequest",
+     *                 ref="#/components/schemas/UpdateProductStockRequest",
      *             )
      *         )
      *     ),
@@ -72,9 +71,8 @@ class ProductStockStoreController extends ApiController
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
-     *                 type="array",
      *                 property="data",
-     *                 @OA\Items(ref="#/components/schemas/ProductStock")
+     *                 ref="#/components/schemas/ProductStock",
      *             ),
      *         ),
      *     ),
@@ -108,20 +106,32 @@ class ProductStockStoreController extends ApiController
      *     ),
      * )
      */
-    public function __invoke(StoreProductStockRequest $request, Product $product)
-    {
+    public function __invoke(
+        UpdateProductStockRequest $request,
+        ProductStock $productStock
+    ) {
         $includes = explode(',', $request->get('include', ''));
 
+        DB::beginTransaction();
         try {
-            $this->productStock = app(StoreProductStockStep::class)(
-                $product->setCreateProductStockStep($request),
-                $product,
-            )->withEagerLoading($includes)->get();
+            $this->productStock = app(UpdateProductStock::class)(
+                $this->productStock->setUpdate(
+                    $request,
+                    $productStock->product->type
+                ),
+                $productStock,
+            );
+            DB::commit();
 
-            return ($this->showAll($this->productStock))
-                ->response()
-                ->setStatusCode(Response::HTTP_CREATED);
+            return $this->showOne(
+                $this->productStock->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                    type: 'load'
+                )
+            );
         } catch (\Exception $exception) {
+            DB::rollBack();
             return $this->errorResponse($exception->getMessage());
         }
     }

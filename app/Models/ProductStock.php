@@ -115,16 +115,20 @@ class ProductStock extends Model
     public function setUpdate($attributes, $productType)
     {
         if ($productType === Product::PRODUCT_TYPE) {
-            !$attributes['stock'] ?: $data['stock'] = $attributes['stock'];
-            !$attributes['width'] ?: $data['width'] = $attributes['width'];
-            !$attributes['height'] ?: $data['height'] = $attributes['height'];
-            !$attributes['length'] ?: $data['length'] = $attributes['length'];
-            !$attributes['weight'] ?: $data['weight'] = $attributes['weight'];
+            !isset($attributes['stock']) ?: $data['stock'] = $attributes['stock'];
+            !isset($attributes['width']) ?: $data['width'] = $attributes['width'];
+            !isset($attributes['height']) ?: $data['height'] = $attributes['height'];
+            !isset($attributes['length']) ?: $data['length'] = $attributes['length'];
+            !isset($attributes['weight']) ?: $data['weight'] = $attributes['weight'];
         }
 
-        !$attributes['images'] ?: $data['images'] = $attributes['images'];
-        !$attributes['price'] ?: $data['price'] = $attributes['price'];
-        !$attributes['sku'] ?: $data['sku'] = $attributes['sku'];
+        !isset($attributes['price']) ?: $data['price'] = $attributes['price'];
+        !isset($attributes['sku']) ?: $data['sku'] = $attributes['sku'];
+
+        if ($attributes['images']) {
+            !isset($attributes['images']['attach']) ?: $data['images']['attach'] = $attributes['images']['attach'];
+            !isset($attributes['images']['detach']) ?: $data['images']['detach'] = $attributes['images']['detach'];
+        }
 
         return $data;
     }

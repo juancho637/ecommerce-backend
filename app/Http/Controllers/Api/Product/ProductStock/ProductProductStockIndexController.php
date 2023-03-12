@@ -22,7 +22,7 @@ class ProductProductStockIndexController extends ApiController
 
     /**
      * @OA\Get(
-     *     path="/api/v1/products/{product}/product_stocks",
+     *     path="/api/v1/products/{product}/stocks",
      *     summary="List of product stocks by product",
      *     description="<strong>Method:</strong> getAllProductStocksByProduct<br/><strong>Includes:</strong> status, product, images, product_attribute_options, product_attribute_options.product_attribute",
      *     operationId="getAllProductStocksByProduct",

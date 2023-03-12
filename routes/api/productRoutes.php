@@ -4,12 +4,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Product\ProductShowController;
 use App\Http\Controllers\Api\Product\ProductIndexController;
 use App\Http\Controllers\Api\Product\ProductStoreController;
-use App\Http\Controllers\Api\Product\ProductFinishController;
 use App\Http\Controllers\Api\Product\ProductUpdateController;
 use App\Http\Controllers\Api\Product\ProductDestroyController;
+use App\Http\Controllers\Api\Product\ProductStockStepController;
 use App\Http\Controllers\Api\Product\Type\ProductTypeIndexController;
+use App\Http\Controllers\Api\Product\ProductSpecificationStepController;
 use App\Http\Controllers\Api\Product\Resource\ProductResourceDestroyController;
-use App\Http\Controllers\Api\Product\ProductStock\ProductProductStockIndexController;
 
 Route::get('products/types', ProductTypeIndexController::class)
     ->name('api.v1.product_types.index');
@@ -20,8 +20,11 @@ Route::get('products', ProductIndexController::class)
 Route::post('products/general', ProductStoreController::class)
     ->name('api.v1.products_general.store');
 
-Route::post('products/{product}/finish', ProductFinishController::class)
-    ->name('api.v1.products.finish');
+Route::post('products/{product}/stocks_step', ProductStockStepController::class)
+    ->name('api.v1.product_stocks.store');
+
+Route::post('products/{product}/specifications_step', ProductSpecificationStepController::class)
+    ->name('api.v1.product_specifications.store');
 
 // Route::post('products/{product}/publish', ProductPublishController::class)
 //     ->name('api.v1.products.publish');
@@ -37,6 +40,3 @@ Route::delete('products/{product}', ProductDestroyController::class)
 
 Route::delete('products/{product}/images/{resource}', ProductResourceDestroyController::class)
     ->name('api.v1.products.images.destroy');
-
-Route::get('products/{product}/product_stocks', ProductProductStockIndexController::class)
-    ->name('api.v1.products.product_stocks.index');

@@ -13,7 +13,6 @@ class StoreProductStockStep
      */
     public function __invoke(array $fields, Product $product)
     {
-        DB::beginTransaction();
         try {
             foreach ($fields['stocks'] as $objectProductStock) {
                 app(StoreProductStock::class)(
@@ -22,11 +21,9 @@ class StoreProductStockStep
                     $product->type,
                 );
             }
-            DB::commit();
 
             return $product->productStocks();
         } catch (\Exception $exception) {
-            DB::rollBack();
             throw new \Exception($exception->getMessage());
         }
     }

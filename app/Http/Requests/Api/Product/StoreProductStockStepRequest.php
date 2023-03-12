@@ -15,7 +15,7 @@ use App\Rules\ProductStock\ProductAttributeOpcionsOfStockRule;
  *     },
  * )
  */
-class StoreProductStockRequest extends FormRequest
+class StoreProductStockStepRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -37,12 +37,13 @@ class StoreProductStockRequest extends FormRequest
      *             "price",
      *             "product_attribute_options",
      *         },
-     *         @OA\Property(property="price", type="number"),
      *         @OA\Property(
      *             property="product_attribute_options",
      *             type="array",
      *             @OA\Items(type="number"),
      *         ),
+     *         @OA\Property(property="price", type="number"),
+     *         @OA\Property(property="sku", type="string"),
      *         @OA\Property(property="stock", type="number"),
      *         @OA\Property(property="width", type="number"),
      *         @OA\Property(property="height", type="number"),
@@ -64,12 +65,6 @@ class StoreProductStockRequest extends FormRequest
                 'array',
                 'min:1',
             ],
-            'stocks.*.price' => [
-                'required',
-                'numeric',
-                'between:0.00,9999999999.99',
-                'regex:/^\d+(\.\d{1,2})?$/',
-            ],
             'stocks.*.product_attribute_options' => [
                 'required',
                 'array',
@@ -80,17 +75,13 @@ class StoreProductStockRequest extends FormRequest
                 'required',
                 'exists:product_attribute_options,id'
             ],
-            'stocks.*.images' => [
-                'array',
-                'max:' . ProductStock::MAX_IMAGES,
-                'nullable',
-            ],
-            'stocks.*.images.*' => [
+            'stocks.*.price' => [
                 'required',
-                Rule::exists('resources', 'id')->where(function ($query) {
-                    $query->where('obtainable_id', null);
-                }),
+                'numeric',
+                'between:0.00,9999999999.99',
+                'regex:/^\d+(\.\d{1,2})?$/',
             ],
+            'stocks.*.sku' => 'string|max:255',
             'stocks.*.stock' => [
                 Rule::requiredIf($this->product->type === Product::PRODUCT_TYPE),
                 'integer',
@@ -120,6 +111,15 @@ class StoreProductStockRequest extends FormRequest
                 'between:0.00,9999999999.99',
                 'regex:/^\d+(\.\d{1,2})?$/',
             ],
+
+            'stocks.*.images' => ['array:attach', 'nullable'],
+            'stocks.*.images.attach' => ['array', 'max:' . ProductStock::MAX_IMAGES, 'nullable'],
+            'stocks.*.images.attach.*' => [
+                'required',
+                Rule::exists('resources', 'id')->where(function ($query) {
+                    $query->where('obtainable_id', null);
+                }),
+            ],
         ];
     }
 
@@ -131,11 +131,31 @@ class StoreProductStockRequest extends FormRequest
     public function messages()
     {
         return [
-            'stocks.*.price.regex' => 'The price format must be between 0.00 and 9999999999.99',
-            'stocks.*.width.regex' => 'The width format must be between 0.00 and 9999999999.99',
-            'stocks.*.height.regex' => 'The height format must be between 0.00 and 9999999999.99',
-            'stocks.*.length.regex' => 'The length format must be between 0.00 and 9999999999.99',
-            'stocks.*.weight.regex' => 'The weight format must be between 0.00 and 9999999999.99',
+            'stocks.*.price.regex' => __('The :attribute format must be between :first and :second', [
+                'attribute' => 'price',
+                'first' => '0.00',
+                'second' => '9999999999.99',
+            ]),
+            'stocks.*.width.regex' => __('The :attribute format must be between :first and :second', [
+                'attribute' => 'width',
+                'first' => '0.00',
+                'second' => '9999999999.99',
+            ]),
+            'stocks.*.height.regex' => __('The :attribute format must be between :first and :second', [
+                'attribute' => 'height',
+                'first' => '0.00',
+                'second' => '9999999999.99',
+            ]),
+            'stocks.*.length.regex' => __('The :attribute format must be between :first and :second', [
+                'attribute' => 'length',
+                'first' => '0.00',
+                'second' => '9999999999.99',
+            ]),
+            'stocks.*.weight.regex' => __('The :attribute format must be between :first and :second', [
+                'attribute' => 'weight',
+                'first' => '0.00',
+                'second' => '9999999999.99',
+            ]),
         ];
     }
 }

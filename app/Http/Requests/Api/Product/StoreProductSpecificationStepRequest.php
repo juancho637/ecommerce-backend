@@ -11,7 +11,7 @@ use Illuminate\Foundation\Http\FormRequest;
  *     },
  * )
  */
-class FinishProductRequest extends FormRequest
+class StoreProductSpecificationStepRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
