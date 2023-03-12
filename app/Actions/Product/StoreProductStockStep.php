@@ -3,7 +3,6 @@
 namespace App\Actions\Product;
 
 use App\Models\Product;
-use Illuminate\Support\Facades\DB;
 use App\Actions\ProductStock\StoreProductStock;
 
 class StoreProductStockStep

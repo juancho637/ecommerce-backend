@@ -5,7 +5,6 @@ namespace App\Http\Requests\Api\ProductStock;
 use App\Models\ProductStock;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\ProductStock\ProductAttributeOpcionsOfStockRule;
 
 /**
  * @OA\Schema()
@@ -23,24 +22,6 @@ class UpdateProductStockRequest extends FormRequest
     }
 
     /**
-     * @OA\Property(
-     *     property="product_attribute_options",
-     *     type="object",
-     *     @OA\Property(
-     *         property="attach",
-     *         type="array",
-     *         @OA\Items(
-     *             type="number",
-     *         ),
-     *     ),
-     *     @OA\Property(
-     *         property="detach",
-     *         type="array",
-     *         @OA\Items(
-     *             type="number",
-     *         ),
-     *     ),
-     * ),
      * @OA\Property(property="price", type="number"),
      * @OA\Property(property="sku", type="string"),
      * @OA\Property(property="stock", type="number"),
@@ -69,20 +50,7 @@ class UpdateProductStockRequest extends FormRequest
      */
     public function rules()
     {
-        $product = $this->productStock->product;
-
         return [
-            'product_attribute_options' => 'array:detach,attach|nullable',
-            'product_attribute_options.detach' => 'array|nullable',
-            'product_attribute_options.detach.*' => 'exists:product_attribute_options,id',
-            'product_attribute_options.attach' => [
-                'array',
-                'min:1',
-                new ProductAttributeOpcionsOfStockRule($product),
-                'nullable',
-            ],
-            'product_attribute_options.attach.*' => 'exists:product_attribute_options,id',
-
             'price' => [
                 'numeric',
                 'between:0.00,9999999999.99',

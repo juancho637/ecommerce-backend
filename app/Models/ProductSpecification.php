@@ -65,7 +65,6 @@ class ProductSpecification extends Model
     {
         !$attributes['name'] ?: $this->name = $attributes['name'];
         !$attributes['value'] ?: $this->value = $attributes['value'];
-        !$attributes['product_id'] ?: $this->product_id = $attributes['product_id'];
 
         return $this;
     }

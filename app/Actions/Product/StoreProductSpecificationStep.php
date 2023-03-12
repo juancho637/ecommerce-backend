@@ -2,19 +2,11 @@
 
 namespace App\Actions\Product;
 
-use App\Actions\ProductSpecification\StoreProductSpecification;
 use App\Models\Product;
-use App\Models\Status;
+use App\Actions\ProductSpecification\StoreProductSpecification;
 
 class StoreProductSpecificationStep
 {
-    private $product;
-
-    public function __construct(Product $product)
-    {
-        $this->product = $product;
-    }
-
     /**
      * Handle the incoming action.
      */
