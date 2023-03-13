@@ -8,15 +8,15 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @OA\Schema(
  *     schema="ProductAttributeOption",
- *     required={"id", "name", "option"},
+ *     required={"id", "name"},
  * )
  */
 class ProductAttributeOptionResource extends JsonResource
 {
     /**
-     * @OA\Property(type="number", title="id", default=1, description="id", property="id"),
-     * @OA\Property(type="string", title="name", default="name", description="name", property="name"),
-     * @OA\Property(type="string", title="option", default="option", description="option", property="option"),
+     * @OA\Property(property="id", type="number"),
+     * @OA\Property(property="name", type="string"),
+     * @OA\Property(property="option", type="string"),
      * 
      * @OA\Property(property="status", ref="#/components/schemas/Status"),
      * @OA\Property(property="product_attribute", ref="#/components/schemas/ProductAttribute"),
@@ -25,9 +25,12 @@ class ProductAttributeOptionResource extends JsonResource
     {
         $resource = [
             'id' => $this->id,
-            'name' => $this->name,
-            'option' => $this->option,
+            'name' => $this->name,            
         ];
+
+        if ($this->option) {
+            $resource['option'] = $this->option;
+        }
 
         if (!$this->whenLoaded('status') instanceof MissingValue) {
             $resource['status'] = new StatusResource($this->status);
