@@ -62,6 +62,16 @@ class ProductAttribute extends Model
             $typeBuilder->$type(['status']);
         }
 
+        if (in_array('product_attribute_options', $includes)) {
+            $typeBuilder->$type([
+                'productAttributeOptions' => function ($query) {
+                    $query->whereHas('status', function ($query) {
+                        $query->where('name', Status::ENABLED);
+                    });
+                }
+            ]);
+        }
+
         return $typeBuilder;
     }
 

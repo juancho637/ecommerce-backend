@@ -14,11 +14,16 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class ProductAttributeResource extends JsonResource
 {
     /**
-     * @OA\Property(type="number", title="id", default=1, description="id", property="id"),
-     * @OA\Property(type="string", title="name", default="name", description="name", property="name"),
-     * @OA\Property(type="string", title="type", default="type", description="type", property="type"),
+     * @OA\Property(property="id", type="number"),
+     * @OA\Property(property="name", type="string"),
+     * @OA\Property(property="type", type="string"),
      * 
      * @OA\Property(property="status", ref="#/components/schemas/Status"),
+     * @OA\Property(
+     *     property="product_attribute_options",
+     *     type="array", 
+     *     @OA\Items(ref="#/components/schemas/ProductAttributeOption")
+     * ),
      */
     public function toArray($request)
     {
@@ -30,6 +35,15 @@ class ProductAttributeResource extends JsonResource
 
         if (!$this->whenLoaded('status') instanceof MissingValue) {
             $resource['status'] = new StatusResource($this->status);
+        }
+
+        if (
+            !$this->whenLoaded('productAttributeOptions') instanceof MissingValue
+            && count($this->productAttributeOptions)
+        ) {
+            $resource['product_attribute_options'] = ProductAttributeOptionResource::collection(
+                $this->productAttributeOptions
+            );
         }
 
         return $resource;
