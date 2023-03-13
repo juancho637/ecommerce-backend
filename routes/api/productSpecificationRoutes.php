@@ -19,5 +19,5 @@ Route::delete('product_specifications/{productSpecification}', ProductSpecificat
 Route::get('products/{product}/specifications', ProductProductSpecificationIndexController::class)
     ->name('api.v1.products.specifications.index');
 
-Route::post('product/{product}/specifications', ProductProductSpecificationStoreController::class)
+Route::post('products/{product}/specifications', ProductProductSpecificationStoreController::class)
     ->name('api.v1.products.specifications.store');
