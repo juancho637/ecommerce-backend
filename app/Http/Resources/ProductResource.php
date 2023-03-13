@@ -30,7 +30,7 @@ class ProductResource extends JsonResource
      * @OA\Property(property="name", type="string"),
      * @OA\Property(property="slug", type="string"),
      * @OA\Property(property="sku", type="string"),
-     * @OA\Property(property="price", type="string"),
+     * @OA\Property(property="price", type="number"),
      * @OA\Property(property="tax", type="string"),
      * @OA\Property(property="short_description", type="string"),
      * @OA\Property(property="description", type="string"),
