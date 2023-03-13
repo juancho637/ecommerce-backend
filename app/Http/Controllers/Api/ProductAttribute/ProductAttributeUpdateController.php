@@ -24,7 +24,7 @@ class ProductAttributeUpdateController extends ApiController
      * @OA\Put(
      *     path="/api/v1/product_attributes/{productAttribute}",
      *     summary="Update product attribute",
-     *     description="<strong>Method:</strong> updateProductAttribute<br/><strong>Includes:</strong> status",
+     *     description="<strong>Method:</strong> updateProductAttribute<br/><strong>Includes:</strong> status, product_attribute_options",
      *     operationId="updateProductAttribute",
      *     tags={"Product attributes"},
      *     security={ {"sanctum": {}} },

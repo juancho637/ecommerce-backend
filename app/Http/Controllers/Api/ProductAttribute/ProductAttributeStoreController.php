@@ -24,7 +24,7 @@ class ProductAttributeStoreController extends ApiController
      * @OA\Post(
      *     path="/api/v1/product_attributes",
      *     summary="Save product attribute",
-     *     description="<strong>Method:</strong> saveProductAttribute<br/><strong>Includes:</strong> status",
+     *     description="<strong>Method:</strong> saveProductAttribute<br/><strong>Includes:</strong> status, product_attribute_options",
      *     operationId="saveProductAttribute",
      *     tags={"Product attributes"},
      *     security={ {"sanctum": {}} },

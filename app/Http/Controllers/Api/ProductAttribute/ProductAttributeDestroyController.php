@@ -24,7 +24,7 @@ class ProductAttributeDestroyController extends ApiController
      * @OA\Delete(
      *     path="/api/v1/product_attributes/{productAttribute}",
      *     summary="Delete product attribute",
-     *     description="<strong>Method:</strong> deleteProductAttribute<br/><strong>Includes:</strong> status",
+     *     description="<strong>Method:</strong> deleteProductAttribute<br/><strong>Includes:</strong> status, product_attribute_options",
      *     operationId="deleteProductAttribute",
      *     tags={"Product attributes"},
      *     security={ {"sanctum": {}} },

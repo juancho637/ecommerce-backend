@@ -19,7 +19,7 @@ class ProductAttributeShowController extends ApiController
      * @OA\Get(
      *     path="/api/v1/product_attributes/{productAttribute}",
      *     summary="Show product attribute by id",
-     *     description="<strong>Method:</strong> getProductAttributeById<br/><strong>Includes:</strong> status",
+     *     description="<strong>Method:</strong> getProductAttributeById<br/><strong>Includes:</strong> status, product_attribute_options",
      *     operationId="getProductAttributeById",
      *     tags={"Product attributes"},
      *     security={ {"sanctum": {}} },

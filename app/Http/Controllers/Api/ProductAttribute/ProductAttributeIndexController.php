@@ -24,7 +24,7 @@ class ProductAttributeIndexController extends ApiController
      * @OA\Get(
      *     path="/api/v1/product_attributes",
      *     summary="List of product attributes",
-     *     description="<strong>Method:</strong> getAllProductAttributes<br/><strong>Includes:</strong> status",
+     *     description="<strong>Method:</strong> getAllProductAttributes<br/><strong>Includes:</strong> status, product_attribute_options",
      *     operationId="getAllProductAttributes",
      *     tags={"Product attributes"},
      *     security={ {"sanctum": {}} },
