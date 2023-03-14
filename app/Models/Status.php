@@ -29,7 +29,10 @@ class Status extends Model
     const STATUSES = [
         ['type' => self::GENERAL, 'name' => self::ENABLED],
         ['type' => self::GENERAL, 'name' => self::DISABLED],
-        ['type' => Product::CLASS_NAME, 'name' => Product::PENDING],
+
+        ['type' => Product::CLASS_NAME, 'name' => Product::GENERAL_STEP],
+        ['type' => Product::CLASS_NAME, 'name' => Product::STOCKS_STEP],
+        ['type' => Product::CLASS_NAME, 'name' => Product::SPECIFICATIONS_STEP],
     ];
 
     public function scopeEnabled($query)
@@ -42,9 +45,21 @@ class Status extends Model
         return $query->where('name', self::DISABLED);
     }
 
-    public function scopeProductPending($query)
+    public function scopeProductGeneralStep($query)
     {
         return $query->where('type', Product::CLASS_NAME)
-            ->where('name', Product::PENDING);
+            ->where('name', Product::GENERAL_STEP);
+    }
+
+    public function scopeProductStocksStep($query)
+    {
+        return $query->where('type', Product::CLASS_NAME)
+            ->where('name', Product::STOCKS_STEP);
+    }
+
+    public function scopeProductSpecificationsStep($query)
+    {
+        return $query->where('type', Product::CLASS_NAME)
+            ->where('name', Product::SPECIFICATIONS_STEP);
     }
 }

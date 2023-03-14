@@ -13,6 +13,8 @@ class StoreProductStockStep
     public function __invoke(array $fields, Product $product)
     {
         try {
+            $product->update($fields);
+
             foreach ($fields['stocks'] as $objectProductStock) {
                 app(StoreProductStock::class)(
                     $objectProductStock,
