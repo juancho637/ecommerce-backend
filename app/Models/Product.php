@@ -46,7 +46,9 @@ class Product extends Model
     const MAX_IMAGES = 4;
 
     // statuses
-    const PENDING = 'pending';
+    const GENERAL_STEP = 'general step';
+    const STOCKS_STEP = 'stocks step';
+    const SPECIFICATIONS_STEP = 'specifications step';
 
     // types
     const PRODUCT_TYPE = 'product';
@@ -218,7 +220,7 @@ class Product extends Model
     {
         $isVariableFiltered = filter_var($attributes['is_variable'], FILTER_VALIDATE_BOOLEAN);
 
-        $data['status_id'] = Status::productPending()->value('id');
+        $data['status_id'] = Status::productGeneralStep()->value('id');
         $data['category_id'] = $attributes['category_id'];
         $data['type'] = $attributes['type'];
         $data['name'] = $attributes['name'];
@@ -256,14 +258,16 @@ class Product extends Model
     public function setCreateProductStockStep($attributes)
     {
         return [
-            'stocks' => $attributes['stocks']
+            'status_id' => Status::productStocksStep()->value('id'),
+            'stocks' => $attributes['stocks'],
         ];
     }
 
     public function setCreateProductSpecificationStep($attributes)
     {
         return [
-            'specifications' => $attributes['specifications']
+            'status_id' => Status::productSpecificationsStep()->value('id'),
+            'specifications' => $attributes['specifications'],
         ];
     }
 

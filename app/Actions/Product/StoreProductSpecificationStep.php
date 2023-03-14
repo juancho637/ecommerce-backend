@@ -13,6 +13,8 @@ class StoreProductSpecificationStep
     public function __invoke(array $fields, Product $product)
     {
         try {
+            $product->update($fields);
+
             foreach ($fields['specifications'] as $objectProductSpecification) {
                 app(StoreProductSpecification::class)(
                     $objectProductSpecification,
