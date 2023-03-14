@@ -62,8 +62,6 @@ class StoreProductTest extends TestCase
             ]
         ];
 
-        dd($data);
-
         $response = $this->json('POST', route('api.v1.products_general.store'), $data);
 
         $response->assertStatus(201)->assertJsonStructure([
