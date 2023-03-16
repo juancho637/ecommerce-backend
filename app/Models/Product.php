@@ -198,6 +198,20 @@ class Product extends Model
             }
         }
 
+        if (in_array('specifications', $includes)) {
+            if ($user && $user->hasRole(Role::ADMIN)) {
+                $typeBuilder->$type(['productSpecifications']);
+            } else {
+                $typeBuilder->$type([
+                    'productSpecifications' => function ($query) {
+                        $query->whereHas('status', function ($query) {
+                            $query->where('name', Status::ENABLED);
+                        });
+                    }
+                ]);
+            }
+        }
+
         return $typeBuilder;
     }
 

@@ -150,7 +150,7 @@ class ProductProductSpecificationStoreController extends ApiController
         DB::beginTransaction();
         try {
             $this->productSpecification = app(StoreProductSpecification::class)(
-                $request,
+                $request->all(),
                 $product->id
             );
             DB::commit();
