@@ -37,5 +37,7 @@
     "The number of :attribute must be equal to the product attributes associated with the product": "El número de :attribute debe ser igual a los atributos asociados con el producto",
     "The product attribute of :attribute must be different": "El atributo de :attribute debe ser diferente",
     "The :attribute must not be different to the product attribute options associated with the product": "El :attribute no debe ser diferente a las opciones de atributo asociadas con el producto",
-    "This combination of :attribute has already been created": "Esta combinación de :attribute ya ha sido creada"
+    "This combination of :attribute has already been created": "Esta combinación de :attribute ya ha sido creada",
+    "The product is disabled": "El producto está deshabilitado",
+    "The product cannot be published": "El producto no puede ser publicado"
 }

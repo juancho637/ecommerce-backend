@@ -69,6 +69,18 @@ class ProductPolicy
     }
 
     /**
+     * Determine whether the user can publish the model.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Product  $product
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function publish(User $user, Product $product)
+    {
+        return $user->isAdmin();
+    }
+
+    /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user

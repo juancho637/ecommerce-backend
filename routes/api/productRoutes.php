@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Product\ProductIndexController;
 use App\Http\Controllers\Api\Product\ProductStoreController;
 use App\Http\Controllers\Api\Product\ProductUpdateController;
 use App\Http\Controllers\Api\Product\ProductDestroyController;
+use App\Http\Controllers\Api\Product\ProductPublishController;
 use App\Http\Controllers\Api\Product\ProductStockStepController;
 use App\Http\Controllers\Api\Product\Type\ProductTypeIndexController;
 use App\Http\Controllers\Api\Product\ProductSpecificationStepController;
@@ -26,8 +27,8 @@ Route::post('products/{product}/stocks_step', ProductStockStepController::class)
 Route::post('products/{product}/specifications_step', ProductSpecificationStepController::class)
     ->name('api.v1.product_specifications.store');
 
-// Route::post('products/{product}/publish', ProductPublishController::class)
-//     ->name('api.v1.products.publish');
+Route::post('products/{product}/publish', ProductPublishController::class)
+    ->name('api.v1.products.publish');
 
 Route::get('products/{product}', ProductShowController::class)
     ->name('api.v1.products.show');
