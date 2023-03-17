@@ -38,5 +38,7 @@
     "The product attribute of :attribute must be different": "The product attribute of :attribute must be different",
     "The :attribute must not be different to the product attribute options associated with the product": "The :attribute must not be different to the product attribute options associated with the product",
     "This combination of :attribute has already been created": "This combination of :attribute has already been created",
-    "The :attribute format must be between :first and :second": "The :attribute format must be between :first and :second"
+    "The :attribute format must be between :first and :second": "The :attribute format must be between :first and :second",
+    "The product is disabled": "The product is disabled",
+    "The product cannot be published": "The product cannot be published"
 }

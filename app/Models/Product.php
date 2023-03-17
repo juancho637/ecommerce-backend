@@ -344,4 +344,11 @@ class Product extends Model
 
         return $this;
     }
+
+    public function setPublish()
+    {
+        return [
+            'status_id' => Status::enabled()->value('id'),
+        ];
+    }
 }
