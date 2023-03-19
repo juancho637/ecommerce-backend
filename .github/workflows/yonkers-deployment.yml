@@ -21,10 +21,10 @@ jobs:
           extensions: imagick, swoole
 
       - name: Speed up the packages installation process
-          run: composer global require hirak/prestissimo
+        run: composer global require hirak/prestissimo
 
       - name: Install Packages
-          run: composer install --no-dev
+        run: composer install --no-dev
 
       - name: Sync files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
