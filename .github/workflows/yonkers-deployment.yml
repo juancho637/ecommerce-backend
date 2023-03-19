@@ -9,6 +9,7 @@ jobs:
   deploy:
     name: 🎉 Deploy
     runs-on: ubuntu-latest
+    environment: yonkers    
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -31,27 +32,3 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
-
-      # - name: Upload production-ready build files
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: production-files
-      #     path: ./dist
-
-  # deploy:
-  #   name: Deploy
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Download artifact
-  #       uses: actions/download-artifact@v3
-  #       with:
-  #         name: production-files
-  #         path: ./dist
-
-  #     - name: 📂 Sync files
-  #       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-  #       with:
-  #         server: ${{ secrets.ftp_server }}
-  #         username: ${{ secrets.ftp_user }}
-  #         password: ${{ secrets.ftp_password }}
