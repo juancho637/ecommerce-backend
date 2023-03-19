@@ -1,0 +1,57 @@
+name: yonkers deployment
+
+on:
+  push:
+    branches:
+      - yonkers
+
+jobs:
+  deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup PHP with PECL extension
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: imagick, swoole
+
+      - name: Speed up the packages installation process
+          run: composer global require hirak/prestissimo
+
+      - name: Install Packages
+          run: composer install --no-dev
+
+      - name: Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+
+      # - name: Upload production-ready build files
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: production-files
+      #     path: ./dist
+
+  # deploy:
+  #   name: Deploy
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Download artifact
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: production-files
+  #         path: ./dist
+
+  #     - name: 📂 Sync files
+  #       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+  #       with:
+  #         server: ${{ secrets.ftp_server }}
+  #         username: ${{ secrets.ftp_user }}
+  #         password: ${{ secrets.ftp_password }}
