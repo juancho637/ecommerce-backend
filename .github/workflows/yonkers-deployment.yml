@@ -24,11 +24,11 @@ jobs:
         run: composer install --no-dev
 
       - name: scp ssh pipelines
-        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+        uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
           port: ${{ secrets.SSH_PORT }}
-          user: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_CERT }}
-          scp: |
-            ./* => ./api_yonkersgarage/
+          source: "*"
+          target: "api_yonkersgarage"
