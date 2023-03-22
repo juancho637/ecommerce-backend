@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -17,9 +18,10 @@ class UserSeeder extends Seeder
         User::factory()
             ->roleAdmin()
             ->create([
-                'name' => 'Administrador Ecommerce',
-                'email' => 'admin@scriptforze.com',
-                'username' => 'admin',
+                'name' => env('INITIAL_USER_NAME', 'Administrador ' . env('APP_NAME', 'Laravel')),
+                'email' => env('INITIAL_USER_EMAIL', 'admin@scriptforze.com'),
+                'username' => env('INITIAL_USER_USERNAME', 'admin'),
+                'password' => Hash::make(env('INITIAL_USER_PASSWORD', 'password')),
             ]);
 
         if (app()->environment() !== 'production') {
