@@ -1,0 +1,37 @@
+name: develop deployment
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    environment: develop    
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup PHP with PECL extension
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: imagick, swoole
+
+      - name: Install Packages
+        run: composer install
+
+      - name: Generate l5-swagger documentation
+        run: php artisan l5-swagger:generate
+
+      - name: scp ssh pipelines
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_CERT }}
+          source: "*"
+          target: "ecommerce_backend"
