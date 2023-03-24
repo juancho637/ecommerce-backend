@@ -76,7 +76,6 @@ class ProductShowController extends ApiController
                 $product->scopeWithEagerLoading(
                     query: null,
                     includes: $includes,
-                    type: 'load'
                 )
             );
         }

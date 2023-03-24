@@ -25,7 +25,7 @@ class ProductPublishController extends ApiController
      * @OA\Post(
      *     path="/api/v1/products/{product}/publish",
      *     summary="Publish product by id",
-     *     description="<strong>Method:</strong> publishProduct<br/><strong>Includes:</strong> status, images, stock_images, category, tags, product_attribute_options, product_stocks",
+     *     description="<strong>Method:</strong> publishProduct<br/><strong>Includes:</strong> images, status, stock_images, category, tags, product_attribute_options, product_stocks",
      *     operationId="publishProduct",
      *     tags={"Products"},
      *     security={ {"sanctum": {}} },
@@ -107,7 +107,6 @@ class ProductPublishController extends ApiController
                 $this->product->scopeWithEagerLoading(
                     query: null,
                     includes: $includes,
-                    type: 'load'
                 )
             );
         } catch (\Exception $exception) {

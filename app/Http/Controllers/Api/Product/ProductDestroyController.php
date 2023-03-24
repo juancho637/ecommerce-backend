@@ -110,7 +110,6 @@ class ProductDestroyController extends ApiController
                 $this->product->scopeWithEagerLoading(
                     query: null,
                     includes: $includes,
-                    type: 'load'
                 )
             );
         } catch (\Exception $exception) {
