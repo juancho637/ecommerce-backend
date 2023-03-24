@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Tag;
 use App\Models\Status;
 use App\Models\Product;
 use App\Models\Category;
@@ -41,6 +42,33 @@ class ProductFactory extends Factory
         });
     }
 
+    public function statusGeneralStep()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'status_id' => Status::productGeneralStep()->value('id'),
+            ];
+        });
+    }
+
+    public function statusStocksStep()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'status_id' => Status::productStocksStep()->value('id'),
+            ];
+        });
+    }
+
+    public function statusSpecificationsStep()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'status_id' => Status::productSpecificationsStep()->value('id'),
+            ];
+        });
+    }
+
     public function isVariable()
     {
         return $this->state(function (array $attributes) {
@@ -65,6 +93,15 @@ class ProductFactory extends Factory
             return [
                 'type' => Product::SERVICE_TYPE,
             ];
+        });
+    }
+
+    public function withTags($numberOfTags = 1)
+    {
+        return $this->afterCreating(function (Product $product) use ($numberOfTags) {
+            $tags = Tag::all()->random($numberOfTags)->pluck('id');
+
+            $product->tags()->attach($tags);
         });
     }
 }
