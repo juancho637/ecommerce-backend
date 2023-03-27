@@ -16,7 +16,7 @@ class SyncProductImages
         try {
             if (array_key_exists('detach', $images) && count($images['detach'])) {
                 foreach ($images['detach'] as $image) {
-                    $resource = Resource::find($image['id']);
+                    $resource = Resource::find($image);
 
                     app(DeleteResource::class)($resource);
                 }
@@ -35,31 +35,6 @@ class SyncProductImages
                     $resource->save();
                 }
             }
-
-            // $imagesSaved = [];
-            // // $path = strtolower(class_basename($product));
-
-            // foreach ($images as $image) {
-            //     $imageUnsync = Resource::find($image['id']);
-            //     $oldImage = $product->images()
-            //         ->where('options->location', $image['location'])
-            //         ->first();
-            //     $options['location'] = $image['location'];
-
-            //     if ($oldImage) {
-            //         app(DeleteResource::class)($oldImage['path']);
-            //     }
-
-            //     $imageUnsync->obtainable_type = Product::class;
-            //     $imageUnsync->obtainable_id = $product->id;
-            //     $imageUnsync->type_resource = Product::PRODUCT_IMAGE;
-            //     $imageUnsync->options = $options;
-            //     $imageUnsync->save();
-
-            //     $imagesSaved[] = $imageUnsync;
-            // }
-
-            // return $imagesSaved;
         } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage());
         }
