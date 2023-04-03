@@ -1,13 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Api\User;
+namespace App\Http\Controllers\Api\Auth;
 
 use App\Models\User;
+use Illuminate\Support\Str;
+use App\Models\PasswordReset;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\User\ResetPassword;
 use App\Http\Controllers\Api\ApiController;
-use App\Http\Requests\Api\User\StoreUserRequest;
+use App\Http\Requests\Api\Auth\ForgotPasswordRequest;
 
-class UserStoreController extends ApiController
+class ForgotPasswordController extends ApiController
 {
     private $user;
 
@@ -15,28 +19,16 @@ class UserStoreController extends ApiController
     {
         $this->user = $user;
 
-        $this->middleware('auth:sanctum');
-
-        $this->middleware('can:create,' . User::class)->only('__invoke');
+        // $this->middleware('auth:sanctum');
     }
 
     /**
      * @OA\Post(
-     *     path="/api/v1/users",
-     *     summary="Save user",
-     *     description="<strong>Method:</strong> saveUser<br/><strong>Includes:</strong> status, roles, social_networks",
-     *     operationId="saveUser",
-     *     tags={"Users"},
-     *     security={ {"sanctum": {}} },
-     *     @OA\Parameter(
-     *         name="include",
-     *         description="Relationships of resource",
-     *         required=false,
-     *         in="query",
-     *         @OA\Schema(
-     *             type="string"
-     *         )
-     *     ),
+     *     path="/api/v1/auth/forgot-password",
+     *     summary="Forgot password",
+     *     description="<strong>Method:</strong> forgotPassword",
+     *     operationId="forgotPassword",
+     *     tags={"Auth"},
      *     @OA\Parameter(
      *         name="lang",
      *         description="Code of language",
@@ -51,7 +43,7 @@ class UserStoreController extends ApiController
      *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
      *                 type="object",
-     *                 ref="#/components/schemas/StoreUserRequest",
+     *                 ref="#/components/schemas/ForgotPasswordRequest",
      *             )
      *         )
      *     ),
@@ -59,11 +51,7 @@ class UserStoreController extends ApiController
      *         response="200",
      *         description="success",
      *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(
-     *                 property="data",
-     *                 ref="#/components/schemas/User",
-     *             ),
+     *             ref="#/components/schemas/ResponseMessage",
      *         ),
      *     ),
      *     @OA\Response(
@@ -74,17 +62,17 @@ class UserStoreController extends ApiController
      *         ),
      *     ),
      *     @OA\Response(
-     *         response="401",
-     *         description="fail",
-     *         @OA\JsonContent(
-     *             ref="#/components/schemas/AuthenticationException",
-     *         ),
-     *     ),
-     *     @OA\Response(
      *         response="403",
      *         description="fail",
      *         @OA\JsonContent(
      *             ref="#/components/schemas/AuthorizationException",
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/ModelNotFoundException",
      *         ),
      *     ),
      *     @OA\Response(
@@ -96,25 +84,33 @@ class UserStoreController extends ApiController
      *     ),
      * )
      */
-    public function __invoke(StoreUserRequest $request)
+    public function __invoke(ForgotPasswordRequest $request)
     {
-        $includes = explode(',', $request->get('include', ''));
-
         DB::beginTransaction();
         try {
-            $this->user = $this->user->create(
-                $this->user->setCreate($request)
-            );
+            $this->user = $this->user->where('email', $request->email)->first();
 
-            $this->user->syncRoles($request->role);
+            if (!$this->user || !$this->user->email) {
+                throw new \Exception(__('Incorrect email address'), Response::HTTP_NOT_FOUND);
+            }
+
+            $resetPasswordToken = Str::random(6);
+
+            if (!$userPassReset = PasswordReset::where('email', $this->user->email)->first()) {
+                PasswordReset::create([
+                    'email' => $request->email,
+                    'token' => $resetPasswordToken
+                ]);
+            } else {
+                $userPassReset->update([
+                    'token' => $resetPasswordToken
+                ]);
+            }
+
+            $this->user->notify(new ResetPassword($resetPasswordToken));
             DB::commit();
 
-            return $this->showOne(
-                $this->user->scopeWithEagerLoading(
-                    query: null,
-                    includes: $includes,
-                )
-            );
+            return $this->showMessage(__('A code has been sent to your Email.'));
         } catch (\Exception $exception) {
             DB::rollBack();
             throw new \Exception($exception->getMessage(), $exception->getCode());

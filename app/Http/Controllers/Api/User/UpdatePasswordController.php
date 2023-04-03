@@ -3,24 +3,30 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Models\User;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Actions\User\UpdatePassword;
 use App\Http\Controllers\Api\ApiController;
+use App\Http\Requests\Api\User\UpdatePasswordRequest;
 
-class UserShowController extends ApiController
+class UpdatePasswordController extends ApiController
 {
-    public function __construct()
+    private $user;
+
+    public function __construct(User $user)
     {
+        $this->user = $user;
+
         $this->middleware('auth:sanctum');
 
-        $this->middleware('can:view,user')->only('__invoke');
+        $this->middleware('can:update-password,user')->only('__invoke');
     }
 
     /**
-     * @OA\Get(
-     *     path="/api/v1/users/{user}",
-     *     summary="Show user by id",
-     *     description="<strong>Method:</strong> getUserById<br/><strong>Includes:</strong> status, roles, social_networks",
-     *     operationId="getUserById",
+     * @OA\Put(
+     *     path="/api/v1/users/{user}/password",
+     *     summary="Update user password",
+     *     description="<strong>Method:</strong> updateUserPassword<br/><strong>Includes:</strong> status, roles, social_networks",
+     *     operationId="updateUserPassword",
      *     tags={"Users"},
      *     security={ {"sanctum": {}} },
      *     @OA\Parameter(
@@ -50,6 +56,15 @@ class UserShowController extends ApiController
      *             type="string"
      *         )
      *     ),
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 ref="#/components/schemas/UpdatePasswordRequest",
+     *             )
+     *         )
+     *     ),
      *     @OA\Response(
      *         response="200",
      *         description="success",
@@ -59,6 +74,13 @@ class UserShowController extends ApiController
      *                 property="data",
      *                 ref="#/components/schemas/User",
      *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="fail",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/BadRequestException",
      *         ),
      *     ),
      *     @OA\Response(
@@ -76,23 +98,35 @@ class UserShowController extends ApiController
      *         ),
      *     ),
      *     @OA\Response(
-     *         response="404",
+     *         response="422",
      *         description="fail",
      *         @OA\JsonContent(
-     *             ref="#/components/schemas/ModelNotFoundException",
+     *             ref="#/components/schemas/ValidationException",
      *         ),
      *     ),
      * )
      */
-    public function __invoke(Request $request, User $user)
+    public function __invoke(UpdatePasswordRequest $request, User $user)
     {
         $includes = explode(',', $request->get('include', ''));
 
-        return $this->showOne(
-            $user->scopeWithEagerLoading(
-                query: null,
-                includes: $includes,
-            )
-        );
+        DB::beginTransaction();
+        try {
+            $this->user = app(UpdatePassword::class)(
+                $user->setUpdatePassword($request),
+                $user,
+            );
+            DB::commit();
+
+            return $this->showOne(
+                $this->user->scopeWithEagerLoading(
+                    query: null,
+                    includes: $includes,
+                )
+            );
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            throw new \Exception($exception->getMessage(), $exception->getCode());
+        }
     }
 }

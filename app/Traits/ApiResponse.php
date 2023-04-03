@@ -24,6 +24,13 @@ trait ApiResponse
         ], $code);
     }
 
+    /**
+     * @OA\Schema(
+     *     schema="ResponseMessage",
+     *     @OA\Property(property="message", type="string"),
+     *     @OA\Property(property="code", type="number"),
+     * )
+     */
     protected function showMessage($message, $code = Response::HTTP_OK)
     {
         return $this->jsonResponse([

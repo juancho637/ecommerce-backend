@@ -119,7 +119,6 @@ class UserUpdateController extends ApiController
                 $this->user->scopeWithEagerLoading(
                     query: null,
                     includes: $includes,
-                    type: 'load'
                 )
             );
         } catch (\Exception $exception) {

@@ -18,10 +18,10 @@ class UserSeeder extends Seeder
     public function run()
     {
         $admin = User::create([
-            'name' => env('INITIAL_USER_NAME', 'Administrador ' . env('APP_NAME', 'Laravel')),
-            'email' => env('INITIAL_USER_EMAIL', 'admin@scriptforze.com'),
-            'username' => env('INITIAL_USER_USERNAME', 'admin'),
-            'password' => Hash::make(env('INITIAL_USER_PASSWORD', 'password')),
+            'name' => env('INITIAL_USER_NAME') ?? 'Administrador ' . env('APP_NAME', 'Laravel'),
+            'email' => env('INITIAL_USER_EMAIL') ?? 'admin@scriptforze.com',
+            'username' => env('INITIAL_USER_USERNAME') ?? 'admin',
+            'password' => Hash::make(env('INITIAL_USER_PASSWORD') ?? 'password'),
             'status_id' => Status::enabled()->value('id'),
             'email_verified_at' => now(),
         ]);
