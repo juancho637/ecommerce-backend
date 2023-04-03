@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\AuthMeController;
+use App\Http\Controllers\Api\Auth\LogoutController;
 use App\Http\Controllers\Api\Auth\AuthLoginController;
 use App\Http\Controllers\Api\Auth\AuthProviderController;
 use App\Http\Controllers\Api\Auth\AuthRegisterController;
@@ -10,6 +11,9 @@ use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 
 Route::post('auth/login', AuthLoginController::class)
     ->name('api.v1.auth.login');
+
+Route::post('auth/logout', LogoutController::class)
+    ->name('api.v1.auth.logout');
 
 Route::get('auth/me', AuthMeController::class)
     ->name('api.v1.auth.me');
