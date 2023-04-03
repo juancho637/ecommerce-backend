@@ -19,13 +19,13 @@ jobs:
         with:
           php-version: '8.1'
           extensions: imagick, swoole
-        env:
-          L5_SWAGGER_CONST_HOST: ${{ vars.L5_SWAGGER_CONST_HOST }}
 
       - name: Install Packages
         run: composer install
 
       - name: Generate l5-swagger documentation
+        env:
+          L5_SWAGGER_CONST_HOST: ${{ vars.L5_SWAGGER_CONST_HOST }}
         run: php artisan l5-swagger:generate
 
       - name: scp ssh pipelines

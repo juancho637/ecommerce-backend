@@ -59,8 +59,7 @@ class AuthMeController extends ApiController
         return $this->showOne(
             $user->scopeWithEagerLoading(
                 query: null,
-                includes: $includes,
-                type: 'load'
+                includes: $includes
             )
         );
     }
