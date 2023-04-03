@@ -92,6 +92,7 @@ return [
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,
+            'token_expire' => env('RESET_PASSWORD_TOKEN_EXPIRE') ?? 60,
         ],
     ],
 

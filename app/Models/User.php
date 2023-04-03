@@ -47,10 +47,11 @@ class User extends Authenticatable
         return $this->hasMany(SocialNetwork::class);
     }
 
-    public function scopeWithEagerLoading(?Builder $query, array $includes, string $type = 'with')
+    public function scopeWithEagerLoading(?Builder $query, array $includes)
     {
         // $user = auth('sanctum')->user();
-        $typeBuilder = $type === 'with' ? $query : $this;
+        $typeBuilder = $query ?? $this;
+        $type = $query ? 'with' : 'load';
 
         if (in_array('status', $includes)) {
             $typeBuilder->$type(['status']);
@@ -89,6 +90,14 @@ class User extends Authenticatable
         !$attributes['username'] ?: $this->username = $attributes['username'];
 
         return $this;
+    }
+
+    public function setUpdatePassword($attributes)
+    {
+        $data['password'] = $attributes['password'];
+        $data['new_password'] = $attributes['new_password'];
+
+        return $data;
     }
 
     public function setDelete()

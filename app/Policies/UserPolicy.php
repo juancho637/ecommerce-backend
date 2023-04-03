@@ -56,6 +56,18 @@ class UserPolicy
     }
 
     /**
+     * Determine whether the user can update the model password.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\User  $model
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function updatePassword(User $user, User $model)
+    {
+        return $user->id === $model->id;
+    }
+
+    /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
