@@ -11,14 +11,14 @@ class UpdateScoutCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'scout:update';
+    protected $signature = "scout:update";
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command to update all scout records';
+    protected $description = "Command to update all scout records";
 
     /**
      * Create a new command instance.
@@ -37,53 +37,53 @@ class UpdateScoutCommand extends Command
      */
     public function handle()
     {
-        $this->call('scout:flush', [
-            'model' => 'App\Models\Country',
+        $this->call("scout:flush", [
+            "model" => "App\Models\Country",
         ]);
-        $this->call('tntsearch:import', [
-            'model' => 'App\Models\Country',
-        ]);
-
-        $this->call('scout:flush', [
-            'model' => 'App\Models\State',
-        ]);
-        $this->call('tntsearch:import', [
-            'model' => 'App\Models\State',
+        $this->call("scout:import", [
+            "model" => "App\Models\Country",
         ]);
 
-        $this->call('scout:flush', [
-            'model' => 'App\Models\City',
+        $this->call("scout:flush", [
+            "model" => "App\Models\State",
         ]);
-        $this->call('tntsearch:import', [
-            'model' => 'App\Models\City',
-        ]);
-
-        $this->call('scout:flush', [
-            'model' => 'App\Models\Category',
-        ]);
-        $this->call('tntsearch:import', [
-            'model' => 'App\Models\Category',
+        $this->call("scout:import", [
+            "model" => "App\Models\State",
         ]);
 
-        $this->call('scout:flush', [
-            'model' => 'App\Models\Tag',
+        $this->call("scout:flush", [
+            "model" => "App\Models\City",
         ]);
-        $this->call('tntsearch:import', [
-            'model' => 'App\Models\Tag',
-        ]);
-
-        $this->call('scout:flush', [
-            'model' => 'App\Models\ProductAttribute',
-        ]);
-        $this->call('tntsearch:import', [
-            'model' => 'App\Models\ProductAttribute',
+        $this->call("scout:import", [
+            "model" => "App\Models\City",
         ]);
 
-        $this->call('scout:flush', [
-            'model' => 'App\Models\Product',
+        $this->call("scout:flush", [
+            "model" => "App\Models\Category",
         ]);
-        $this->call('tntsearch:import', [
-            'model' => 'App\Models\Product',
+        $this->call("scout:import", [
+            "model" => "App\Models\Category",
+        ]);
+
+        $this->call("scout:flush", [
+            "model" => "App\Models\Tag",
+        ]);
+        $this->call("scout:import", [
+            "model" => "App\Models\Tag",
+        ]);
+
+        $this->call("scout:flush", [
+            "model" => "App\Models\ProductAttribute",
+        ]);
+        $this->call("scout:import", [
+            "model" => "App\Models\ProductAttribute",
+        ]);
+
+        $this->call("scout:flush", [
+            "model" => "App\Models\Product",
+        ]);
+        $this->call("scout:import", [
+            "model" => "App\Models\Product",
         ]);
     }
 }

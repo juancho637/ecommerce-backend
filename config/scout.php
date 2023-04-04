@@ -144,7 +144,7 @@ return [
         ],
         'asYouType' => true,
         'searchBoolean' => env('TNTSEARCH_BOOLEAN', false),
-        'modelPath' => 'app/models',
+        'modelPath' => 'app/Models',
         // 'maxDocs' => env('TNTSEARCH_MAX_DOCS', 500),
     ],
 ];
