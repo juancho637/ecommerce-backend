@@ -40,49 +40,49 @@ class UpdateScoutCommand extends Command
         $this->call('scout:flush', [
             'model' => 'App\Models\Country',
         ]);
-        $this->call('scout:import', [
+        $this->call('tntsearch:import', [
             'model' => 'App\Models\Country',
         ]);
 
         $this->call('scout:flush', [
             'model' => 'App\Models\State',
         ]);
-        $this->call('scout:import', [
+        $this->call('tntsearch:import', [
             'model' => 'App\Models\State',
         ]);
 
         $this->call('scout:flush', [
             'model' => 'App\Models\City',
         ]);
-        $this->call('scout:import', [
+        $this->call('tntsearch:import', [
             'model' => 'App\Models\City',
         ]);
 
         $this->call('scout:flush', [
             'model' => 'App\Models\Category',
         ]);
-        $this->call('scout:import', [
+        $this->call('tntsearch:import', [
             'model' => 'App\Models\Category',
         ]);
 
         $this->call('scout:flush', [
             'model' => 'App\Models\Tag',
         ]);
-        $this->call('scout:import', [
+        $this->call('tntsearch:import', [
             'model' => 'App\Models\Tag',
         ]);
 
         $this->call('scout:flush', [
             'model' => 'App\Models\ProductAttribute',
         ]);
-        $this->call('scout:import', [
+        $this->call('tntsearch:import', [
             'model' => 'App\Models\ProductAttribute',
         ]);
 
         $this->call('scout:flush', [
             'model' => 'App\Models\Product',
         ]);
-        $this->call('scout:import', [
+        $this->call('tntsearch:import', [
             'model' => 'App\Models\Product',
         ]);
     }
