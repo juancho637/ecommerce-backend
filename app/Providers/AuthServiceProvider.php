@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Tag;
 use App\Models\City;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\State;
 use App\Models\Country;
@@ -13,6 +14,7 @@ use App\Models\Resource;
 use App\Policies\TagPolicy;
 use App\Policies\CityPolicy;
 use App\Models\ProductStock;
+use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
 use App\Policies\StatePolicy;
 use App\Policies\CountryPolicy;
@@ -49,6 +51,7 @@ class AuthServiceProvider extends ServiceProvider
         Product::class => ProductPolicy::class,
         ProductSpecification::class => ProductSpecificationPolicy::class,
         ProductStock::class => ProductStockPolicy::class,
+        Role::class => RolePolicy::class,
     ];
 
     /**

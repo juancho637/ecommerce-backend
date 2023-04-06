@@ -28,4 +28,6 @@ Route::group(['prefix' => 'v1'], function () {
     Route::group([], __DIR__ . '/api/productStocksRoutes.php');
 
     Route::group([], __DIR__ . '/api/resourceRoutes.php');
+
+    Route::group([], __DIR__ . '/api/roleRoutes.php');
 });
