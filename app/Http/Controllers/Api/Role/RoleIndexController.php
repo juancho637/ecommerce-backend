@@ -26,6 +26,7 @@ class RoleIndexController extends ApiController
      *     description="<strong>Method:</strong> getAllRoles",
      *     operationId="getAllRoles",
      *     tags={"Roles"},
+     *     security={ {"sanctum": {}} },
      *     @OA\Parameter(
      *         name="per_page",
      *         description="Number of resources per page",
