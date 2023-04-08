@@ -27,6 +27,8 @@ class Product extends Model
         'short_description',
         'description',
         'options',
+        'amount_viewed',
+        'quantity_sold',
     ];
 
     protected $casts = [
@@ -223,12 +225,12 @@ class Product extends Model
         if ($this->status->name === Status::DISABLED) {
             if ($user && $user->hasRole(Role::ADMIN)) {
                 return true;
-            } else {
-                return false;
             }
-        } else {
-            return true;
+
+            return false;
         }
+
+        return true;
     }
 
     public function setCreate($attributes)

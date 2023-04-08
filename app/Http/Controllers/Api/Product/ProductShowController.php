@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api\Product;
 
+use App\Models\Role;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Events\Product\ProductViewed;
 use App\Http\Controllers\Api\ApiController;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -72,6 +74,12 @@ class ProductShowController extends ApiController
         $includes = explode(',', $request->get('include', ''));
 
         if ($product->validByRole()) {
+            $user = auth('sanctum')->user();
+
+            if (!$user || !$user->hasRole(Role::ADMIN)) {
+                ProductViewed::dispatch($product);
+            }
+
             return $this->showOne(
                 $product->scopeWithEagerLoading(
                     query: null,

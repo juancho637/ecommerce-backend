@@ -19,6 +19,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *         "short_description",
  *         "description",
  *         "is_variable",
+ *         "amount_viewed",
+ *         "quantity_sold",
  *     },
  * )
  */
@@ -35,6 +37,9 @@ class ProductResource extends JsonResource
      * @OA\Property(property="short_description", type="string"),
      * @OA\Property(property="description", type="string"),
      * @OA\Property(property="is_variable", type="boolean"),
+     * @OA\Property(property="amount_viewed", type="number"),
+     * @OA\Property(property="quantity_sold", type="number"),
+     * 
      * @OA\Property(property="stock", type="number"),
      * @OA\Property(property="width", type="number"),
      * @OA\Property(property="height", type="number"),
@@ -87,6 +92,8 @@ class ProductResource extends JsonResource
             'short_description' => $this->short_description,
             'description' => $this->description,
             'is_variable' => $this->is_variable,
+            'amount_viewed' => $this->amount_viewed,
+            'quantity_sold' => $this->quantity_sold,
         ];
 
         if (!$this->whenLoaded('status') instanceof MissingValue) {
@@ -146,6 +153,8 @@ class ProductResource extends JsonResource
             'slug' => 'slug',
             'description' => 'description',
             'is_variable' => 'is_variable',
+            'amount_viewed' => 'amount_viewed',
+            'quantity_sold' => 'quantity_sold',
         ];
 
         return isset($attributes[$index]) ? $attributes[$index] : null;
