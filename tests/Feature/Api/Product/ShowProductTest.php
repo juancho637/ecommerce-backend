@@ -6,6 +6,9 @@ use Tests\TestCase;
 use App\Models\Product;
 use App\Models\Resource;
 use App\Models\ProductStock;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Event;
+use App\Events\Product\ProductViewed;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,6 +22,8 @@ class ShowProductTest extends TestCase
         parent::setUp();
 
         Storage::fake('public');
+        Event::fake();
+
         $this->seed();
     }
 
@@ -30,7 +35,8 @@ class ShowProductTest extends TestCase
 
         // dd($response->decodeResponseJson());
 
-        $response->assertStatus(200)->assertJson([
+        Event::assertDispatched(ProductViewed::class);
+        $response->assertStatus(Response::HTTP_OK)->assertJson([
             'data' => [
                 'id' => $product->id,
                 'name' => $product->name,
@@ -63,7 +69,7 @@ class ShowProductTest extends TestCase
 
         // dd($response->decodeResponseJson());
 
-        $response->assertStatus(200)->assertJson([
+        $response->assertStatus(Response::HTTP_OK)->assertJson([
             'data' => [
                 'id' => $product->id,
                 'name' => $product->name,
@@ -88,7 +94,7 @@ class ShowProductTest extends TestCase
             'include' => 'images'
         ]));
 
-        $response->assertStatus(200)
+        $response->assertStatus(Response::HTTP_OK)
             ->assertJsonStructure([
                 'data' => [
                     'id',
@@ -147,7 +153,7 @@ class ShowProductTest extends TestCase
             'include' => 'images,product_stocks,stock_images'
         ]));
 
-        $response->assertStatus(200)
+        $response->assertStatus(Response::HTTP_OK)
             ->assertJsonStructure([
                 'data' => [
                     'id',
