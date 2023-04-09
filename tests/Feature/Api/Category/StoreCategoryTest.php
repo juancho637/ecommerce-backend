@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Category;
 use App\Models\Resource;
 use Laravel\Sanctum\Sanctum;
+use Illuminate\Http\Response;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -30,13 +31,15 @@ class StoreCategoryTest extends TestCase
         $name = $this->faker->unique()->sentence(1, false);
         $parent = $this->faker->boolean() ? Category::whereNull('parent_id')->get()->random()->id : null;
 
-        $response = $this->json('POST', route('api.v1.categories.store'), [
+        $response = $this->json('POST', route('api.v1.categories.store', [
+            'include' => 'image'
+        ]), [
             'name' => $name,
             'image' => $image->id,
             'parent_id' => $parent,
         ]);
 
-        $response->assertStatus(201)->assertJsonStructure([
+        $response->assertStatus(Response::HTTP_CREATED)->assertJsonStructure([
             'data' => [
                 'id',
                 'name',

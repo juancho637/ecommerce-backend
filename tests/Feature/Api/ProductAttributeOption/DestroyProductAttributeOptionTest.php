@@ -6,6 +6,7 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Status;
 use Laravel\Sanctum\Sanctum;
+use Illuminate\Http\Response;
 use App\Models\ProductAttributeOption;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -34,17 +35,15 @@ class DestroyProductAttributeOptionTest extends TestCase
             'include' => 'status'
         ]));
 
-        $response->assertStatus(200)->assertJsonStructure([
+        $response->assertStatus(Response::HTTP_OK)->assertJsonStructure([
             'data' => [
                 'id',
                 'name',
-                'option',
             ]
         ])->assertJson([
             'data' => [
                 'id' => $productAttributeOption->id,
                 'name' => $productAttributeOption->name,
-                'option' => $productAttributeOption->option,
                 'status' => [
                     'id' => $disabledStatus->id,
                     'name' => $disabledStatus->name,

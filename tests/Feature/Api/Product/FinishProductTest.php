@@ -6,6 +6,7 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Product;
 use Laravel\Sanctum\Sanctum;
+use Illuminate\Http\Response;
 use App\Models\ProductAttributeOption;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -49,27 +50,18 @@ class FinishProductTest extends TestCase
             ],
         ];
 
-        $response = $this->json('POST', route('api.v1.products.finish', [
-            $product,
-            'include' => 'specifications',
+        $response = $this->json('POST', route('api.v1.product_specifications.store', [
+            $product
         ]), [
             'specifications' => $specifications,
         ]);
 
-        $response->assertStatus(200)->assertJsonStructure([
+        $response->assertStatus(Response::HTTP_CREATED)->assertJsonStructure([
             'data' => [
-                'id',
-                'name',
-                'slug',
-                'short_description',
-                'description',
-                'is_variable',
-                'specifications' => [
-                    [
-                        'id',
-                        'name',
-                        'value',
-                    ],
+                '*' => [
+                    'id',
+                    'name',
+                    'value',
                 ]
             ]
         ])->assertJsonFragment([

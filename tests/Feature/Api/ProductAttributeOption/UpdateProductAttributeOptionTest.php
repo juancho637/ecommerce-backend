@@ -5,6 +5,7 @@ namespace Tests\Feature\Api\ProductAttributeOption;
 use Tests\TestCase;
 use App\Models\User;
 use Laravel\Sanctum\Sanctum;
+use Illuminate\Http\Response;
 use App\Models\ProductAttribute;
 use App\Models\ProductAttributeOption;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -42,17 +43,15 @@ class UpdateProductAttributeOptionTest extends TestCase
             'option' => $option,
         ]);
 
-        $response->assertStatus(200)->assertJsonStructure([
+        $response->assertStatus(Response::HTTP_OK)->assertJsonStructure([
             'data' => [
                 'id',
                 'name',
-                'option',
             ]
         ])->assertJson([
             'data' => [
                 'id' => $productAttributeOption->id,
                 'name' => $name,
-                'option' => $option,
             ]
         ]);
     }

@@ -5,6 +5,7 @@ namespace Tests\Feature\Api\ProductAttribute\ProductAttributeOption;
 use Tests\TestCase;
 use App\Models\User;
 use Laravel\Sanctum\Sanctum;
+use Illuminate\Http\Response;
 use App\Models\ProductAttribute;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -35,12 +36,11 @@ class IndexProductAttributeProductAttributeOptionTest extends TestCase
             ]
         ));
 
-        $response->assertStatus(200)->assertJsonStructure([
+        $response->assertStatus(Response::HTTP_OK)->assertJsonStructure([
             'data' => [
                 [
                     'id',
                     'name',
-                    'option',
                 ]
             ]
         ]);
@@ -61,6 +61,6 @@ class IndexProductAttributeProductAttributeOptionTest extends TestCase
             ]
         ));
 
-        $response->assertStatus(200)->assertJsonStructure([]);
+        $response->assertStatus(Response::HTTP_OK)->assertJsonStructure([]);
     }
 }

@@ -5,6 +5,7 @@ namespace Tests\Feature\Api\ProductAttributeOption;
 use Tests\TestCase;
 use App\Models\User;
 use Laravel\Sanctum\Sanctum;
+use Illuminate\Http\Response;
 use App\Models\ProductAttributeOption;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -29,11 +30,10 @@ class ShowProductAttributeOptionTest extends TestCase
 
         $response = $this->json('GET', route('api.v1.product_attribute_options.show', [$productAttributeOption]));
 
-        $response->assertStatus(200)->assertJson([
+        $response->assertStatus(Response::HTTP_OK)->assertJson([
             'data' => [
                 'id' => $productAttributeOption->id,
                 'name' => $productAttributeOption->name,
-                'option' => $productAttributeOption->option,
             ]
         ]);
     }

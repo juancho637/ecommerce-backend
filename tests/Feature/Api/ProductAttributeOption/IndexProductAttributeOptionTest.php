@@ -5,6 +5,7 @@ namespace Tests\Feature\Api\ProductAttributeOption;
 use Tests\TestCase;
 use App\Models\User;
 use Laravel\Sanctum\Sanctum;
+use Illuminate\Http\Response;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -26,12 +27,11 @@ class IndexProductAttributeOptionTest extends TestCase
 
         $response = $this->json('GET', route('api.v1.product_attribute_options.index'));
 
-        $response->assertStatus(200)->assertJsonStructure([
+        $response->assertStatus(Response::HTTP_OK)->assertJsonStructure([
             'data' => [
                 [
                     'id',
                     'name',
-                    'option',
                 ]
             ]
         ]);
