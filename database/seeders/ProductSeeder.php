@@ -55,7 +55,7 @@ class ProductSeeder extends Seeder
             });
 
         Product::factory()
-            ->count(5)
+            ->count(10)
             ->create()
             ->each(function ($product) {
                 $tags = Tag::all()->random(3);
@@ -68,7 +68,7 @@ class ProductSeeder extends Seeder
             });
 
         Product::factory()
-            ->count(5)
+            ->count(10)
             ->isVariable()
             ->create()
             ->each(function ($product) {
