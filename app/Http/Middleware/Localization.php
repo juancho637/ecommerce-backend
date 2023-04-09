@@ -11,6 +11,17 @@ class Localization
     /**
      * Handle an incoming request.
      *
+     * @OA\Parameter(
+     *     parameter="localization--lang",
+     *     name="lang",
+     *     description="Code of language",
+     *     required=false,
+     *     in="query",
+     *     @OA\Schema(
+     *         type="string"
+     *     )
+     * ),
+     *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse

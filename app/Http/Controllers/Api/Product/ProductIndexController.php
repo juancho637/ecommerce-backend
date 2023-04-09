@@ -23,60 +23,26 @@ class ProductIndexController extends ApiController
      *     description="<strong>Method:</strong> getAllProducts<br/><strong>Includes:</strong> status, images, stock_images, category, tags, product_attribute_options, product_stocks",
      *     operationId="getAllProducts",
      *     tags={"Products"},
-     *     @OA\Parameter(
-     *         name="include",
-     *         description="Relationships of resource",
-     *         required=false,
-     *         in="query",
-     *         @OA\Schema(
-     *             type="string"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="search",
-     *         description="String to search",
-     *         required=false,
-     *         in="query",
-     *         @OA\Schema(
-     *             type="string"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="per_page",
-     *         description="Number of resources per page",
-     *         required=false,
-     *         in="query",
-     *         @OA\Schema(
-     *             type="number"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="page",
-     *         description="Number of current page",
-     *         required=false,
-     *         in="query",
-     *         @OA\Schema(
-     *             type="number"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="sort_by",
-     *         description="Name of field to sort",
-     *         required=false,
-     *         in="query",
-     *         @OA\Schema(
-     *             type="string"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="lang",
-     *         description="Code of language",
-     *         required=false,
-     *         in="query",
-     *         @OA\Schema(
-     *             type="string"
-     *         )
-     *     ),
+     *     @OA\Parameter(ref="#/components/parameters/relationships--include"),
+     *     @OA\Parameter(ref="#/components/parameters/filter--search"),
+     *     @OA\Parameter(ref="#/components/parameters/pagination--per_page"),
+     *     @OA\Parameter(ref="#/components/parameters/pagination--page"),
+     *     @OA\Parameter(ref="#/components/parameters/filter--sort_by"),
+     *     @OA\Parameter(ref="#/components/parameters/localization--lang"),
+     * 
+     *     @OA\Parameter(ref="#/components/parameters/product--id"),
+     *     @OA\Parameter(ref="#/components/parameters/product--status"),
+     *     @OA\Parameter(ref="#/components/parameters/product--category"),
+     *     @OA\Parameter(ref="#/components/parameters/product--type"),
+     *     @OA\Parameter(ref="#/components/parameters/product--name"),
+     *     @OA\Parameter(ref="#/components/parameters/product--price"),
+     *     @OA\Parameter(ref="#/components/parameters/product--tax"),
+     *     @OA\Parameter(ref="#/components/parameters/product--slug"),
+     *     @OA\Parameter(ref="#/components/parameters/product--description"),
+     *     @OA\Parameter(ref="#/components/parameters/product--is_variable"),
+     *     @OA\Parameter(ref="#/components/parameters/product--amount_viewed"),
+     *     @OA\Parameter(ref="#/components/parameters/product--quantity_sold"),
+     * 
      *     @OA\Response(
      *         response="200",
      *         description="success",

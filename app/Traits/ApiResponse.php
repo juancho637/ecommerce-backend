@@ -70,6 +70,17 @@ trait ApiResponse
 
     /**
      * función para ordenar segun el campo sort_by de un request.
+     * 
+     * @OA\Parameter(
+     *     parameter="filter--sort_by",
+     *     name="sort_by",
+     *     description="Name of field to sort",
+     *     required=false,
+     *     in="query",
+     *     @OA\Schema(
+     *         type="string"
+     *     )
+     * ),
      */
     protected function sortData(Collection $collection, $transformer)
     {
@@ -141,6 +152,28 @@ trait ApiResponse
      *     @OA\Property(property="to", type="number", example=1),
      *     @OA\Property(property="total", type="number", example=1),
      * )
+     * 
+     * @OA\Parameter(
+     *     parameter="pagination--per_page",
+     *     name="per_page",
+     *     description="Number of resources per page",
+     *     required=false,
+     *     in="query",
+     *     @OA\Schema(
+     *         type="number"
+     *     )
+     * ),
+     * 
+     * @OA\Parameter(
+     *     parameter="pagination--page",
+     *     name="page",
+     *     description="Number of current page",
+     *     required=false,
+     *     in="query",
+     *     @OA\Schema(
+     *         type="number"
+     *     )
+     * ),
      */
     protected function paginateData(Collection $collection)
     {
