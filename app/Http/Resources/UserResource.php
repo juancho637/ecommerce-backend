@@ -48,6 +48,48 @@ class UserResource extends JsonResource
         return $resource;
     }
 
+    /**
+     * @OA\Parameter(
+     *     parameter="user--id",
+     *     name="id",
+     *     in="query",
+     *     @OA\Schema(
+     *         type="number"
+     *     )
+     * ),
+     * @OA\Parameter(
+     *     parameter="user--status",
+     *     name="status",
+     *     in="query",
+     *     @OA\Schema(
+     *         type="number"
+     *     )
+     * ),
+     * @OA\Parameter(
+     *     parameter="user--name",
+     *     name="name",
+     *     in="query",
+     *     @OA\Schema(
+     *         type="string"
+     *     )
+     * ),
+     * @OA\Parameter(
+     *     parameter="user--email",
+     *     name="email",
+     *     in="query",
+     *     @OA\Schema(
+     *         type="string"
+     *     )
+     * ),
+     * @OA\Parameter(
+     *     parameter="user--username",
+     *     name="username",
+     *     in="query",
+     *     @OA\Schema(
+     *         type="string"
+     *     )
+     * ),
+     */
     public static function originalAttribute($index)
     {
         $attributes = [

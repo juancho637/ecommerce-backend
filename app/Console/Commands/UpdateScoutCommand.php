@@ -85,5 +85,12 @@ class UpdateScoutCommand extends Command
         $this->call("scout:import", [
             "model" => "App\Models\Product",
         ]);
+
+        $this->call("scout:flush", [
+            "model" => "App\Models\User",
+        ]);
+        $this->call("scout:import", [
+            "model" => "App\Models\User",
+        ]);
     }
 }
