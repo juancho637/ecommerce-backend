@@ -36,6 +36,8 @@ class ProductIndexController extends ApiController
      *     @OA\Parameter(ref="#/components/parameters/product--type"),
      *     @OA\Parameter(ref="#/components/parameters/product--name"),
      *     @OA\Parameter(ref="#/components/parameters/product--price"),
+     *     @OA\Parameter(ref="#/components/parameters/product--min_price"),
+     *     @OA\Parameter(ref="#/components/parameters/product--max_price"),
      *     @OA\Parameter(ref="#/components/parameters/product--tax"),
      *     @OA\Parameter(ref="#/components/parameters/product--slug"),
      *     @OA\Parameter(ref="#/components/parameters/product--description"),

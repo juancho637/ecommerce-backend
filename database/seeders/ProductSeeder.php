@@ -22,8 +22,6 @@ class ProductSeeder extends Seeder
                 'name' => 'iphone 12',
                 'type' => Product::PRODUCT_TYPE,
                 'slug' => 'iphone-12',
-                'short_description' => 'this is a short example description',
-                'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vel facilisis neque. Donec placerat ligula mi, convallis faucibus velit gravida eget. Phasellus at dui et quam luctus imperdiet malesuada et nisi. Nulla erat enim, egestas pharetra volutpat convallis, gravida sed enim. Vestibulum tincidunt ullamcorper elit, at vestibulum nulla condimentum at. Donec aliquam vitae nisl sit amet gravida. Morbi posuere tellus dictum ante efficitur, quis consectetur magna maximus. Praesent at augue maximus, tincidunt mi at, condimentum felis. Cras turpis nulla, pulvinar eget viverra eu, vehicula sit amet sapien. Integer porta non elit nec lobortis.',
             ])
             ->each(function ($product) {
                 $tags = Tag::all()->random(3);
@@ -41,8 +39,6 @@ class ProductSeeder extends Seeder
                 'name' => 'iphone 13',
                 'type' => Product::PRODUCT_TYPE,
                 'slug' => 'iphone-13',
-                'short_description' => 'this is a short example description',
-                'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vel facilisis neque. Donec placerat ligula mi, convallis faucibus velit gravida eget. Phasellus at dui et quam luctus imperdiet malesuada et nisi. Nulla erat enim, egestas pharetra volutpat convallis, gravida sed enim. Vestibulum tincidunt ullamcorper elit, at vestibulum nulla condimentum at. Donec aliquam vitae nisl sit amet gravida. Morbi posuere tellus dictum ante efficitur, quis consectetur magna maximus. Praesent at augue maximus, tincidunt mi at, condimentum felis. Cras turpis nulla, pulvinar eget viverra eu, vehicula sit amet sapien. Integer porta non elit nec lobortis.',
             ])
             ->each(function ($product) {
                 $tags = Tag::all()->random(3);
