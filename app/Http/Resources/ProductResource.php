@@ -15,6 +15,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *         "slug",
  *         "sku",
  *         "price",
+ *         "min_price",
+ *         "max_price",
  *         "tax",
  *         "short_description",
  *         "description",
@@ -33,6 +35,8 @@ class ProductResource extends JsonResource
      * @OA\Property(property="slug", type="string"),
      * @OA\Property(property="sku", type="string"),
      * @OA\Property(property="price", type="number"),
+     * @OA\Property(property="min_price", type="number"),
+     * @OA\Property(property="max_price", type="number"),
      * @OA\Property(property="tax", type="number"),
      * @OA\Property(property="short_description", type="string"),
      * @OA\Property(property="description", type="string"),
@@ -88,6 +92,8 @@ class ProductResource extends JsonResource
             'slug' => $this->slug,
             'sku' => $this->sku,
             'price' => $this->price,
+            'min_price' => $this->min_price,
+            'max_price' => $this->max_price,
             'tax' => $this->tax,
             'short_description' => $this->short_description,
             'description' => $this->description,
@@ -190,6 +196,22 @@ class ProductResource extends JsonResource
      *     )
      * ),
      * @OA\Parameter(
+     *     parameter="product--min_price",
+     *     name="min_price",
+     *     in="query",
+     *     @OA\Schema(
+     *         type="number"
+     *     )
+     * ),
+     * @OA\Parameter(
+     *     parameter="product--max_price",
+     *     name="max_price",
+     *     in="query",
+     *     @OA\Schema(
+     *         type="number"
+     *     )
+     * ),
+     * @OA\Parameter(
      *     parameter="product--tax",
      *     name="tax",
      *     in="query",
@@ -247,6 +269,8 @@ class ProductResource extends JsonResource
             'type' => 'type',
             'name' => 'name',
             'price' => 'price',
+            'min_price' => 'min_price',
+            'max_price' => 'max_price',
             'tax' => 'tax',
             'slug' => 'slug',
             'description' => 'description',

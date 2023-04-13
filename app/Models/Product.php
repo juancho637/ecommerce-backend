@@ -21,6 +21,8 @@ class Product extends Model
         'name',
         'slug',
         'price',
+        'min_price',
+        'max_price',
         'tax',
         'sku',
         'is_variable',
@@ -36,6 +38,8 @@ class Product extends Model
         'category_id' => 'integer',
         'is_variable' => 'boolean',
         'price' => 'float',
+        'min_price' => 'float',
+        'max_price' => 'float',
         'tax' => 'float',
     ];
 
@@ -243,6 +247,8 @@ class Product extends Model
         $data['name'] = $attributes['name'];
         $data['slug'] = Str::slug($data['name'], '-');
         $data['price'] = $attributes['price'];
+        $data['min_price'] = $attributes['price'];
+        $data['max_price'] = $attributes['price'];
         $data['tax'] = $attributes['tax'];
         $attributes['sku']
             ? $data['sku'] = $attributes['sku']
