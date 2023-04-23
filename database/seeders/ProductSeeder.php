@@ -27,9 +27,9 @@ class ProductSeeder extends Seeder
                 $tags = Tag::all()->random(3);
                 $product->tags()->sync($tags->pluck('id'));
 
-                $product->options .= "category:" . $product->category->name;
-                $product->options .= "|tag:" . $tags->pluck('name')->implode('|tag:');
-                $product->options .= "|color:rojo";
+                $product->options .= "category_" . $product->category->name;
+                $product->options .= "|tag_" . $tags->pluck('name')->implode('|tag_');
+                $product->options .= "|color_rojo";
                 $product->save();
             });
 
@@ -44,9 +44,9 @@ class ProductSeeder extends Seeder
                 $tags = Tag::all()->random(3);
                 $product->tags()->sync($tags->pluck('id'));
 
-                $product->options .= "category:" . $product->category->name;
-                $product->options .= "|tag:" . $tags->pluck('name')->implode('|tag:');
-                $product->options .= "|color:rojo|color:verde|color:space grey";
+                $product->options .= "category_" . $product->category->name;
+                $product->options .= "|tag_" . $tags->pluck('name')->implode('|tag_');
+                $product->options .= "|color_rojo|color_verde|color_space grey";
                 $product->save();
             });
 
@@ -58,8 +58,8 @@ class ProductSeeder extends Seeder
 
                 $product->tags()->sync($tags->pluck('id'));
 
-                $product->options .= "category:" . $product->category->name;
-                $product->options .= "|tag:" . $tags->pluck('name')->implode('|tag:');
+                $product->options .= "category_" . $product->category->name;
+                $product->options .= "|tag_" . $tags->pluck('name')->implode('|tag_');
                 $product->save();
             });
 
@@ -68,7 +68,7 @@ class ProductSeeder extends Seeder
             ->isVariable()
             ->create()
             ->each(function ($product) {
-                $tags = Tag::all()->random(3)->pluck('id');
+                $tags = Tag::all()->random(3);
                 $productAttributeOptions = ProductAttribute::all()
                     ->load('productAttributeOptions')
                     ->random(mt_rand(1, 3))
@@ -76,8 +76,12 @@ class ProductSeeder extends Seeder
                     ->collapse()
                     ->pluck('id');
 
-                $product->tags()->sync($tags);
+                $product->tags()->sync($tags->pluck('id'));
                 $product->productAttributeOptions()->sync($productAttributeOptions);
+
+                $product->options .= "category_" . $product->category->name;
+                $product->options .= "|tag_" . $tags->pluck('name')->implode('|tag_');
+                $product->save();
             });
     }
 }
