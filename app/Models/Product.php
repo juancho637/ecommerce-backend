@@ -346,7 +346,6 @@ class Product extends Model
     public function setDelete()
     {
         if ($this->status_id === Status::disabled()->value('id')) {
-            $this->status_id = Status::enabled()->value('id');
             if ($this->is_variable) {
                 $this->status_id = Status::productStocksStep()->value('id');
             } else {
