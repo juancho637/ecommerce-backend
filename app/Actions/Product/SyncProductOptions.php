@@ -12,10 +12,9 @@ class SyncProductOptions
     public function __invoke(Product $product)
     {
         try {
-            // dd($product->category()->pluck('name')->implode(''));
-            $options = 'category:' . $product->category()->pluck('name')->implode('');
+            $options = 'category_' . $product->category()->pluck('name')->implode('');
 
-            $options .= '|tag:' . $product->tags()->pluck('name')->implode('|tag:');
+            $options .= '|tag_' . $product->tags()->pluck('name')->implode('|tag_');
 
             if ($product->productAttributeOptions()->count()) {
                 $options .= '|' . $product->productAttributeOptions()
@@ -23,7 +22,7 @@ class SyncProductOptions
                     ->with('productAttribute:id,name')
                     ->get()
                     ->map(function ($productAttributeOption) {
-                        return $productAttributeOption->productAttribute->name . ':' . $productAttributeOption->name;
+                        return $productAttributeOption->productAttribute->name . '_' . $productAttributeOption->name;
                     })->implode('|');
             }
 
