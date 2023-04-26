@@ -347,6 +347,11 @@ class Product extends Model
     {
         if ($this->status_id === Status::disabled()->value('id')) {
             $this->status_id = Status::enabled()->value('id');
+            if ($this->is_variable) {
+                $this->status_id = Status::productStocksStep()->value('id');
+            } else {
+                $this->status_id = Status::productGeneralStep()->value('id');
+            }
         } else if ($this->status_id === Status::enabled()->value('id')) {
             $this->status_id = Status::disabled()->value('id');
         }
