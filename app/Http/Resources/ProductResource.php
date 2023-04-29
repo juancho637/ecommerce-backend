@@ -100,6 +100,7 @@ class ProductResource extends JsonResource
             'is_variable' => $this->is_variable,
             'amount_viewed' => $this->amount_viewed,
             'quantity_sold' => $this->quantity_sold,
+            'created_at' => $this->created_at,
         ];
 
         if (!$this->whenLoaded('status') instanceof MissingValue) {
@@ -259,6 +260,14 @@ class ProductResource extends JsonResource
      *         type="number"
      *     )
      * ),
+     * @OA\Parameter(
+     *     parameter="product--created_at",
+     *     name="created_at",
+     *     in="query",
+     *     @OA\Schema(
+     *         type="string"
+     *     )
+     * ),
      */
     public static function originalAttribute($index)
     {
@@ -277,6 +286,7 @@ class ProductResource extends JsonResource
             'is_variable' => 'is_variable',
             'amount_viewed' => 'amount_viewed',
             'quantity_sold' => 'quantity_sold',
+            'created_at' => 'created_at',
         ];
 
         return isset($attributes[$index]) ? $attributes[$index] : null;

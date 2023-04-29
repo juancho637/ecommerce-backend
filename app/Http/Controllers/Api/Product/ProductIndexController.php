@@ -44,6 +44,7 @@ class ProductIndexController extends ApiController
      *     @OA\Parameter(ref="#/components/parameters/product--is_variable"),
      *     @OA\Parameter(ref="#/components/parameters/product--amount_viewed"),
      *     @OA\Parameter(ref="#/components/parameters/product--quantity_sold"),
+     *     @OA\Parameter(ref="#/components/parameters/product--created_at"),
      * 
      *     @OA\Response(
      *         response="200",
