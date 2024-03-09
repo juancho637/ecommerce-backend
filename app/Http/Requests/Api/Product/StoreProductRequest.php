@@ -37,6 +37,7 @@ class StoreProductRequest extends FormRequest
     /**
      * @OA\Property(property="type", type="string", enum={"product", "service"}),
      * @OA\Property(property="name", type="string"),
+     * @OA\Property(property="sku", type="string"),
      * @OA\Property(property="category_id", type="number"),
      * @OA\Property(property="price", type="number"),
      * @OA\Property(property="tax", type="number"),
@@ -97,6 +98,7 @@ class StoreProductRequest extends FormRequest
         return [
             'type' => 'required|string|in:' . implode(',', Product::TYPES),
             'name' => 'required|string|max:255|unique:products',
+            'sku' => 'nullable|string|max:60|unique:products',
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|between:0.00,9999999999.99|regex:/^\d+(\.\d{1,2})?$/',
             'tax' => 'required|numeric|between:0.00,99.99|regex:/^\d+(\.\d{1,2})?$/',
