@@ -114,7 +114,7 @@ class ProductProductSpecificationIndexController extends ApiController
     {
         $includes = explode(',', $request->get('include', ''));
 
-        $this->productSpecifications = $product->productSpecifications->toQuery()
+        $this->productSpecifications = $product->productSpecifications
             ->withEagerLoading($includes)
             ->get();
 

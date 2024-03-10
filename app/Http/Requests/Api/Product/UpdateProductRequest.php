@@ -26,6 +26,7 @@ class UpdateProductRequest extends FormRequest
     /**
      * @OA\Property(property="type", type="string", enum={"product", "service"}),
      * @OA\Property(property="name", type="string"),
+     * @OA\Property(property="sku", type="string"),
      * @OA\Property(property="category_id", type="number"),
      * @OA\Property(property="short_description", type="string"),
      * @OA\Property(property="description", type="string"),
@@ -99,6 +100,11 @@ class UpdateProductRequest extends FormRequest
             'name' => [
                 'string',
                 Rule::unique('products', 'name')->ignore($this->product),
+                'nullable',
+            ],
+            'sku' => [
+                'string',
+                Rule::unique('products', 'sku')->ignore($this->product),
                 'nullable',
             ],
             'category_id' => 'exists:categories,id|nullable',
